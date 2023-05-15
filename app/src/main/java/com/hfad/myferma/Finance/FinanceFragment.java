@@ -102,7 +102,7 @@ public class FinanceFragment extends Fragment implements View.OnClickListener{
 
             Cursor cursor = myDB.idProduct1(MyConstanta.TABLE_NAMESALE, MyConstanta.TITLESale, product);
 
-            if (cursor != null) {
+            if (cursor != null && cursor.getCount() != 0) {
 
                 while (cursor.moveToNext()) {
                     Double productUnit = cursor.getDouble(6);

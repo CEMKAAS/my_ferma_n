@@ -50,7 +50,6 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
 
     //Формируем массив из БД
     public void add() {
-
         Cursor cursor = myDB.readAllDataProduct();
 
         while (cursor.moveToNext()) {
@@ -63,7 +62,7 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
     public void addMap() {
         tempList = new HashMap<>();
         Cursor cursor = myDB.readAllDataPrice();
-        if (cursor.getCount() != 0) {
+        if (cursor != null && cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 String product = cursor.getString(1);
                 Double price = cursor.getDouble(2);

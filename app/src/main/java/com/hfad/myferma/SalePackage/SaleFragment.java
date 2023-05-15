@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -44,6 +45,7 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
     private CheckBox checkPrice;
     private Map<String, Double> tempList;
     private Map<String, Double> tempListPrice;
+    private ArrayAdapter<String> arrayAdapterProduct;
     private List<String> productList;
     private DecimalFormat f;
 
@@ -69,7 +71,6 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
         result_text = (TextView) layout.findViewById(R.id.totalSale_text);
         error = (TextView) layout.findViewById(R.id.errorText);
 
-//        priceSale.setText("Яйцо " + mydbManager.price("Яйца") + " ₽");
         // Установка CheckBox
         checkPrice = layout.findViewById(R.id.check_price);
         // Установка Spinner
@@ -78,15 +79,25 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
         addPrice.setVisibility(View.GONE);
 
         f = new DecimalFormat("0");
-        result_text.setText(f.format(String.valueOf(tempList.get(animals_spiner.getText()))) + unit); //Todo suffix+ f = new DecimalFormat("0.00");
-        priceSale.setText(animals_spiner.getText().toString() + String.valueOf(tempListPrice.get(animals_spiner.getText())) + " ₽");
+        String product = animals_spiner.getText().toString();
+        unitString(product);
+        result_text.setText(f.format(tempList.get(product)) + unit); //Todo suffix+ f = new DecimalFormat("0.00");
+        priceSale.setText(unit + " Товара " + product + " " + tempListPrice.get(product) + " ₽");
 
         //При выборе спинера происходят следующие изменения
         animals_spiner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                result_text.setText(f.format(String.valueOf(tempList.get(animals_spiner.getText()))) + unit); //Todo suffix+ f = new DecimalFormat("0.00");
-                priceSale.setText(animals_spiner.getText().toString() + String.valueOf(tempListPrice.get(animals_spiner.getText())) + " ₽");
+                String productClick = productList.get(position);
+                unitString(productClick);
+                result_text.setText(f.format(tempList.get(productClick)) + unit);
+                priceSale.setText(unit + " Товара " + productClick + " " + tempListPrice.get(productClick) + " ₽");
+                addSaleEdit.setSuffixText(unit);
+                addSaleEdit.setEndIconDrawable(null);
+                addSaleEdit.getEndIconDrawable();
+                addPrice.setEndIconDrawable(null);
+                addPrice.getEndIconDrawable();
+
             }
         });
 
@@ -106,8 +117,16 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
             public void onClick(View v) {
                 if (checkPrice.isChecked()) {
                     addPrice.setVisibility(View.VISIBLE);
+                    addSaleEdit.setEndIconDrawable(null);
+                    addSaleEdit.getEndIconDrawable();
+                    addPrice.setEndIconDrawable(null);
+                    addPrice.getEndIconDrawable();
                 } else {
                     addPrice.setVisibility(View.GONE);
+                    addSaleEdit.setEndIconDrawable(null);
+                    addSaleEdit.getEndIconDrawable();
+                    addPrice.setEndIconDrawable(null);
+                    addPrice.getEndIconDrawable();
                 }
             }
         });
@@ -117,6 +136,16 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
         }
 
         return layout;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        View view = getView();
+        if (view != null) {
+            arrayAdapterProduct = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, productList);
+            animals_spiner.setAdapter(arrayAdapterProduct);
+        }
     }
 
     //Добавляем продукцию в список
@@ -139,7 +168,7 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
 
             Cursor cursor = myDB.idProduct1(MyConstanta.TABLE_NAME, MyConstanta.TITLE, product);
 
-            if (cursor != null) {
+            if (cursor != null && cursor.getCount() != 0) {
 
                 while (cursor.moveToNext()) {
                     Double productUnit = cursor.getDouble(2);
@@ -178,7 +207,7 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
     public void addMapPrice() {
         tempListPrice = new HashMap<>();
         Cursor cursor = myDB.readAllDataPrice();
-        if (cursor.getCount() != 0) {
+        if (cursor != null && cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 String product = cursor.getString(1);
                 Double price = cursor.getDouble(2);
@@ -193,11 +222,9 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
             case R.id.addSale_edit:
                 addSaleEdit.getEditText().setOnEditorActionListener(editorListenerSale);
                 break;
-
             case R.id.addSale_button:
                 onClickAddSale(v);
                 break;
-
             case R.id.saleChart_button:
                 saleChart(v);
                 break;
@@ -249,8 +276,6 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
 
             double inputUnit = Double.parseDouble(inputUnitString);
 
-            unitString(animalsType);
-
             //убираем ошибку
             addSaleEdit.setErrorEnabled(false);
             addPrice.setErrorEnabled(false);
@@ -266,7 +291,7 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
                         result_text.setText(f.format(tempList.get(animalsType)) + unit);
                         Toast.makeText(getActivity(), "Вы заработали " + addPrice.getEditText().getText().toString() + " ₽", Toast.LENGTH_SHORT).show();
                     } else {
-                        myDB.insertToDbSale(animalsType, inputUnit, priceSale);//todo ценообразование
+                        myDB.insertToDbSale(animalsType, inputUnit, priceSale);
                         result_text.setText(f.format(tempList.get(animalsType)) + unit);
                         Toast.makeText(getActivity(), "Вы заработали " + priceSale + " ₽", Toast.LENGTH_SHORT).show();
                     }

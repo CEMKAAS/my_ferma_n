@@ -90,7 +90,7 @@ public class WarehouseFragment extends Fragment implements View.OnClickListener 
 
             Cursor cursor = myDB.idProduct1(MyConstanta.TABLE_NAME, MyConstanta.TITLE, product);
 
-            if (cursor != null) {
+            if (cursor != null && cursor.getCount() != 0) {
 
                 while (cursor.moveToNext()) {
                     Double productUnit = cursor.getDouble(2);

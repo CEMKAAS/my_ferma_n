@@ -28,7 +28,6 @@ import java.util.Set;
 public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     private MyFermaDatabaseHelper myDB;
-    private MydbManagerMetod mydbManager;
     private TextInputLayout menuProducts;
     private AutoCompleteTextView addProduct;
     private List<String> arrayListProduct;
@@ -46,7 +45,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         //Подключение к базе данных
         myDB = new MyFermaDatabaseHelper(getActivity());
-        mydbManager = new MydbManagerMetod(inflater.getContext());
 
         // устнановка кнопок
         Button addProductButton = (Button) layout.findViewById(R.id.add_product_button);

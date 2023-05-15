@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ public class AddFragment extends Fragment implements View.OnClickListener {
     private AutoCompleteTextView animals_spiner;
     private Map<String, Double> tempList;
     private List<String> productList;
+    private ArrayAdapter<String> arrayAdapterProduct;
     private DecimalFormat f;
     private String unit = null;
 
@@ -51,46 +53,30 @@ public class AddFragment extends Fragment implements View.OnClickListener {
         productList = new ArrayList<>();
         add();
         add1();
-
+        f = new DecimalFormat("0");
         //Установка EditText
         addEdit = layout.findViewById(R.id.add_edit);
         addEdit.getEditText().setOnEditorActionListener(editorListenerAdd);
 
-        // Установка текста
-        totalAdd_text = (TextView) layout.findViewById(R.id.totalAdd_text);
-        totalAdd_text.setText(f.format(String.valueOf(tempList.get(animals_spiner.getText()))));
         // Установка спинера
         animals_spiner = (AutoCompleteTextView) layout.findViewById(R.id.animals_spiner);
         animals_spiner.setText("Яйца", false);
 
-        f = new DecimalFormat("0");
-
+        // Установка текста
+        String product = animals_spiner.getText().toString();
+        unitString(product);
+        totalAdd_text = (TextView) layout.findViewById(R.id.totalAdd_text);
+        totalAdd_text.setText(f.format(tempList.get(product)) + unit);
 
         animals_spiner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                unitString(animals_spiner.getText().toString());
-
-                totalAdd_text.setText(f.format(String.valueOf(tempList.get(animals_spiner.getText()))) + unit); //Todo suffix+ f = new DecimalFormat("0.00");
-
-
-//                    switch (position) {
-//                        case 0:
-//                            f = new DecimalFormat("0");
-//                            addEdit.setSuffixText("шт.");
-//                            totalAdd_text.setText(f.format(mydbManager.sumSaleEgg()) + " шт.");
-//                            break;
-//                        case 1:
-//                            f = new DecimalFormat("0.00");
-//                            addEdit.setSuffixText("л.");
-//                            totalAdd_text.setText(f.format(mydbManager.sumSaleMilk()) + " л.");
-//                            break;
-//                        case 2:
-//                            f = new DecimalFormat("0.00");
-//                            addEdit.setSuffixText("кг.");
-//                            totalAdd_text.setText(f.format(mydbManager.sumSaleMeat()) + " кг.");
-//                            break;
-//                    }
+                String productClick = productList.get(position);
+                unitString(productClick);
+                totalAdd_text.setText(f.format(tempList.get(productClick)) + unit);
+                addEdit.setSuffixText(unit);
+                addEdit.setEndIconDrawable(null);
+                addEdit.getEndIconDrawable();
             }
         });
 
@@ -106,6 +92,16 @@ public class AddFragment extends Fragment implements View.OnClickListener {
             animals_spiner.setText("Яйца", false);
         }
         return layout;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        View view = getView();
+        if (view != null) {
+            arrayAdapterProduct = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, productList);
+            animals_spiner.setAdapter(arrayAdapterProduct);
+        }
     }
 
     //Добавляем продукцию в список
@@ -128,7 +124,7 @@ public class AddFragment extends Fragment implements View.OnClickListener {
 
             Cursor cursor = myDB.idProduct1(MyConstanta.TABLE_NAME, MyConstanta.TITLE, product);
 
-            if (cursor != null) {
+            if (cursor != null && cursor.getCount() != 0) {
 
                 while (cursor.moveToNext()) {
                     Double productUnit = cursor.getDouble(2);
@@ -217,8 +213,6 @@ public class AddFragment extends Fragment implements View.OnClickListener {
 
             //убираем ошибку
             addEdit.setErrorEnabled(false);
-
-            unitString(animalsType);
 
             myDB.insertToDb(animalsType, inputUnit);
 

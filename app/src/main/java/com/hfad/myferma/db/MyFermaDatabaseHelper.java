@@ -457,6 +457,19 @@ public class MyFermaDatabaseHelper extends SQLiteOpenHelper {
         db.insert(MyConstanta.TABLE_NAMESALE, null, cv);
     }
 
+    public void insertToDbWriteOff(String title, double disc, int status) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        Calendar calendar = Calendar.getInstance();
+        cv.put(MyConstanta.TITLEWRITEOFF, title);
+        cv.put(MyConstanta.DISCROTIONSWRITEOFF, disc);
+        cv.put(MyConstanta.DAY, calendar.get(Calendar.DAY_OF_MONTH));
+        cv.put(MyConstanta.MOUNT, calendar.get(Calendar.MONTH) + 1);
+        cv.put(MyConstanta.YEAR, calendar.get(Calendar.YEAR));
+        cv.put(MyConstanta.STASTUSWRITEOFF, status);
+        db.insert(MyConstanta.TABLE_NAMEWRITEOFF, null, cv);
+    }
+
     public void insertToDbPrice(String title, double disc) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
