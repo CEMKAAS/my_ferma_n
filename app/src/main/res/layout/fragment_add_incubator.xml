@@ -1,0 +1,1691 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top|center">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name_incubator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:hint="Назавание инкубатора"
+            app:endIconMode="custom"
+            app:errorEnabled="true"
+            app:helperText="Укажите название инкубатора"
+            app:helperTextEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/menu"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:hint="Тип птицы"
+            app:helperText="Выберите тип птицы">
+
+            <AutoCompleteTextView
+                android:id="@+id/animals_spiner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                app:simpleItems="@array/birsd" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:hint="Дата"
+                app:endIconDrawable="@drawable/baseline_calendar_month_24"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
+                app:helperText="Укажите дату"
+                app:helperTextEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionGo"
+                    android:inputType="date" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eggAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="5dp"
+                android:hint="Количество"
+                app:endIconDrawable="@drawable/baseline_egg_24"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
+                app:helperText="Укажите кол-во яиц"
+                app:helperTextEnabled="true"
+                app:suffixText="шт.">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionGo"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/time1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:hint="Уведомление 1"
+                app:endIconDrawable="@drawable/baseline_access_time_24"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
+                app:helperTextEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionGo"
+                    android:inputType="time" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/time2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:hint="Уведомление 2"
+                app:endIconDrawable="@drawable/baseline_access_time_24"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
+                app:helperTextEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionGo"
+                    android:inputType="time" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/time3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:hint="Уведомление 3"
+                app:endIconDrawable="@drawable/baseline_access_time_24"
+                app:endIconMode="custom"
+                app:errorEnabled="true"
+                app:helperTextEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionGo"
+                    android:inputType="time" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+                    <CheckBox
+                        android:id="@+id/friz"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Авто \nохлаждение"/>
+
+                    <CheckBox
+                        android:id="@+id/overturn"
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Авто \nпереворот"/>
+        </LinearLayout>
+
+        <TextView
+            android:textSize="18dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/robotoregular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="5dp"
+            android:lineSpacingExtra="8sp"
+            android:layout_marginBottom="15dp"
+            android:text="Если у Вашего инкубатора имеются погрешность Вы можете задать нужную Вам температуру здесь, или воспользоваться рекомендуемыми значениями" />
+
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="3">
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="7"
+            android:layout_column="0"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginBottom="15dp"
+            android:text="Дата" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="7"
+            android:layout_column="1"
+            android:layout_gravity="left"
+            android:layout_marginBottom="15dp"
+            android:text="Температура" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="7"
+            android:layout_column="2"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginBottom="15dp"
+            android:text="Влажность" />
+
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_row="8"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
+            android:text="День 1" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="9"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginBottom="15dp"
+            android:text="День 2" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="10"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_column="0"
+            android:text="День 3" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="11"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_column="0"
+            android:text="День 4" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="12"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_column="0"
+            android:text="День 5" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="13"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 6" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="14"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 7" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="15"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 8" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="16"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 9" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="17"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 10" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="18"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 11" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="19"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 12" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="20"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 13" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="21"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 14" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="22"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 15" />
+
+        <TextView
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="23"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 16" />
+
+        <TextView
+            android:id="@+id/day17"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="24"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 17" />
+
+        <TextView
+            android:id="@+id/day18"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="25"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 18" />
+
+        <TextView
+            android:id="@+id/day19"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="26"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 19" />
+
+        <TextView
+            android:id="@+id/day20"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="27"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 20" />
+
+        <TextView
+            android:id="@+id/day21"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="28"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 21" />
+
+        <TextView
+            android:id="@+id/day22"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="29"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 22" />
+
+        <TextView
+            android:id="@+id/day23"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="30"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 23" />
+
+        <TextView
+            android:id="@+id/day24"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="31"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 24" />
+
+        <TextView
+            android:id="@+id/day25"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="32"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 25" />
+
+        <TextView
+            android:id="@+id/day26"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="33"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 26" />
+
+        <TextView
+            android:id="@+id/day27"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="34"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 27" />
+
+        <TextView
+            android:id="@+id/day28"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="35"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 28" />
+
+        <TextView
+            android:id="@+id/day29"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="36"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 29" />
+
+        <TextView
+            android:id="@+id/day30"
+            style="@style/TextAppearance.MyApp.DisplaySmall2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="37"
+            android:layout_column="0"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="День 30" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp1"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="8"
+            android:layout_column="1"
+            android:layout_marginRight="5dp"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp1"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="8"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp2"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="9"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp2"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="9"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp3"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="10"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp3"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="10"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp4"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="11"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp4"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="11"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp5"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="12"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp5"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="12"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp6"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="13"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp6"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="13"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp7"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="14"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp7"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="14"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp8"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="15"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp8"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="15"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp9"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="16"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp9"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="16"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp10"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="17"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp10"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="17"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp11"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="18"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp11"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="18"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp12"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="19"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp12"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="19"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp13"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="20"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp13"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="20"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp14"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="21"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp14"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="21"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp15"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="22"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp15"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="22"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp16"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="23"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp16"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="23"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp17"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="24"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp17"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="24"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp18"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="25"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp18"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="25"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp19"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="26"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp19"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="26"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp20"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="27"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp20"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="27"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp21"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="28"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp21"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="28"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp22"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="29"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp22"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="29"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp23"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="30"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp23"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="30"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp24"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="31"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp24"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="31"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp25"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="32"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp25"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="32"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp26"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="33"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp26"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="33"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp27"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="34"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp27"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="34"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp28"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="35"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp28"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="35"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp29"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="36"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp29"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="36"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayTemp30"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="37"
+            android:layout_column="1"
+            android:hint="Температура"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="°C">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dayDamp30"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_row="37"
+            android:layout_column="2"
+            android:hint="Влажность"
+            app:errorEnabled="true"
+            app:helperTextEnabled="true"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionGo"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </GridLayout>
+
+        <Button
+            android:id="@+id/begin"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:text="Запуск"
+            android:textAllCaps="false"
+            android:layout_gravity="center"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</ScrollView>

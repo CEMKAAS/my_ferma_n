@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar"
+            app:title=""
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.MyApp.DisplaySmall4" />
+
+        <com.yandex.mobile.ads.banner.BannerAdView
+            android:id="@+id/banner_ad_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/windowBackground" />
+        <!--             app:navigationIcon="@drawable/baseline_menu_24" /> -->
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/conteiner"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/extended_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="40dp"
+            android:text="text"
+            app:icon="@drawable/ic_action_meat" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_navigartion" />
+
+
+
+    <!--         app:layout_constraintTop_toBottomOf="+id/banner_ad_view" -->
+</LinearLayout>
