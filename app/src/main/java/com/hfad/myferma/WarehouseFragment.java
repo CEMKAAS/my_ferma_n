@@ -35,9 +35,7 @@ import java.util.Set;
 public class WarehouseFragment extends Fragment implements View.OnClickListener {
 
     private MyFermaDatabaseHelper myDB;
-
     private RecyclerView recyclerView;
-
     private List<String> productList;
     private DecimalFormat f, eggFormat;
 
@@ -129,6 +127,7 @@ public class WarehouseFragment extends Fragment implements View.OnClickListener 
 
         return tempList;
     }
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.writeOff_button:

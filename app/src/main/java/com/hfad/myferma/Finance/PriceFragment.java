@@ -28,14 +28,8 @@ import java.util.Map;
 
 public class PriceFragment extends Fragment implements View.OnClickListener {
 
-    private TextInputLayout priceEgg, priceMilk, priceMeat;
-    private LinearLayout containerLayout;
-
     private MyFermaDatabaseHelper myDB;
-
     private TextInputLayout til;
-    private List<TextInputLayout> sd;
-
     private Map<String, Double> tempList;
     private List<String> productList;
     private View layout;
@@ -47,7 +41,6 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
         layout = inflater.inflate(R.layout.fragment_price, container, false);
         myDB = new MyFermaDatabaseHelper(getActivity());
         productList = new ArrayList();
-        sd = new ArrayList<>();
         add();
         addMap();
         onBackPressed();
