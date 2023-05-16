@@ -54,7 +54,7 @@ public class FinanceChartFragment extends Fragment {
     private ArrayList<String> yearList, productList, productListAll;
     private ArrayAdapter<String> arrayAdapterProduct, arrayAdapterYear;
     private Map<String, ArrayList<Entry>> sumCategory, sumCategoryAll;
-    private Map<String, ArrayList<Entry>> sumProductYan, sumProductFeb, sumProductMar, sumProductApr, sumProductMay, sumProductJun, sumProductJar, sumProductAvg, sumProductSep, sumProductOkt, sumProductNov, sumProductDec;
+    private Map<String, ArrayList<Entry>> sumProductYan, sumProductFeb, sumProductMar, sumProductApr, sumProductMay, sumProductJun, sumProductJar, sumProductAvg, sumProductSep, sumProductOkt, sumProductNov, sumProductDec, sumProductAll;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,33 +107,18 @@ public class FinanceChartFragment extends Fragment {
         sumProductOkt = new HashMap<>();
         sumProductNov = new HashMap<>();
         sumProductDec = new HashMap<>();
+        sumProductAll = new HashMap<>();
 
         //Логика просчета
         allProducts();
 //        storeDataInArrays();
-
-        LineDataSet datasetFirst = new LineDataSet(entriesFirst, "Яйца");
-        // График будет зеленого цвета
-        datasetFirst.setColor(Color.GRAY);
-        // График будет плавным
-        datasetFirst.setMode(LineDataSet.Mode.LINEAR);
-        lineChart.getDescription().setText("График продукции");
-        LineDataSet datasetSecond = new LineDataSet(entriesSecond, "Молоко");
-        // График будет зеленого цвета
-        datasetSecond.setColor(Color.GREEN);
-        // График будет плавным
-        datasetSecond.setMode(LineDataSet.Mode.LINEAR);
-
-        LineDataSet datasetThird = new LineDataSet(entriesThird, "Мясо");
-        // График будет зеленого цвета
-        datasetThird.setColor(Color.RED);
-        // График будет плавным
-        datasetThird.setMode(LineDataSet.Mode.LINEAR);
-
+        all();
         ArrayList<ILineDataSet> dataSets = new ArrayList();
-        dataSets.add(datasetFirst);
-        dataSets.add(datasetSecond);
-        dataSets.add(datasetThird);
+        for (String product : productList) {
+            LineDataSet datasetFirst = new LineDataSet(sumProductAll.get(product), product);
+            datasetFirst.setMode(LineDataSet.Mode.LINEAR);
+            dataSets.add(datasetFirst);
+        }
 
         LineData data = new LineData(dataSets);
         lineChart.invalidate();
@@ -172,42 +157,17 @@ public class FinanceChartFragment extends Fragment {
         entriesThird.clear();
 
         if (animals_spiner.getText().toString().equals("Все")) {
-            allProducts();
             LineChart lineChart = layout.findViewById(R.id.lineChart);
             lineChart.getDescription().setText("График продукции");
             ArrayList<ILineDataSet> dataSets = new ArrayList();
             for (String product : productList) {
-                LineDataSet datasetFirst = new LineDataSet(entriesFirst, product);
-                // График будет зеленого цвета
-//                datasetFirst.setColor();
-                // График будет плавным
+                LineDataSet datasetFirst = new LineDataSet(sumProductAll.get(product), product);
+//                 График будет зеленого цвета
+                datasetFirst.setColor(Color.GRAY);
+//                 График будет плавным
                 datasetFirst.setMode(LineDataSet.Mode.LINEAR);
                 dataSets.add(datasetFirst);
             }
-//            LineChart lineChart = layout.findViewById(R.id.lineChart);
-//            lineChart.getDescription().setText("График продукции");
-//            LineDataSet datasetFirst = new LineDataSet(entriesFirst, "Яйца");
-//            // График будет зеленого цвета
-//            datasetFirst.setColor(Color.GRAY);
-//            // График будет плавным
-//            datasetFirst.setMode(LineDataSet.Mode.LINEAR);
-//
-//            LineDataSet datasetSecond = new LineDataSet(entriesSecond, "Молоко");
-//            // График будет зеленого цвета
-//            datasetSecond.setColor(Color.GREEN);
-//            // График будет плавным
-//            datasetSecond.setMode(LineDataSet.Mode.LINEAR);
-//
-//            LineDataSet datasetThird = new LineDataSet(entriesThird, "Мясо");
-//            // График будет зеленого цвета
-//            datasetThird.setColor(Color.RED);
-//            // График будет плавным
-//            datasetThird.setMode(LineDataSet.Mode.LINEAR);
-
-
-//            dataSets.add(datasetSecond);
-//            dataSets.add(datasetThird);
-
             LineData data = new LineData(dataSets);
             lineChart.invalidate();
             lineChart.setData(data);
@@ -297,20 +257,18 @@ public class FinanceChartFragment extends Fragment {
 
         setMount(mountString);
 
-        cursor.moveToNext();
-
-        if (mount <= 12 && mount > 0) {
-            allProductsMount(cursor);
-            while (cursor.moveToNext()) {
-                allProductsMount(cursor);
-            }
-            cursor.close();
-        } else if (cursor.getCount() == 0) {
+        if (cursor.getCount() == 0) {
 
             x = 0;
             y = 0;
 
             visitors.add(new Entry(y, x));
+
+        } else if (mount <= 12 && mount > 0) {
+            while (cursor.moveToNext()) {
+                allProductsMount(cursor, animalsType, year2);
+            }
+
         }
         //проверка за весь год //TODO Сократи это говно плиз и еще ниже будет его тоже
         else if (mount == 13) {
@@ -320,48 +278,46 @@ public class FinanceChartFragment extends Fragment {
                     if (year2.equals(cursor.getString(5))) {
                         switch (Integer.parseInt(cursor.getString(4))) {
                             case 1:
-                                productMount(cursor, sumProductYan);
+                                productMount(cursor, sumProductYan, 1);
                                 break;
                             case 2:
-                                productMount(cursor, sumProductFeb);
+                                productMount(cursor, sumProductFeb,2);
                                 break;
                             case 3:
-                                productMount(cursor, sumProductMar);
+                                productMount(cursor, sumProductMar,3);
                                 break;
                             case 4:
-                                productMount(cursor, sumProductApr);
+                                productMount(cursor, sumProductApr,4);
                                 break;
                             case 5:
-                                productMount(cursor, sumProductMay);
+                                productMount(cursor, sumProductMay,5);
                                 break;
                             case 6:
-                                productMount(cursor, sumProductJun);
+                                productMount(cursor, sumProductJun,6);
                                 break;
                             case 7:
-                                productMount(cursor, sumProductJar);
+                                productMount(cursor, sumProductJar,7);
                                 break;
                             case 8:
-                                productMount(cursor, sumProductAvg);
+                                productMount(cursor, sumProductAvg,8);
                                 break;
                             case 9:
-                                productMount(cursor, sumProductSep);
+                                productMount(cursor, sumProductSep,9);
                                 break;
                             case 10:
-                                productMount(cursor, sumProductOkt);
+                                productMount(cursor, sumProductOkt,10);
                                 break;
                             case 11:
-                                productMount(cursor, sumProductNov);
+                                productMount(cursor, sumProductNov,11);
                                 break;
                             case 12:
-                                productMount(cursor, sumProductDec);
+                                productMount(cursor, sumProductDec,12);
                                 break;
                         }
-                        break;
                     }
                 }
             }
             cursor.close();
-
             // если месяц пустой
         } else {
 
@@ -373,20 +329,54 @@ public class FinanceChartFragment extends Fragment {
         cursor.close();
     }
 
-    public void productMount(Cursor cursor, Map<String, ArrayList<Entry>> sumProductMount) {
-        Float y = Float.parseFloat(cursor.getString(6));
+    public void productMount(Cursor cursor, Map<String, ArrayList<Entry>> sumProductMount,float x) {
+
         if (sumProductMount.get(cursor.getString(1)) == null) {
-
-            sumProductMount.get(cursor.getString(1)).add(new Entry(1, y));
-
-            sumProductMount.put(cursor.getString(1), sumProductMount.get(cursor.getString(1)));
+            ArrayList<Entry> sd = new ArrayList<>();
+            float y = Float.parseFloat(cursor.getString(6));
+            sd.add(new Entry(x, y));
+            sumProductMount.put(cursor.getString(1), sd);
         } else {
-            for (Entry ds : sumProductYan.get(cursor.getString(1))) {
+            float y = Float.parseFloat(cursor.getString(6));
+//            ArrayList<Entry> sd = (ArrayList<Entry>) sumProductMount.get(cursor.getString(1)).clone();
+            for (Entry ds : sumProductMount.get(cursor.getString(1))){
                 y += ds.getY();
             }
-            sumProductMount.get(cursor.getString(1)).add(new Entry(1, y));
+            sumProductMount.get(cursor.getString(1)).clear();
+            sumProductMount.get(cursor.getString(1)).add(new Entry(x, y));
             sumProductMount.put(cursor.getString(1), sumProductMount.get(cursor.getString(1)));
         }
+    }
+
+    public void all() {
+        for (String product : productList) {
+
+            ArrayList<Entry> entries = new ArrayList<>();
+            entries.addAll(addAll22(sumProductYan,product,1));
+            entries.addAll(addAll22(sumProductFeb,product,2));
+            entries.addAll(addAll22(sumProductMar,product,3));
+            entries.addAll(addAll22(sumProductApr,product,4));
+            entries.addAll(addAll22(sumProductMay,product,5));
+            entries.addAll(addAll22(sumProductJun,product,6));
+            entries.addAll(addAll22(sumProductJar,product,7));
+            entries.addAll(addAll22(sumProductAvg,product,8));
+            entries.addAll(addAll22(sumProductSep,product,9));
+            entries.addAll(addAll22(sumProductOkt,product,10));
+            entries.addAll(addAll22(sumProductNov,product,11));
+            entries.addAll(addAll22(sumProductDec,product,12));
+
+            sumProductAll.put(product,entries);
+        }
+    }
+
+    public ArrayList<Entry> addAll22(Map<String, ArrayList<Entry>> sumProductYansdad,String product1, float x){
+        ArrayList<Entry> entries = new ArrayList<>();
+        if(sumProductYansdad.get(product1)== null){
+            entries.add(new Entry(x,0));
+            sumProductYansdad.put(product1, entries);
+        }else {
+            entries.addAll(sumProductYansdad.get(product1));}
+        return entries;
     }
 
     public void storeDataInArraysMount(Cursor cursor) {
@@ -409,22 +399,18 @@ public class FinanceChartFragment extends Fragment {
         }
     }
 
-    public void allProductsMount(Cursor cursor) {
-
+    public void allProductsMount(Cursor cursor, String animalsType, String year2) {
         float x, y;
-        String animalsType = animals_spiner.getText().toString();
-        String year2 = year_spiner.getText().toString();
         if (animalsType.equals("Все")) {
             //проверка месяца
             if (mount == Integer.parseInt(cursor.getString(4))) {
                 //проверка года
                 if (year2.equals(cursor.getString(5))) {
-
+                    ArrayList<Entry> sd = new ArrayList<>();
                     x = Float.parseFloat(cursor.getString(6));
                     y = Float.parseFloat(cursor.getString(3));
-
-                    sumCategory.get(cursor.getString(1)).add(new Entry(y, x));
-                    sumCategory.put(cursor.getString(1), sumCategory.get(cursor.getString(1)));
+                    sd.add(new Entry(y, x));
+                    sumCategory.put(cursor.getString(1), sd);
 
                 }
             }
