@@ -29,6 +29,7 @@ import com.hfad.myferma.R;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,25 +40,24 @@ public class WriteOffChartFragment extends Fragment {
     private MyFermaDatabaseHelper myDB;
     private AutoCompleteTextView animals_spiner, mount_spiner, year_spiner;
     private ArrayList<BarEntry> visitors;
-    private ArrayAdapter<String> arrayAdapterAnimals;
-
     private RadioButton radioButton1, radioButton2;
-
     private RadioGroup radioGroup;
     private String[] labes = {"", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь", ""};
     private String[] mountMass;
     private int mount = 0;
-
     private int status = R.drawable.baseline_cottage_24;
-
     private View layout;
-
+    private List<String> yearList, productList;
+    private ArrayAdapter<String> arrayAdapterProduct, arrayAdapterYear;
     private String infoChart = "График списанной продукции на собсвенные нужды";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.fragment_write_off_chart, container, false);
 
+        //Подключение к базе данных
+        myDB = new MyFermaDatabaseHelper(getActivity());
+        add();
         // установка радио
         radioGroup = (RadioGroup) layout.findViewById(R.id.radioGroup);
         radioButton1 = (RadioButton) layout.findViewById(R.id.radio_button_1);
@@ -68,21 +68,19 @@ public class WriteOffChartFragment extends Fragment {
         mount_spiner = (AutoCompleteTextView) layout.findViewById(R.id.mount_spiner);
         year_spiner = (AutoCompleteTextView) layout.findViewById(R.id.year_spiner);
 
-        //Подключение к базе данных
-        myDB = new MyFermaDatabaseHelper(getActivity());
-
         //Создание списка с данными для графиков
         visitors = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
 
         // настройка спинеров
         animals_spiner.setText("Яйца", false);
         mount_spiner.setText("За весь год", false);
-        year_spiner.setText("2023", false);
+        year_spiner.setText(String.valueOf(calendar.get(Calendar.YEAR)), false);
 
         //убириаем фаб кнопку
         ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) getActivity().findViewById(R.id.extended_fab);
         fab.setVisibility(View.GONE);
-
+        // Todo кнопка назад
         //настройка верхнего меню фаб кнопку
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.setTitle("Мои Списания - График");
@@ -185,28 +183,38 @@ public class WriteOffChartFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null) {
+            //Настройка спинера с продуктами
+            arrayAdapterProduct = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, productList);
+            animals_spiner.setAdapter(arrayAdapterProduct);
+
             // настройка спинера с годами (выглядил как обычный, и год запоминал)
-            arrayAdapterAnimals = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, add());
-            year_spiner.setAdapter(arrayAdapterAnimals);
+            arrayAdapterYear = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, yearList);
+            year_spiner.setAdapter(arrayAdapterYear);
         }
     }
 
-    public ArrayList<String> add() {
-        Set<String> tempList = new HashSet<>();
-        Cursor cursor = myDB.readAllDataSale();
+    public void add() {
+        Set<String> yearSet = new HashSet<>();
+        Set<String> productSet = new HashSet<>();
+        Cursor cursor = myDB.readAllDataWriteOff();
 
         while (cursor.moveToNext()) {
-            String string1 = cursor.getString(5);
-            tempList.add(string1);
+            String year = cursor.getString(5);
+            String product = cursor.getString(1);
+
+            yearSet.add(year);
+            productSet.add(product);
         }
         cursor.close();
 
-        ArrayList<String> tempList1 = new ArrayList<>();
-        for (String nameExpenses : tempList) {
-            tempList1.add(nameExpenses);
+        yearList = new ArrayList<>();
+        productList = new ArrayList<>();
+        for (String yearColum : yearSet) {
+            yearList.add(yearColum);
         }
-
-        return tempList1;
+        for (String productColum : productSet) {
+            productList.add(productColum);
+        }
     }
 
     void storeDataInArrays() {

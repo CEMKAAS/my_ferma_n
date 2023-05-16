@@ -28,6 +28,7 @@ import com.hfad.myferma.R;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,39 +39,32 @@ public class SaleChartFragment extends Fragment {
     private MyFermaDatabaseHelper myDB;
     private AutoCompleteTextView animals_spiner, mount_spiner, year_spiner;
     private ArrayList<BarEntry> visitors;
-
-    private List<String> arrayListAnaimals;
-    private ArrayAdapter<String> arrayAdapterAnimals;
-
-
     private String[] labes = {"", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь", ""};
-
     private String[] mountMass;
-
     private int mount = 0;
+    private View layout;
+    private List<String> yearList, productList;
+    private ArrayAdapter<String> arrayAdapterProduct, arrayAdapterYear;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.fragment_sale_chart, container, false);
+        layout = inflater.inflate(R.layout.fragment_sale_chart, container, false);
         // установка спинеров
         animals_spiner = (AutoCompleteTextView) layout.findViewById(R.id.animals_spiner);
         mount_spiner = (AutoCompleteTextView) layout.findViewById(R.id.mount_spiner);
         year_spiner = (AutoCompleteTextView) layout.findViewById(R.id.year_spiner);
 
-        //установка графиков
-        BarChart barChart = layout.findViewById(R.id.barChart);
-
         //Подключение к базе данных
         myDB = new MyFermaDatabaseHelper(getActivity());
-
-//Создание списка с данными для графиков
+        add();
+        //Создание списка с данными для графиков
         visitors = new ArrayList<>();
-
+        Calendar calendar = Calendar.getInstance();
         // настройка спинеров
         animals_spiner.setText("Яйца", false);
         mount_spiner.setText("За весь год", false);
-        year_spiner.setText("2023", false);
+        year_spiner.setText(String.valueOf(calendar.get(Calendar.YEAR)), false);
 
         //убириаем фаб кнопку
         ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) getActivity().findViewById(R.id.extended_fab);
@@ -79,29 +73,11 @@ public class SaleChartFragment extends Fragment {
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.setTitle("Мои продажи - График");
 
+        // Todo кнопка назад
+
         //Логика просчета
         storeDataInArrays();
-
-        // настройка графиков
-        BarDataSet barDataSet = new BarDataSet(visitors, animals_spiner.getText().toString());
-        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        barDataSet.setValueTextColor(Color.BLACK);
-        barDataSet.setValueTextSize(16f);
-
-        BarData barData = new BarData(barDataSet);
-
-        barChart.setFitBars(true);
-        barChart.setData(barData);
-        barChart.getDescription().setText("График проданной продукции");
-        barChart.animateY(2000);
-
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f); // only intervals of 1 day
-        xAxis.setLabelCount(6); //сколько отображается
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(labes));
-        barChart.invalidate();
+        bar(labes);
 
         animals_spiner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -109,48 +85,9 @@ public class SaleChartFragment extends Fragment {
                 visitors.clear();
                 storeDataInArrays();
                 if (mount != 13) {
-                    BarChart barChart = layout.findViewById(R.id.barChart);
-                    BarDataSet barDataSet = new BarDataSet(visitors, animals_spiner.getText().toString());
-                    barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                    barDataSet.setValueTextColor(Color.BLACK);
-                    barDataSet.setValueTextSize(16f);
-
-                    BarData barData = new BarData(barDataSet);
-                    barChart.invalidate();
-                    barChart.setFitBars(true);
-                    barChart.setData(barData);
-                    barChart.getDescription().setText("График добавленной продукции на склад");
-                    barChart.animateY(2000);
-
-                    XAxis xAxis = barChart.getXAxis();
-                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setDrawGridLines(false);
-                    xAxis.setGranularity(1f); // only intervals of 1 day
-                    xAxis.setLabelCount(7);
-                    xAxis.setValueFormatter(new IndexAxisValueFormatter(mountMass));
-
-
+                    bar(mountMass);
                 } else {
-                    BarChart barChart = layout.findViewById(R.id.barChart);
-                    BarDataSet barDataSet = new BarDataSet(visitors, animals_spiner.getText().toString());
-                    barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                    barDataSet.setValueTextColor(Color.BLACK);
-                    barDataSet.setValueTextSize(16f);
-
-                    BarData barData = new BarData(barDataSet);
-                    barChart.invalidate();
-                    barChart.setFitBars(true);
-                    barChart.setData(barData);
-                    barChart.getDescription().setText("График добавленной продукции на склад");
-                    barChart.animateY(2000);
-
-                    XAxis xAxis = barChart.getXAxis();
-                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setDrawGridLines(false);
-                    xAxis.setGranularity(1f); // only intervals of 1 day
-                    xAxis.setLabelCount(6); //сколько отображается
-                    xAxis.setValueFormatter(new IndexAxisValueFormatter(labes));
-
+                    bar(labes);
                 }
             }
         });
@@ -161,48 +98,9 @@ public class SaleChartFragment extends Fragment {
                 visitors.clear();
                 storeDataInArrays();
                 if (mount != 13) {
-                    BarChart barChart = layout.findViewById(R.id.barChart);
-                    BarDataSet barDataSet = new BarDataSet(visitors, animals_spiner.getText().toString());
-                    barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                    barDataSet.setValueTextColor(Color.BLACK);
-                    barDataSet.setValueTextSize(16f);
-
-                    BarData barData = new BarData(barDataSet);
-                    barChart.invalidate();
-                    barChart.setFitBars(true);
-                    barChart.setData(barData);
-                    barChart.getDescription().setText("График добавленной продукции на склад");
-                    barChart.animateY(2000);
-
-                    XAxis xAxis = barChart.getXAxis();
-                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setDrawGridLines(false);
-                    xAxis.setGranularity(1f); // only intervals of 1 day
-                    xAxis.setLabelCount(7);
-                    xAxis.setValueFormatter(new IndexAxisValueFormatter(mountMass));
-
-
+                    bar(mountMass);
                 } else {
-                    BarChart barChart = layout.findViewById(R.id.barChart);
-                    BarDataSet barDataSet = new BarDataSet(visitors, animals_spiner.getText().toString());
-                    barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                    barDataSet.setValueTextColor(Color.BLACK);
-                    barDataSet.setValueTextSize(16f);
-
-                    BarData barData = new BarData(barDataSet);
-                    barChart.invalidate();
-                    barChart.setFitBars(true);
-                    barChart.setData(barData);
-                    barChart.getDescription().setText("График добавленной продукции на склад");
-                    barChart.animateY(2000);
-
-                    XAxis xAxis = barChart.getXAxis();
-                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setDrawGridLines(false);
-                    xAxis.setGranularity(1f); // only intervals of 1 day
-                    xAxis.setLabelCount(6); //сколько отображается
-                    xAxis.setValueFormatter(new IndexAxisValueFormatter(labes));
-
+                    bar(labes);
                 }
             }
         });
@@ -213,52 +111,12 @@ public class SaleChartFragment extends Fragment {
                 visitors.clear();
                 storeDataInArrays();
                 if (mount != 13) {
-                    BarChart barChart = layout.findViewById(R.id.barChart);
-                    BarDataSet barDataSet = new BarDataSet(visitors, animals_spiner.getText().toString());
-                    barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                    barDataSet.setValueTextColor(Color.BLACK);
-                    barDataSet.setValueTextSize(16f);
-
-                    BarData barData = new BarData(barDataSet);
-                    barChart.invalidate();
-                    barChart.setFitBars(true);
-                    barChart.setData(barData);
-                    barChart.getDescription().setText("График добавленной продукции на склад");
-                    barChart.animateY(2000);
-
-                    XAxis xAxis = barChart.getXAxis();
-                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setDrawGridLines(false);
-                    xAxis.setGranularity(1f); // only intervals of 1 day
-                    xAxis.setLabelCount(7);
-                    xAxis.setValueFormatter(new IndexAxisValueFormatter(mountMass));
-
+                   bar(mountMass);
                 } else {
-                    BarChart barChart = layout.findViewById(R.id.barChart);
-                    BarDataSet barDataSet = new BarDataSet(visitors, animals_spiner.getText().toString());
-                    barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                    barDataSet.setValueTextColor(Color.BLACK);
-                    barDataSet.setValueTextSize(16f);
-
-                    BarData barData = new BarData(barDataSet);
-                    barChart.invalidate();
-                    barChart.setFitBars(true);
-                    barChart.setData(barData);
-                    barChart.getDescription().setText("График добавленной продукции на склад");
-                    barChart.animateY(2000);
-
-                    XAxis xAxis = barChart.getXAxis();
-                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setDrawGridLines(false);
-                    xAxis.setGranularity(1f); // only intervals of 1 day
-                    xAxis.setLabelCount(6); //сколько отображается
-                    xAxis.setValueFormatter(new IndexAxisValueFormatter(labes));
-
+                   bar(labes);
                 }
             }
         });
-
-
         return layout;
     }
 
@@ -267,28 +125,60 @@ public class SaleChartFragment extends Fragment {
         super.onStart();
         View view = getView();
         if (view != null) {
+            //Настройка спинера с продуктами
+            arrayAdapterProduct = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, productList);
+            animals_spiner.setAdapter(arrayAdapterProduct);
+
             // настройка спинера с годами (выглядил как обычный, и год запоминал)
-            arrayAdapterAnimals = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, add());
-            year_spiner.setAdapter(arrayAdapterAnimals);
+            arrayAdapterYear = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, yearList);
+            year_spiner.setAdapter(arrayAdapterYear);
         }
     }
 
-    public ArrayList<String> add() {
-        Set<String> tempList = new HashSet<>();
+    public void add() {
+        Set<String> yearSet = new HashSet<>();
+        Set<String> productSet = new HashSet<>();
         Cursor cursor = myDB.readAllDataSale();
 
         while (cursor.moveToNext()) {
-            String string1 = cursor.getString(5);
-            tempList.add(string1);
+            String year = cursor.getString(5);
+            String product = cursor.getString(1);
+
+            yearSet.add(year);
+            productSet.add(product);
         }
         cursor.close();
 
-        ArrayList<String> tempList1 = new ArrayList<>();
-        for (String nameExpenses : tempList) {
-            tempList1.add(nameExpenses);
+        yearList = new ArrayList<>();
+        productList = new ArrayList<>();
+        for (String yearColum : yearSet) {
+            yearList.add(yearColum);
         }
+        for (String productColum : productSet) {
+            productList.add(productColum);
+        }
+    }
 
-        return tempList1;
+    public void bar (String [] xAsis){
+        BarChart barChart = layout.findViewById(R.id.barChart);
+        BarDataSet barDataSet = new BarDataSet(visitors, animals_spiner.getText().toString());
+        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        barDataSet.setValueTextColor(Color.BLACK);
+        barDataSet.setValueTextSize(16f);
+
+        BarData barData = new BarData(barDataSet);
+        barChart.invalidate();
+        barChart.setFitBars(true);
+        barChart.setData(barData);
+        barChart.getDescription().setText("График проданной продукции со склада");
+        barChart.animateY(2000);
+
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f); // only intervals of 1 day
+        xAxis.setLabelCount(6); //сколько отображается
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(xAsis));
     }
 
 
@@ -314,7 +204,6 @@ public class SaleChartFragment extends Fragment {
         setMount(mountString);
 
         cursor.moveToNext();
-
 
         if (mount <= 12 && mount > 0) {
 
@@ -483,7 +372,6 @@ public class SaleChartFragment extends Fragment {
         }
     }
 
-
     public void setMount(String mountString) {
         switch (mountString) {
             case "Январь":
@@ -539,6 +427,4 @@ public class SaleChartFragment extends Fragment {
                 break;
         }
     }
-
-
 }

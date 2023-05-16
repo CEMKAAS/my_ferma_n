@@ -8,13 +8,12 @@
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_row="1"
         android:layout_column="0"
         android:layout_columnSpan="3"
-        android:layout_gravity="fill_horizontal"
-        android:layout_marginTop="150dp"
+        android:layout_gravity="center|top"
         android:layout_marginBottom="40dp" />
 
 
@@ -35,8 +34,7 @@
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:textSize="10dp"
-            android:inputType="none"
-            app:simpleItems="@array/animals" />
+            android:inputType="none"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
