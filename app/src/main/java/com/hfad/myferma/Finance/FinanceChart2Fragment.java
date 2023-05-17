@@ -29,6 +29,7 @@ import com.hfad.myferma.R;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -47,6 +48,9 @@ public class FinanceChart2Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //Подключение к базе данных
+        myDB = new MyFermaDatabaseHelper(getActivity());
+        Calendar calendar = Calendar.getInstance();
         layout = inflater.inflate(R.layout.fragment_finance_chart2, container, false);
 
         // установка спинеров
@@ -55,7 +59,7 @@ public class FinanceChart2Fragment extends Fragment {
 
         // настройка спинеров
         mount_spiner.setText("За весь год", false);
-        year_spiner.setText("2023", false);
+        year_spiner.setText(String.valueOf(calendar.get(Calendar.YEAR)), false);
 
         //убириаем фаб кнопку
         ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) getActivity().findViewById(R.id.extended_fab);
@@ -66,9 +70,6 @@ public class FinanceChart2Fragment extends Fragment {
 
         //установка графиков
         LineChart lineChart = layout.findViewById(R.id.lineChart);
-
-        //Подключение к базе данных
-        myDB = new MyFermaDatabaseHelper(getActivity());
 
         //Массивы
         entriesFirst = new ArrayList<>();
@@ -214,14 +215,9 @@ public class FinanceChart2Fragment extends Fragment {
 
         setMount(mountString);
 
-        cursorExpenses.moveToNext();
-        cursor.moveToNext();
-
         if (mount <= 12 && mount > 0) {
-
-            allProductsMount(cursor, entriesFirst, 6, 1);
-            allProductsMount(cursorExpenses, entriesThird, 2, -1);
-
+            allProductsMount(cursor, entriesFirst, 6, 1, year2);
+            allProductsMount(cursorExpenses, entriesThird, 2, -1, year2);
         }
 
         //проверка за весь год //TODO Сократи это говно плиз и еще ниже будет его тоже
@@ -254,7 +250,7 @@ public class FinanceChart2Fragment extends Fragment {
 
                 entriesSecond.add(new Entry(name, sum));
             }
-            // если месяц пустой
+
         } else {
             entriesFirst.add(new Entry(0F,0F));
             entriesSecond.add(new Entry(0F,0F));
@@ -264,27 +260,17 @@ public class FinanceChart2Fragment extends Fragment {
         cursor.close();
     }
 
-    public void allProductsMount(Cursor cursor, ArrayList<Entry> entries, int price, int kof) {
+    public void allProductsMount(Cursor cursor, ArrayList<Entry> entries, int price, int kof, String year2) {
         float x, y;
-        String year2 = year_spiner.getText().toString();
         if (cursor.getCount() != 0) {
-            //проверка месяца
-            if (mount == Integer.parseInt(cursor.getString(4))) {
-                //проверка года
-                if (year2.equals(cursor.getString(5))) {
-                    x = Float.parseFloat(cursor.getString(price)) * kof;
-                    y = Float.parseFloat(cursor.getString(3));
-                    entries.add(new Entry(y, x));
-                }
-            }
             while (cursor.moveToNext()) {
                 //проверка месяца
                 if (mount == Integer.parseInt(cursor.getString(4))) {
                     //проверка года
                     if (year2.equals(cursor.getString(5))) {
-                        x = Float.parseFloat(cursor.getString(price)) * kof;
-                        y = Float.parseFloat(cursor.getString(3));
-                        entries.add(new Entry(y, x));
+                        y = Float.parseFloat(cursor.getString(price)) * kof;//Для вычитания
+                        x = Float.parseFloat(cursor.getString(3));
+                        entries.add(new Entry(x, y));
                     }
                 }
             }
@@ -296,27 +282,23 @@ public class FinanceChart2Fragment extends Fragment {
 
 
     public void allProductsYear(Cursor cursor, String year2, Map<Float, Float> sumCategory, ArrayList<Entry> entries, int price, int kof) {
-        sumCategory.put(1F, (float) 0);
-        sumCategory.put(2F, (float) 0);
-        sumCategory.put(3F, (float) 0);
-        sumCategory.put(4F, (float) 0);
-        sumCategory.put(5F, (float) 0);
-        sumCategory.put(6F, (float) 0);
-        sumCategory.put(7F, (float) 0);
-        sumCategory.put(8F, (float) 0);
-        sumCategory.put(9F, (float) 0);
-        sumCategory.put(10F, (float) 0);
-        sumCategory.put(11F, (float) 0);
-        sumCategory.put(12F, (float) 0);
+        sumCategory.put((float) 1, (float) 0);
+        sumCategory.put((float) 2, (float) 0);
+        sumCategory.put((float) 3, (float) 0);
+        sumCategory.put((float) 4, (float) 0);
+        sumCategory.put((float) 5, (float) 0);
+        sumCategory.put((float) 6, (float) 0);
+        sumCategory.put((float) 7, (float) 0);
+        sumCategory.put((float) 8, (float) 0);
+        sumCategory.put((float) 9, (float) 0);
+        sumCategory.put((float) 10, (float) 0);
+        sumCategory.put((float) 11, (float) 0);
+        sumCategory.put((float) 12, (float) 0);
 
         if (cursor.getCount() != 0) {
-            if (year2.equals(cursor.getString(5))) {
-                sumCategory.put(Float.parseFloat(cursor.getString(4)), Float.parseFloat(cursor.getString(price)) * kof);
-            }
             while (cursor.moveToNext()) {
                 //проверка года
                 if (year2.equals(cursor.getString(5))) {
-
                     float sum = sumCategory.get(Float.parseFloat(cursor.getString(4))) + Float.parseFloat(cursor.getString(price)) * kof;
                     sumCategory.put(Float.parseFloat(cursor.getString(4)), sum);
                 }

@@ -43,25 +43,24 @@ import java.util.Set;
 
 public class FinanceChartFragment extends Fragment {
     private MyFermaDatabaseHelper myDB;
-    private ArrayList<Entry> visitors, entriesFirst, entriesSecond, entriesThird;
-
-    private ArrayList<ProductChar> entriesProductAll;
+    private ArrayList<Entry> visitors;
     private AutoCompleteTextView animals_spiner, mount_spiner, year_spiner;
     private String[] labes = {"", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь", ""};
     private String[] mountMass;
     private View layout;
     private int mount = 0;
+    private String year;
     private ArrayList<String> yearList, productList, productListAll;
     private ArrayAdapter<String> arrayAdapterProduct, arrayAdapterYear;
-    private Map<String, ArrayList<Entry>> sumCategory, sumCategoryAll;
-    private Map<String, ArrayList<Entry>> sumProductYan, sumProductFeb, sumProductMar, sumProductApr, sumProductMay, sumProductJun, sumProductJar, sumProductAvg, sumProductSep, sumProductOkt, sumProductNov, sumProductDec, sumProductAll;
+    private Map<String, ArrayList<Entry>> sumCategory, sumProductYan, sumProductFeb, sumProductMar, sumProductApr, sumProductMay, sumProductJun, sumProductJar, sumProductAvg, sumProductSep, sumProductOkt, sumProductNov, sumProductDec, sumProductAll;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//Подключение к базе данных
+        //Подключение к базе данных и к календарю
         myDB = new MyFermaDatabaseHelper(getActivity());
         add();
+        Calendar calendar = Calendar.getInstance();
 
         layout = inflater.inflate(R.layout.fragment_finance_chart, container, false);
 
@@ -70,11 +69,11 @@ public class FinanceChartFragment extends Fragment {
         mount_spiner = (AutoCompleteTextView) layout.findViewById(R.id.animals_spiner2);
         year_spiner = (AutoCompleteTextView) layout.findViewById(R.id.animals_spiner3);
 
-        Calendar calendar = Calendar.getInstance();
         // настройка спинеров
         animals_spiner.setText("Все", false);
         mount_spiner.setText("За весь год", false);
         year_spiner.setText(String.valueOf(calendar.get(Calendar.YEAR)), false);
+        year = year_spiner.getText().toString();
 
         //убириаем фаб кнопку
         ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) getActivity().findViewById(R.id.extended_fab);
@@ -82,19 +81,12 @@ public class FinanceChartFragment extends Fragment {
 
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.setTitle("Мои Финансы - Продукция");
-        //Todo кнопка назад
 
-        //установка графиков
-        LineChart lineChart = layout.findViewById(R.id.lineChart);
+        //Todo кнопка назад
 
         //Массивы
         visitors = new ArrayList<>();
-        entriesFirst = new ArrayList<>();
-        entriesSecond = new ArrayList<>();
-        entriesThird = new ArrayList<>();
-        entriesProductAll = new ArrayList<>();
         sumCategory = new HashMap<>();
-        sumCategoryAll = new HashMap<>();
         sumProductYan = new HashMap<>();
         sumProductFeb = new HashMap<>();
         sumProductMar = new HashMap<>();
@@ -111,22 +103,11 @@ public class FinanceChartFragment extends Fragment {
 
         //Логика просчета
         allProducts();
-//        storeDataInArrays();
+        //Формируем списки
         all();
-        ArrayList<ILineDataSet> dataSets = new ArrayList();
-        for (String product : productList) {
-            LineDataSet datasetFirst = new LineDataSet(sumProductAll.get(product), product);
-            datasetFirst.setMode(LineDataSet.Mode.LINEAR);
-            dataSets.add(datasetFirst);
-        }
+        // Формируем график
+        spiner();
 
-        LineData data = new LineData(dataSets);
-        lineChart.invalidate();
-        lineChart.setData(data);
-        lineChart.animateY(500);
-
-        xaxis(lineChart, labes);
-        lineChart.invalidate();
         animals_spiner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -152,22 +133,39 @@ public class FinanceChartFragment extends Fragment {
 
     public void spiner() {
         visitors.clear();
-        entriesFirst.clear();
-        entriesSecond.clear();
-        entriesThird.clear();
+        String animalsType = animals_spiner.getText().toString();
+        String mountString = mount_spiner.getText().toString();
+        String year2 = year_spiner.getText().toString();
+        setMount(mountString);
 
-        if (animals_spiner.getText().toString().equals("Все")) {
+        if (animalsType.equals("Все")) {
+
             LineChart lineChart = layout.findViewById(R.id.lineChart);
             lineChart.getDescription().setText("График продукции");
             ArrayList<ILineDataSet> dataSets = new ArrayList();
-            for (String product : productList) {
-                LineDataSet datasetFirst = new LineDataSet(sumProductAll.get(product), product);
-//                 График будет зеленого цвета
-                datasetFirst.setColor(Color.GRAY);
-//                 График будет плавным
-                datasetFirst.setMode(LineDataSet.Mode.LINEAR);
-                dataSets.add(datasetFirst);
+
+            if (mount <= 12 && mount > 0) {
+                allProductsMount(animalsType, year2);
+                for (String product : productList) {
+                    greatChar(product, dataSets,sumCategory);
+                }
+            } else {
+                if (year.equals(year2)) {
+                    for (String product : productList) {
+                        greatChar(product, dataSets, sumProductAll);
+                    }
+                } else {
+                    year = year2;
+                    //Логика просчета
+                    allProducts();
+                    //Формируем списки
+                    all();
+                    for (String product : productList) {
+                        greatChar(product, dataSets, sumProductAll);
+                    }
+                }
             }
+
             LineData data = new LineData(dataSets);
             lineChart.invalidate();
             lineChart.setData(data);
@@ -179,10 +177,10 @@ public class FinanceChartFragment extends Fragment {
             }
 
         } else {
-            storeDataInArrays();
+            storeDataInArrays(animalsType, mountString, year2);
             LineChart lineChart = layout.findViewById(R.id.lineChart);
             lineChart.getDescription().setText("График продукции");
-            LineDataSet dataset = new LineDataSet(visitors, animals_spiner.getText().toString());
+            LineDataSet dataset = new LineDataSet(visitors, animalsType);
             LineData data = new LineData(dataset);
             lineChart.invalidate();
             lineChart.setData(data);
@@ -193,7 +191,284 @@ public class FinanceChartFragment extends Fragment {
                 xaxis(lineChart, labes);
             }
         }
+    }
 
+    // Добавление графиков
+    public void greatChar(String product, ArrayList<ILineDataSet> dataSets, Map<String, ArrayList<Entry>> mapProduct) {
+        LineDataSet datasetFirst = new LineDataSet(mapProduct.get(product), product);
+        //График будет зеленого цвета
+        datasetFirst.setColor(Color.GRAY); // Todo Логика просчета
+        //График будет плавным
+        datasetFirst.setMode(LineDataSet.Mode.LINEAR);
+        dataSets.add(datasetFirst);
+    }
+
+    // Добавление значений в мапу
+    public void allProducts() {
+        sumProductYan.clear();
+        sumProductFeb.clear();
+        sumProductMar.clear();
+        sumProductApr.clear();
+        sumProductMay.clear();
+        sumProductJun.clear();
+        sumProductJar.clear();
+        sumProductAvg.clear();
+        sumProductSep.clear();
+        sumProductOkt.clear();
+        sumProductNov.clear();
+        sumProductDec.clear();
+        sumProductAll.clear();
+        Cursor cursor = myDB.readAllDataSale();
+        String year2 = year_spiner.getText().toString();
+
+        if (cursor.getCount() != 0) {
+            //проверка за весь год //TODO Сократи это говно плиз и еще ниже будет его тоже, будущий Семён я сделал все что мог
+            while (cursor.moveToNext()) {
+                //проверка года
+                if (year2.equals(cursor.getString(5))) {
+                    switch (Integer.parseInt(cursor.getString(4))) {
+                        case 1:
+                            productMount(cursor, sumProductYan, 1);
+                            break;
+                        case 2:
+                            productMount(cursor, sumProductFeb, 2);
+                            break;
+                        case 3:
+                            productMount(cursor, sumProductMar, 3);
+                            break;
+                        case 4:
+                            productMount(cursor, sumProductApr, 4);
+                            break;
+                        case 5:
+                            productMount(cursor, sumProductMay, 5);
+                            break;
+                        case 6:
+                            productMount(cursor, sumProductJun, 6);
+                            break;
+                        case 7:
+                            productMount(cursor, sumProductJar, 7);
+                            break;
+                        case 8:
+                            productMount(cursor, sumProductAvg, 8);
+                            break;
+                        case 9:
+                            productMount(cursor, sumProductSep, 9);
+                            break;
+                        case 10:
+                            productMount(cursor, sumProductOkt, 10);
+                            break;
+                        case 11:
+                            productMount(cursor, sumProductNov, 11);
+                            break;
+                        case 12:
+                            productMount(cursor, sumProductDec, 12);
+                            break;
+                    }
+                }
+            }
+        }
+        cursor.close();
+    }
+
+    // Добавление значений по месячно
+    public void productMount(Cursor cursor, Map<String, ArrayList<Entry>> sumProductMount, float x) {
+
+        if (sumProductMount.get(cursor.getString(1)) == null) {
+            ArrayList<Entry> sd = new ArrayList<>();
+            float y = Float.parseFloat(cursor.getString(6));
+            sd.add(new Entry(x, y));
+            sumProductMount.put(cursor.getString(1), sd);
+        } else {
+            float y = Float.parseFloat(cursor.getString(6));
+            for (Entry ds : sumProductMount.get(cursor.getString(1))) {
+                y += ds.getY();
+            }
+            sumProductMount.get(cursor.getString(1)).clear();
+            sumProductMount.get(cursor.getString(1)).add(new Entry(x, y));
+            sumProductMount.put(cursor.getString(1), sumProductMount.get(cursor.getString(1)));
+        }
+    }
+
+    // Соединение значений в единую мапу
+    public void all() {
+        for (String product : productList) {
+
+            ArrayList<Entry> entries = new ArrayList<>();
+            entries.addAll(addAll22(sumProductYan, product, 1));
+            entries.addAll(addAll22(sumProductFeb, product, 2));
+            entries.addAll(addAll22(sumProductMar, product, 3));
+            entries.addAll(addAll22(sumProductApr, product, 4));
+            entries.addAll(addAll22(sumProductMay, product, 5));
+            entries.addAll(addAll22(sumProductJun, product, 6));
+            entries.addAll(addAll22(sumProductJar, product, 7));
+            entries.addAll(addAll22(sumProductAvg, product, 8));
+            entries.addAll(addAll22(sumProductSep, product, 9));
+            entries.addAll(addAll22(sumProductOkt, product, 10));
+            entries.addAll(addAll22(sumProductNov, product, 11));
+            entries.addAll(addAll22(sumProductDec, product, 12));
+
+            sumProductAll.put(product, entries);
+        }
+    }
+
+    // Находим пустые мапы и добавляем минимальные значения
+    public ArrayList<Entry> addAll22(Map<String, ArrayList<Entry>> sumProductYansdad, String product1, float x) {
+        ArrayList<Entry> entries = new ArrayList<>();
+        if (sumProductYansdad.get(product1) == null) {
+            entries.add(new Entry(x, 0));
+            sumProductYansdad.put(product1, entries);
+        } else {
+            entries.addAll(sumProductYansdad.get(product1));
+        }
+        return entries;
+    }
+
+    //Если пользователь выбрал все товары по месяцу за год
+    public void allProductsMount(String animalsType, String year2) {
+        float x, y;
+        sumCategory.clear();
+        Cursor cursor = myDB.readAllDataSale();
+        if (cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                if (animalsType.equals("Все")) {
+                    //проверка месяца
+                    if (mount == Integer.parseInt(cursor.getString(4))) {
+                        //проверка года
+                        if (year2.equals(cursor.getString(5))) {
+                            ArrayList<Entry> sd = new ArrayList<>();
+                            y = Float.parseFloat(cursor.getString(6));
+                            x = Float.parseFloat(cursor.getString(3));
+                            if (sumCategory.get(cursor.getString(1)) == null) {
+                                sd.add(new Entry(x, y));
+                                sumCategory.put(cursor.getString(1), sd);
+                            } else {
+                                sumCategory.get(cursor.getString(1)).add(new Entry(x, y));
+                                sumCategory.put(cursor.getString(1), sumCategory.get(cursor.getString(1)));
+                            }
+//                            x = Float.parseFloat(cursor.getString(6));
+//                            y = Float.parseFloat(cursor.getString(3));
+//                            sd.add(new Entry(y, x));
+//                            sumCategory.put(cursor.getString(1), sd);
+                        }
+                    }
+                }
+            }
+        } else {
+            ArrayList<Entry> sd = new ArrayList<>();
+            sd.add(new Entry(0, 0));
+            for (String product : productList) {
+                sumCategory.put(product, sd);
+            }
+        }
+        cursor.close();
+    }
+
+    public void storeDataInArrays(String animalsType, String mountString, String year2) {
+        Cursor cursor = myDB.readAllDataSale();
+
+        float jan = 0f;
+        float feb = 0f;
+        float mar = 0f;
+        float apr = 0f;
+        float mai = 0f;
+        float jun = 0f;
+        float jul = 0f;
+        float aug = 0f;
+        float sep = 0f;
+        float oct = 0f;
+        float nov = 0f;
+        float dec = 0f;
+
+        cursor.moveToNext();
+
+        if(cursor.getCount() != 0) {
+            if (mount <= 12 && mount > 0) {
+                while (cursor.moveToNext()) {
+                    storeDataInArraysMount(cursor, animalsType, year2);
+                }
+            }
+            //проверка за весь год
+            else if (mount == 13) {
+                while (cursor.moveToNext()) {
+                    if (animalsType.equals(cursor.getString(1))) {
+                        //проверка года
+                        if (year2.equals(cursor.getString(5))) {
+                            switch (Integer.parseInt(cursor.getString(4))) {
+                                case 1:
+                                    jan += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 2:
+                                    feb += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 3:
+                                    mar += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 4:
+                                    apr += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 5:
+                                    mai += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 6:
+                                    jun += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 7:
+                                    jul += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 8:
+                                    aug += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 9:
+                                    sep += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 10:
+                                    oct += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 11:
+                                    nov += Float.parseFloat(cursor.getString(6));
+                                    break;
+                                case 12:
+                                    dec += Float.parseFloat(cursor.getString(6));
+                                    break;
+                            }
+                        }
+                    }
+                }
+                cursor.close();
+                visitors.add(new Entry(1, jan));
+                visitors.add(new Entry(2, feb));
+                visitors.add(new Entry(3, mar));
+                visitors.add(new Entry(4, apr));
+                visitors.add(new Entry(5, mai));
+                visitors.add(new Entry(6, jun));
+                visitors.add(new Entry(7, jul));
+                visitors.add(new Entry(8, aug));
+                visitors.add(new Entry(9, sep));
+                visitors.add(new Entry(10, oct));
+                visitors.add(new Entry(11, nov));
+                visitors.add(new Entry(12, dec));
+            }
+        } else {
+            visitors.add(new Entry(0, 0));
+        }
+        cursor.close();
+    }
+
+    public void storeDataInArraysMount(Cursor cursor, String animalsType, String year2) {
+
+        if (animalsType.equals(cursor.getString(1))) {
+            //проверка месяца
+            if (mount == Integer.parseInt(cursor.getString(4))) {
+                //проверка года
+                if (year2.equals(cursor.getString(5))) {
+
+                    float x = Float.parseFloat(cursor.getString(6));
+                    float y = Float.parseFloat(cursor.getString(3));
+
+                    visitors.add(new Entry(y, x));
+                }
+            }
+        }
     }
 
     public void xaxis(LineChart lineChart, String[] valueX) {
@@ -247,332 +522,6 @@ public class FinanceChartFragment extends Fragment {
         productListAll.add("Все");
     }
 
-    public void allProducts() {
-        Cursor cursor = myDB.readAllDataSale();
-        float x, y;
-
-        String animalsType = animals_spiner.getText().toString();
-        String mountString = mount_spiner.getText().toString();
-        String year2 = year_spiner.getText().toString();
-
-        setMount(mountString);
-
-        if (cursor.getCount() == 0) {
-
-            x = 0;
-            y = 0;
-
-            visitors.add(new Entry(y, x));
-
-        } else if (mount <= 12 && mount > 0) {
-            while (cursor.moveToNext()) {
-                allProductsMount(cursor, animalsType, year2);
-            }
-
-        }
-        //проверка за весь год //TODO Сократи это говно плиз и еще ниже будет его тоже
-        else if (mount == 13) {
-            while (cursor.moveToNext()) {
-                if (animalsType.equals("Все")) {
-                    //проверка года
-                    if (year2.equals(cursor.getString(5))) {
-                        switch (Integer.parseInt(cursor.getString(4))) {
-                            case 1:
-                                productMount(cursor, sumProductYan, 1);
-                                break;
-                            case 2:
-                                productMount(cursor, sumProductFeb,2);
-                                break;
-                            case 3:
-                                productMount(cursor, sumProductMar,3);
-                                break;
-                            case 4:
-                                productMount(cursor, sumProductApr,4);
-                                break;
-                            case 5:
-                                productMount(cursor, sumProductMay,5);
-                                break;
-                            case 6:
-                                productMount(cursor, sumProductJun,6);
-                                break;
-                            case 7:
-                                productMount(cursor, sumProductJar,7);
-                                break;
-                            case 8:
-                                productMount(cursor, sumProductAvg,8);
-                                break;
-                            case 9:
-                                productMount(cursor, sumProductSep,9);
-                                break;
-                            case 10:
-                                productMount(cursor, sumProductOkt,10);
-                                break;
-                            case 11:
-                                productMount(cursor, sumProductNov,11);
-                                break;
-                            case 12:
-                                productMount(cursor, sumProductDec,12);
-                                break;
-                        }
-                    }
-                }
-            }
-            cursor.close();
-            // если месяц пустой
-        } else {
-
-            x = 0;
-            y = 0;
-
-            visitors.add(new Entry(y, x));
-        }
-        cursor.close();
-    }
-
-    public void productMount(Cursor cursor, Map<String, ArrayList<Entry>> sumProductMount,float x) {
-
-        if (sumProductMount.get(cursor.getString(1)) == null) {
-            ArrayList<Entry> sd = new ArrayList<>();
-            float y = Float.parseFloat(cursor.getString(6));
-            sd.add(new Entry(x, y));
-            sumProductMount.put(cursor.getString(1), sd);
-        } else {
-            float y = Float.parseFloat(cursor.getString(6));
-//            ArrayList<Entry> sd = (ArrayList<Entry>) sumProductMount.get(cursor.getString(1)).clone();
-            for (Entry ds : sumProductMount.get(cursor.getString(1))){
-                y += ds.getY();
-            }
-            sumProductMount.get(cursor.getString(1)).clear();
-            sumProductMount.get(cursor.getString(1)).add(new Entry(x, y));
-            sumProductMount.put(cursor.getString(1), sumProductMount.get(cursor.getString(1)));
-        }
-    }
-
-    public void all() {
-        for (String product : productList) {
-
-            ArrayList<Entry> entries = new ArrayList<>();
-            entries.addAll(addAll22(sumProductYan,product,1));
-            entries.addAll(addAll22(sumProductFeb,product,2));
-            entries.addAll(addAll22(sumProductMar,product,3));
-            entries.addAll(addAll22(sumProductApr,product,4));
-            entries.addAll(addAll22(sumProductMay,product,5));
-            entries.addAll(addAll22(sumProductJun,product,6));
-            entries.addAll(addAll22(sumProductJar,product,7));
-            entries.addAll(addAll22(sumProductAvg,product,8));
-            entries.addAll(addAll22(sumProductSep,product,9));
-            entries.addAll(addAll22(sumProductOkt,product,10));
-            entries.addAll(addAll22(sumProductNov,product,11));
-            entries.addAll(addAll22(sumProductDec,product,12));
-
-            sumProductAll.put(product,entries);
-        }
-    }
-
-    public ArrayList<Entry> addAll22(Map<String, ArrayList<Entry>> sumProductYansdad,String product1, float x){
-        ArrayList<Entry> entries = new ArrayList<>();
-        if(sumProductYansdad.get(product1)== null){
-            entries.add(new Entry(x,0));
-            sumProductYansdad.put(product1, entries);
-        }else {
-            entries.addAll(sumProductYansdad.get(product1));}
-        return entries;
-    }
-
-    public void storeDataInArraysMount(Cursor cursor) {
-        float x, y;
-        String animalsType = animals_spiner.getText().toString();
-        String year2 = year_spiner.getText().toString();
-
-        if (animalsType.equals(cursor.getString(1))) {
-            //проверка месяца
-            if (mount == Integer.parseInt(cursor.getString(4))) {
-                //проверка года
-                if (year2.equals(cursor.getString(5))) {
-
-                    x = Float.parseFloat(cursor.getString(6));
-                    y = Float.parseFloat(cursor.getString(3));
-
-                    visitors.add(new Entry(y, x));
-                }
-            }
-        }
-    }
-
-    public void allProductsMount(Cursor cursor, String animalsType, String year2) {
-        float x, y;
-        if (animalsType.equals("Все")) {
-            //проверка месяца
-            if (mount == Integer.parseInt(cursor.getString(4))) {
-                //проверка года
-                if (year2.equals(cursor.getString(5))) {
-                    ArrayList<Entry> sd = new ArrayList<>();
-                    x = Float.parseFloat(cursor.getString(6));
-                    y = Float.parseFloat(cursor.getString(3));
-                    sd.add(new Entry(y, x));
-                    sumCategory.put(cursor.getString(1), sd);
-
-                }
-            }
-        }
-    }
-
-    public void storeDataInArrays() {
-        Cursor cursor = myDB.readAllDataSale();
-        float x, y;
-        String animalsType = animals_spiner.getText().toString();
-        String mountString = mount_spiner.getText().toString();
-        String year2 = year_spiner.getText().toString();
-        float jan = 0f;
-        float feb = 0f;
-        float mar = 0f;
-        float apr = 0f;
-        float mai = 0f;
-        float jun = 0f;
-        float jul = 0f;
-        float aug = 0f;
-        float sep = 0f;
-        float oct = 0f;
-        float nov = 0f;
-        float dec = 0f;
-
-        setMount(mountString);
-
-        cursor.moveToNext();
-
-        if (mount <= 12 && mount > 0) {
-            storeDataInArraysMount(cursor);
-            while (cursor.moveToNext()) {
-                storeDataInArraysMount(cursor);
-            }
-            cursor.close();
-
-            // Если таблица не создана
-        } else if (cursor.getCount() == 0) {
-            x = 0;
-            y = 0;
-            visitors.add(new Entry(y, x));
-        }
-
-        //проверка за весь год
-        else if (mount == 13) {
-
-            if (animalsType.equals(cursor.getString(1))) {
-                //проверка года
-                if (year2.equals(cursor.getString(5))) {
-                    switch (Integer.parseInt(cursor.getString(4))) {
-                        case 1:
-                            jan += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 2:
-                            feb += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 3:
-                            mar += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 4:
-                            apr += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 5:
-                            mai += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 6:
-                            jun += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 7:
-                            jul += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 8:
-                            aug += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 9:
-                            sep += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 10:
-                            oct += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 11:
-                            nov += Float.parseFloat(cursor.getString(6));
-                            break;
-                        case 12:
-                            dec += Float.parseFloat(cursor.getString(6));
-                            break;
-
-                    }
-                }
-            }
-
-            while (cursor.moveToNext()) {
-
-                if (animalsType.equals(cursor.getString(1))) {
-                    //проверка года
-                    if (year2.equals(cursor.getString(5))) {
-
-                        switch (Integer.parseInt(cursor.getString(4))) {
-                            case 1:
-                                jan += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 2:
-                                feb += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 3:
-                                mar += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 4:
-                                apr += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 5:
-                                mai += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 6:
-                                jun += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 7:
-                                jul += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 8:
-                                aug += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 9:
-                                sep += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 10:
-                                oct += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 11:
-                                nov += Float.parseFloat(cursor.getString(6));
-                                break;
-                            case 12:
-                                dec += Float.parseFloat(cursor.getString(6));
-                                break;
-                        }
-                    }
-                }
-            }
-            cursor.close();
-            visitors.add(new Entry(1, jan));
-            visitors.add(new Entry(2, feb));
-            visitors.add(new Entry(3, mar));
-            visitors.add(new Entry(4, apr));
-            visitors.add(new Entry(5, mai));
-            visitors.add(new Entry(6, jun));
-            visitors.add(new Entry(7, jul));
-            visitors.add(new Entry(8, aug));
-            visitors.add(new Entry(9, sep));
-            visitors.add(new Entry(10, oct));
-            visitors.add(new Entry(11, nov));
-            visitors.add(new Entry(12, dec));
-
-            // если месяц пустой
-        } else {
-
-            x = 0;
-            y = 0;
-
-            visitors.add(new Entry(y, x));
-        }
-        cursor.close();
-    }
 
     public void setMount(String mountString) {
         switch (mountString) {
