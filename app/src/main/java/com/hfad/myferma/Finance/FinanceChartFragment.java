@@ -15,19 +15,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.hfad.myferma.R;
@@ -37,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,7 +41,7 @@ public class FinanceChartFragment extends Fragment {
     private String[] labes = {"", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь", ""};
     private String[] mountMass;
     private View layout;
-    private int mount = 0;
+    private int mount = 0, idColor =0;
     private String year;
     private ArrayList<String> yearList, productList, productListAll;
     private ArrayAdapter<String> arrayAdapterProduct, arrayAdapterYear;
@@ -196,12 +189,38 @@ public class FinanceChartFragment extends Fragment {
     // Добавление графиков
     public void greatChar(String product, ArrayList<ILineDataSet> dataSets, Map<String, ArrayList<Entry>> mapProduct) {
         LineDataSet datasetFirst = new LineDataSet(mapProduct.get(product), product);
+        idColor++;
         //График будет зеленого цвета
-        datasetFirst.setColor(Color.GRAY); // Todo Логика просчета
+        datasetFirst.setColor(setColors()); // Todo Логика просчета
         //График будет плавным
         datasetFirst.setMode(LineDataSet.Mode.LINEAR);
         dataSets.add(datasetFirst);
     }
+
+    public int setColors (){
+        switch (idColor){
+            case 0:
+                return Color.GRAY;
+            case 1:
+                return Color.RED;
+            case 2:
+                return Color.BLUE;
+            case 4:
+                return Color.CYAN;
+            case 5:
+                return Color.GREEN;
+            case 6:
+                return Color.YELLOW;
+            case 7:
+                return Color.WHITE;
+            case 8:
+                return Color.BLACK;
+            case 9:
+                return Color.GRAY;
+        }
+        return Color.GRAY;
+    }
+
 
     // Добавление значений в мапу
     public void allProducts() {
@@ -345,10 +364,6 @@ public class FinanceChartFragment extends Fragment {
                                 sumCategory.get(cursor.getString(1)).add(new Entry(x, y));
                                 sumCategory.put(cursor.getString(1), sumCategory.get(cursor.getString(1)));
                             }
-//                            x = Float.parseFloat(cursor.getString(6));
-//                            y = Float.parseFloat(cursor.getString(3));
-//                            sd.add(new Entry(y, x));
-//                            sumCategory.put(cursor.getString(1), sd);
                         }
                     }
                 }

@@ -39,11 +39,12 @@ public class FinanceChart2Fragment extends Fragment {
     private ArrayAdapter<String> arrayAdapterAnimals;
     private MyFermaDatabaseHelper myDB;
     private ArrayList<Entry> entriesFirst, entriesSecond, entriesThird;
-    private AutoCompleteTextView  mount_spiner, year_spiner;
+    private AutoCompleteTextView mount_spiner, year_spiner;
     private String[] labes = {"", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь", ""};
     private String[] mountMass;
     private View layout;
     private int mount = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -124,6 +125,7 @@ public class FinanceChart2Fragment extends Fragment {
 
         return layout;
     }
+
     public void spiner() {
         entriesFirst.clear();
         entriesSecond.clear();
@@ -166,6 +168,7 @@ public class FinanceChart2Fragment extends Fragment {
             xaxis(lineChart, labes);
         }
     }
+
     public void xaxis(LineChart lineChart, String[] valueX) {
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -185,6 +188,7 @@ public class FinanceChart2Fragment extends Fragment {
             year_spiner.setAdapter(arrayAdapterAnimals);
         }
     }
+
     public ArrayList<String> add() {
         Set<String> tempList = new HashSet<>();
         Cursor cursor = myDB.readAllDataSale();
@@ -202,6 +206,7 @@ public class FinanceChart2Fragment extends Fragment {
 
         return tempList1;
     }
+
     public void allProducts() {
         Cursor cursor = myDB.readAllDataSale();
         Cursor cursorExpenses = myDB.readAllDataExpenses();
@@ -252,9 +257,9 @@ public class FinanceChart2Fragment extends Fragment {
             }
 
         } else {
-            entriesFirst.add(new Entry(0F,0F));
-            entriesSecond.add(new Entry(0F,0F));
-            entriesThird.add(new Entry(0F,0F));
+            entriesFirst.add(new Entry(0F, 0F));
+            entriesSecond.add(new Entry(0F, 0F));
+            entriesThird.add(new Entry(0F, 0F));
         }
         cursorExpenses.close();
         cursor.close();
@@ -282,35 +287,31 @@ public class FinanceChart2Fragment extends Fragment {
 
 
     public void allProductsYear(Cursor cursor, String year2, Map<Float, Float> sumCategory, ArrayList<Entry> entries, int price, int kof) {
-        sumCategory.put((float) 1, (float) 0);
-        sumCategory.put((float) 2, (float) 0);
-        sumCategory.put((float) 3, (float) 0);
-        sumCategory.put((float) 4, (float) 0);
-        sumCategory.put((float) 5, (float) 0);
-        sumCategory.put((float) 6, (float) 0);
-        sumCategory.put((float) 7, (float) 0);
-        sumCategory.put((float) 8, (float) 0);
-        sumCategory.put((float) 9, (float) 0);
-        sumCategory.put((float) 10, (float) 0);
-        sumCategory.put((float) 11, (float) 0);
-        sumCategory.put((float) 12, (float) 0);
 
         if (cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 //проверка года
                 if (year2.equals(cursor.getString(5))) {
+                    if (sumCategory.get(Float.parseFloat(cursor.getString(4))) == null){
+                        sumCategory.put(Float.parseFloat(cursor.getString(4)), Float.parseFloat(cursor.getString(price)) * kof);
+                    }else {
                     float sum = sumCategory.get(Float.parseFloat(cursor.getString(4))) + Float.parseFloat(cursor.getString(price)) * kof;
-                    sumCategory.put(Float.parseFloat(cursor.getString(4)), sum);
+                    sumCategory.put(Float.parseFloat(cursor.getString(4)), sum);}
                 }
             }
         }
         cursor.close();
+        for (float i = 1; i < 12; i++) {
+            if (sumCategory.get(i) == null) {
+                entries.add(new Entry(i, 0));
 
-        for (Map.Entry<Float, Float> entry : sumCategory.entrySet()) {
-            Float name = entry.getKey();
-            Float sum = entry.getValue();
+            }else {
+                for (Map.Entry<Float, Float> entry : sumCategory.entrySet()) {
+                Float name = entry.getKey();
+                Float sum = entry.getValue();
 
-            entries.add(new Entry(name, sum));
+                entries.add(new Entry(name, sum));
+            }}
         }
     }
 

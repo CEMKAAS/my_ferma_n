@@ -62,7 +62,7 @@ public class WarehouseFragment extends Fragment implements View.OnClickListener 
         // Настраиваем адаптер
         recyclerView = layout.findViewById(R.id.recyclerView);
 
-        ProductAdapter productAdapter = new ProductAdapter(add1(),"", " Шт.");
+        ProductAdapter productAdapter = new ProductAdapter(add1(),"", " Шт.");//TODO Suffix
         recyclerView.setAdapter(productAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
