@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.hfad.myferma.R;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.incubator.ListAdapterIncubator;
@@ -37,6 +39,13 @@ public class AddManagerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_add_manager, container, false);
         myDB = new MyFermaDatabaseHelper(getActivity());
+
+        MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
+        appBar.getMenu().findItem(R.id.filler).setVisible(true);
+
+        //убириаем фаб кнопку
+        ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) getActivity().findViewById(R.id.extended_fab);
+        fab.setVisibility(View.GONE);
 
         recyclerView = layout.findViewById(R.id.recyclerView);
         empty_imageview = layout.findViewById(R.id.empty_imageview);

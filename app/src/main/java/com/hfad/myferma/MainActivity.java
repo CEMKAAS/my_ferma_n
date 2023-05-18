@@ -15,6 +15,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private InterstitialAd mInterstitialAd;
     private int position = 0;
 
+    private FrameLayout llBottomSheet;
     //    WriteOffFragment writeOffFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,18 +145,17 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-        View da = findViewById(R.id.standard_bottom_sheet);
+        llBottomSheet = findViewById(R.id.bottom_sheet);
 
-        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(da);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
+
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
 // настройка максимальной высоты
-        bottomSheetBehavior.setPeekHeight(340);
+        bottomSheetBehavior.setPeekHeight(0);
 
 // настройка возможности скрыть элемент при свайпе вниз
-        bottomSheetBehavior.setHideable(false);
+        bottomSheetBehavior.setHideable(true);
 
         //Реклама от яндекса
 //        mBannerAdView = (BannerAdView) findViewById(R.id.banner_ad_view);
@@ -180,13 +182,15 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.delete:
                     beginIncubator();
+                case R.id.filler:
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
             }
             return true;
         });
 
        appBar.getMenu().findItem(R.id.delete).setVisible(false);
-
+       appBar.getMenu().findItem(R.id.filler).setVisible(false);
 
         //убираем ботом навигацию и фабкнопку при вызове клавиатуры
         KeyboardVisibilityEvent.setEventListener(
