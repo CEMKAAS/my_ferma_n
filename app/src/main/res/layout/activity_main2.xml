@@ -46,6 +46,8 @@
             android:text="text"
             app:icon="@drawable/ic_action_meat" />
 
+
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -57,7 +59,13 @@
         android:background="?android:attr/windowBackground"
         app:menu="@menu/bottom_navigartion" />
 
+    <FrameLayout
 
+        android:id="@+id/standard_bottom_sheet"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
+    </FrameLayout>
     <!--         app:layout_constraintTop_toBottomOf="+id/banner_ad_view" -->
 </LinearLayout>

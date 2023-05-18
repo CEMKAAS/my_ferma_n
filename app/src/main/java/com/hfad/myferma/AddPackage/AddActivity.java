@@ -49,10 +49,6 @@ public class AddActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         empty_imageview = findViewById(R.id.empty_imageview);
         no_data = findViewById(R.id.no_data);
-//        animals_spiner = findViewById(R.id.animals_spiner);
-//        animals_spiner2 = findViewById(R.id.mount_spiner);
-//        animals_spiner3 = findViewById(R.id.year_spiner);
-
 
         myDB = new MyFermaDatabaseHelper(AddActivity.this);
         id = new ArrayList<>();
@@ -63,66 +59,12 @@ public class AddActivity extends AppCompatActivity {
         year = new ArrayList<>();
 
         no_data = findViewById(R.id.no_data);
-//        animals_spiner.setText("Все", false);
-//        animals_spiner2.setText("За весь год", false);
-//        animals_spiner3.setText("2023", false);
-
-
-//        arrayAdapterAnimals = new ArrayAdapter<>(AddActivity.this, android.R.layout.simple_spinner_dropdown_item, add());
-//        animals_spiner3.setAdapter(arrayAdapterAnimals);
 
         storeDataInArrays();
-        customAdapterAdd = new CustomAdapterAdd(AddActivity.this, this, id, title, disc,
-                day, mount, year);
-
-        recyclerView.setAdapter(customAdapterAdd);
-        recyclerView.setLayoutManager(new LinearLayoutManager(AddActivity.this));
-
-//        animals_spiner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id2) {
-//                id.clear();
-//                title.clear();
-//                disc.clear();
-//                day.clear();
-//                mount.clear();
-//                year.clear();
-//                storeDataInArrays();
-//                recyclerView.setAdapter(customAdapterAdd);
-//                recyclerView.setLayoutManager(new LinearLayoutManager(AddActivity.this));
-//            }
-//        });
-//
-//        animals_spiner2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id2) {
-//                id.clear();
-//                title.clear();
-//                disc.clear();
-//                day.clear();
-//                mount.clear();
-//                year.clear();
-//                storeDataInArrays();
-//                recyclerView.setAdapter(customAdapterAdd);
-//                recyclerView.setLayoutManager(new LinearLayoutManager(AddActivity.this));
-//            }
-//        });
-//
-//        animals_spiner2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id2) {
-//                id.clear();
-//                title.clear();
-//                disc.clear();
-//                day.clear();
-//                mount.clear();
-//                year.clear();
-//                storeDataInArrays();
-//
-//                recyclerView.setAdapter(customAdapterAdd);
-//                recyclerView.setLayoutManager(new LinearLayoutManager(AddActivity.this));
-//            }
-//        });
+//        customAdapterAdd = new CustomAdapterAdd(AddActivity.this, this, id, title, disc,
+//                day, mount, year);
+//        recyclerView.setAdapter(customAdapterAdd);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(AddActivity.this));
 
     }
 
@@ -177,6 +119,8 @@ public class AddActivity extends AppCompatActivity {
             no_data.setVisibility(View.GONE);
         }
     }
+
+
 //    void storeDataInArrays() {
 //        Cursor cursor = myDB.readAllData();
 //        String mountString = String.valueOf(animals_spiner2.getText());

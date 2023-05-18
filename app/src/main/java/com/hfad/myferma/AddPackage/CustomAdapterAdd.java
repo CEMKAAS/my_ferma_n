@@ -16,19 +16,20 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hfad.myferma.R;
+import com.hfad.myferma.incubator.ListAdapterIncubator;
 
 import java.util.ArrayList;
 
 public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyViewHolder> {
 
-    private Context context;
-    private Activity activity;
     private ArrayList id, title, disc, day,mount,year;
 
-    public CustomAdapterAdd(Activity activity, Context context, ArrayList idAdd, ArrayList titleAdd, ArrayList discAdd,
+    private Listener listener;
+    public static interface Listener {
+        public void onClick(int position);
+    }
+    public CustomAdapterAdd(ArrayList idAdd, ArrayList titleAdd, ArrayList discAdd,
                      ArrayList dayAdd, ArrayList mountAdd, ArrayList yearAdd){
-        this.activity = activity;
-        this.context = context;
         this.id = idAdd;
         this.title = titleAdd;
         this.disc = discAdd;
@@ -37,11 +38,14 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
         this.year = yearAdd;
 
     }
+    public void setListener(CustomAdapterAdd.Listener listener) {
+        this.listener = listener;
+    }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.my_row, parent, false);
         return new MyViewHolder(view);
     }
@@ -69,14 +73,9 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, UpdateActivityAdd.class);
-                intent.putExtra("id", String.valueOf(id.get(position)));
-                intent.putExtra("title", String.valueOf(title.get(position)));
-                intent.putExtra("disc", String.valueOf(disc.get(position)));
-                intent.putExtra("day", String.valueOf(day.get(position)));
-                intent.putExtra("mount", String.valueOf(mount.get(position)));
-                intent.putExtra("year", String.valueOf(year.get(position)));
-                activity.startActivityForResult(intent, 1);
+                if (listener != null) {
+                    listener.onClick(position);
+                }
             }
         });
 

@@ -4,7 +4,6 @@ import static android.app.PendingIntent.FLAG_IMMUTABLE;
 import static android.content.ContentValues.TAG;
 
 import android.app.AlarmManager;
-import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,36 +16,26 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.hfad.myferma.AddPackage.AddActivity;
 import com.hfad.myferma.AddPackage.AddFragment;
-import com.hfad.myferma.ExpensesPackage.ExpensesActivity;
+import com.hfad.myferma.AddPackage.AddManagerFragment;
 import com.hfad.myferma.ExpensesPackage.ExpensesFragment;
 import com.hfad.myferma.Finance.FinanceFragment;
 import com.hfad.myferma.Finance.PriceFragment;
-import com.hfad.myferma.SalePackage.SaleActivity;
 import com.hfad.myferma.SalePackage.SaleFragment;
 import com.hfad.myferma.WriteOff.WriteOffFragment;
 import com.hfad.myferma.databinding.ActivityMain2Binding;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.incubator.IncubatorMenuFragment;
-import com.yandex.mobile.ads.banner.AdSize;
 import com.yandex.mobile.ads.banner.BannerAdView;
-import com.yandex.mobile.ads.common.AdRequest;
-import com.yandex.mobile.ads.common.AdRequestError;
-import com.yandex.mobile.ads.common.ImpressionData;
 import com.yandex.mobile.ads.interstitial.InterstitialAd;
-import com.yandex.mobile.ads.interstitial.InterstitialAdEventListener;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -135,25 +124,36 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.add_button:
                     replaceFragment(new AddFragment());
                     appBar.setTitle("Мои Товар");
-                    fba(AddActivity.class);
+                    fba(new AddManagerFragment());
                     break;
 
                 case R.id.sale_button:
                     replaceFragment(new SaleFragment());
                     appBar.setTitle("Мой Продажи");
-                    fba(SaleActivity.class);
+//                    fba(SaleActivity.class);
                     break;
 
                 case R.id.expenses_button:
                     replaceFragment(new ExpensesFragment());
                     appBar.setTitle("Мои Покупки");
-                    fba(ExpensesActivity.class);
+//                    fba(ExpensesActivity.class);
                     break;
 
             }
             return true;
         });
+        View da = findViewById(R.id.standard_bottom_sheet);
 
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(da);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+// настройка максимальной высоты
+        bottomSheetBehavior.setPeekHeight(340);
+
+// настройка возможности скрыть элемент при свайпе вниз
+        bottomSheetBehavior.setHideable(false);
 
         //Реклама от яндекса
 //        mBannerAdView = (BannerAdView) findViewById(R.id.banner_ad_view);
@@ -210,9 +210,9 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-        if (getFragmentManager().findFragmentByTag("WriteOff") != null && getFragmentManager().findFragmentByTag("WriteOff").isVisible()) {
-            fba(WriteOffFragment.class);
-        }
+//        if (getFragmentManager().findFragmentByTag("WriteOff") != null && getFragmentManager().findFragmentByTag("WriteOff").isVisible()) {
+//            fba(WriteOffFragment.class);
+//        }
 
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             public void onBackStackChanged() {
@@ -494,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // gпеоеключение значков FBA
-    public void fba(Class clas) {
+    public void fba(Fragment fragment) {
 
         fab.show();
         fab.setText("Журнал");
@@ -503,8 +503,10 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, clas);
-                startActivity(intent);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.conteiner, fragment, "visible_fragment")
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 

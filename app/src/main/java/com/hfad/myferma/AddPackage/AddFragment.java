@@ -169,7 +169,7 @@ public class AddFragment extends Fragment implements View.OnClickListener {
                 onClickAdd(v);
                 break;
             case R.id.addChart_button:
-                addChart(v);
+                addChart(new AddChartFragment());
                 break;
         }
     }
@@ -247,10 +247,9 @@ public class AddFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void addChart(View view) {
-        AddChartFragment addChartFragment = new AddChartFragment();
+    public void addChart(Fragment fragment) {
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.conteiner, addChartFragment, "visible_fragment")
+                .replace(R.id.conteiner, fragment, "visible_fragment")
                 .addToBackStack(null)
                 .commit();
     }

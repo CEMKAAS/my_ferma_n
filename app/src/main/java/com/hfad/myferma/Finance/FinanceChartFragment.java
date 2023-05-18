@@ -131,10 +131,11 @@ public class FinanceChartFragment extends Fragment {
         String year2 = year_spiner.getText().toString();
         setMount(mountString);
 
+        LineChart lineChart = layout.findViewById(R.id.lineChart);
+        lineChart.getDescription().setText("График продукции");
+
         if (animalsType.equals("Все")) {
 
-            LineChart lineChart = layout.findViewById(R.id.lineChart);
-            lineChart.getDescription().setText("График продукции");
             ArrayList<ILineDataSet> dataSets = new ArrayList();
 
             if (mount <= 12 && mount > 0) {
@@ -163,6 +164,7 @@ public class FinanceChartFragment extends Fragment {
             lineChart.invalidate();
             lineChart.setData(data);
             lineChart.animateY(500);
+
             if (mount != 13) {
                 xaxis(lineChart, mountMass);
             } else {
@@ -171,13 +173,14 @@ public class FinanceChartFragment extends Fragment {
 
         } else {
             storeDataInArrays(animalsType, mountString, year2);
-            LineChart lineChart = layout.findViewById(R.id.lineChart);
-            lineChart.getDescription().setText("График продукции");
+
             LineDataSet dataset = new LineDataSet(visitors, animalsType);
+
             LineData data = new LineData(dataset);
             lineChart.invalidate();
             lineChart.setData(data);
             lineChart.animateY(500);
+
             if (mount != 13) {
                 xaxis(lineChart, mountMass);
             } else {
@@ -237,6 +240,7 @@ public class FinanceChartFragment extends Fragment {
         sumProductNov.clear();
         sumProductDec.clear();
         sumProductAll.clear();
+
         Cursor cursor = myDB.readAllDataSale();
         String year2 = year_spiner.getText().toString();
 

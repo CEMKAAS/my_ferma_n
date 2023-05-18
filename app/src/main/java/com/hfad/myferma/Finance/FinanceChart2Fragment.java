@@ -69,47 +69,13 @@ public class FinanceChart2Fragment extends Fragment {
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.setTitle("Мои Финансы - Общее");
 
-        //установка графиков
-        LineChart lineChart = layout.findViewById(R.id.lineChart);
-
         //Массивы
         entriesFirst = new ArrayList<>();
         entriesSecond = new ArrayList<>();
         entriesThird = new ArrayList<>();
 
-        //Логика просчета
-        allProducts();
-        lineChart.getDescription().setText("График финансов");
-        LineDataSet datasetFirst = new LineDataSet(entriesFirst, "Прибыль");
-        // График будет зеленого цвета
-        datasetFirst.setColor(Color.GRAY);
-        // График будет плавным
-        datasetFirst.setMode(LineDataSet.Mode.LINEAR);
+        spiner();
 
-        LineDataSet datasetSecond = new LineDataSet(entriesSecond, "Чистая прибыль");
-        // График будет зеленого цвета
-        datasetSecond.setColor(Color.GREEN);
-        // График будет плавным
-        datasetSecond.setMode(LineDataSet.Mode.LINEAR);
-
-        LineDataSet datasetThird = new LineDataSet(entriesThird, "Расходы");
-        // График будет зеленого цвета
-        datasetThird.setColor(Color.RED);
-        // График будет плавным
-        datasetThird.setMode(LineDataSet.Mode.LINEAR);
-
-        ArrayList<ILineDataSet> dataSets = new ArrayList();
-        dataSets.add(datasetFirst);
-        dataSets.add(datasetSecond);
-        dataSets.add(datasetThird);
-
-        LineData data = new LineData(dataSets);
-        lineChart.invalidate();
-        lineChart.setData(data);
-        lineChart.animateY(500);
-
-        xaxis(lineChart, labes);
-        lineChart.invalidate();
         mount_spiner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -136,6 +102,7 @@ public class FinanceChart2Fragment extends Fragment {
         LineChart lineChart = layout.findViewById(R.id.lineChart);
         lineChart.getDescription().setText("График финансов");
         LineDataSet datasetFirst = new LineDataSet(entriesFirst, "Прибыль");
+
         // График будет зеленого цвета
         datasetFirst.setColor(Color.GRAY);
         // График будет плавным
@@ -162,6 +129,7 @@ public class FinanceChart2Fragment extends Fragment {
         lineChart.invalidate();
         lineChart.setData(data);
         lineChart.animateY(500);
+
         if (mount != 13) {
             xaxis(lineChart, mountMass);
         } else {
@@ -292,11 +260,12 @@ public class FinanceChart2Fragment extends Fragment {
             while (cursor.moveToNext()) {
                 //проверка года
                 if (year2.equals(cursor.getString(5))) {
-                    if (sumCategory.get(Float.parseFloat(cursor.getString(4))) == null){
+                    if (sumCategory.get(Float.parseFloat(cursor.getString(4))) == null) {
                         sumCategory.put(Float.parseFloat(cursor.getString(4)), Float.parseFloat(cursor.getString(price)) * kof);
-                    }else {
-                    float sum = sumCategory.get(Float.parseFloat(cursor.getString(4))) + Float.parseFloat(cursor.getString(price)) * kof;
-                    sumCategory.put(Float.parseFloat(cursor.getString(4)), sum);}
+                    } else {
+                        float sum = sumCategory.get(Float.parseFloat(cursor.getString(4))) + Float.parseFloat(cursor.getString(price)) * kof;
+                        sumCategory.put(Float.parseFloat(cursor.getString(4)), sum);
+                    }
                 }
             }
         }
@@ -305,13 +274,14 @@ public class FinanceChart2Fragment extends Fragment {
             if (sumCategory.get(i) == null) {
                 entries.add(new Entry(i, 0));
 
-            }else {
+            } else {
                 for (Map.Entry<Float, Float> entry : sumCategory.entrySet()) {
-                Float name = entry.getKey();
-                Float sum = entry.getValue();
+                    Float name = entry.getKey();
+                    Float sum = entry.getValue();
 
-                entries.add(new Entry(name, sum));
-            }}
+                    entries.add(new Entry(name, sum));
+                }
+            }
         }
     }
 
