@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.hfad.myferma.AddPackage.AddFragment;
@@ -145,17 +145,23 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-        llBottomSheet = findViewById(R.id.bottom_sheet);
+//        llBottomSheet = findViewById(R.id.bottom_sheet);
+//
+//        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
+//
+//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+//
+//// настройка максимальной высоты
+//        bottomSheetBehavior.setPeekHeight(0);
+//
+//// настройка возможности скрыть элемент при свайпе вниз
+//        bottomSheetBehavior.setHideable(true);
 
-        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
 
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+//        BottomSheetDialogFragment sd = new BottomSheetDialogFragment();
+//        sd.show(getSupportFragmentManager(), bottomFragment.TAG);
 
-// настройка максимальной высоты
-        bottomSheetBehavior.setPeekHeight(0);
 
-// настройка возможности скрыть элемент при свайпе вниз
-        bottomSheetBehavior.setHideable(true);
 
         //Реклама от яндекса
 //        mBannerAdView = (BannerAdView) findViewById(R.id.banner_ad_view);
@@ -183,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.delete:
                     beginIncubator();
                 case R.id.filler:
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
+//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    showBottomSheetDialog();
             }
             return true;
         });
@@ -445,6 +451,21 @@ public class MainActivity extends AppCompatActivity {
             }
             cursor.close();
         }
+    }
+
+
+    private void showBottomSheetDialog() {
+
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.fragment_bottom);
+
+//        LinearLayout copy = bottomSheetDialog.findViewById(R.id.copyLinearLayout);
+//        LinearLayout share = bottomSheetDialog.findViewById(R.id.shareLinearLayout);
+//        LinearLayout upload = bottomSheetDialog.findViewById(R.id.uploadLinearLayout);
+//        LinearLayout download = bottomSheetDialog.findViewById(R.id.download);
+//        LinearLayout delete = bottomSheetDialog.findViewById(R.id.delete);
+
+        bottomSheetDialog.show();
     }
 
 

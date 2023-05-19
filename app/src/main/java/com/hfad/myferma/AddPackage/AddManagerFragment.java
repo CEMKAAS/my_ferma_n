@@ -11,10 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.hfad.myferma.R;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
@@ -33,6 +36,8 @@ public class AddManagerFragment extends Fragment {
 
     private int mount1 = 0;
 
+    private AutoCompleteTextView animals_spiner;
+
     private ArrayAdapter<String> arrayAdapterAnimals;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +55,14 @@ public class AddManagerFragment extends Fragment {
         recyclerView = layout.findViewById(R.id.recyclerView);
         empty_imageview = layout.findViewById(R.id.empty_imageview);
         no_data = layout.findViewById(R.id.no_data);
+
+
+//        FrameLayout llBottomSheet = getActivity().findViewById(R.id.bottom_sheet);
+//
+//        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
+//
+//        animals_spiner = (AutoCompleteTextView) bottomSheetBehavior.findViewById(R.id.animals_spiner_sheet);
+//        animals_spiner.setText("Яйца", false);
 
         id = new ArrayList<>();
         title = new ArrayList<>();

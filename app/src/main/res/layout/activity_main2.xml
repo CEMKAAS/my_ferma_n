@@ -56,10 +56,10 @@
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             app:shapeAppearance="?attr/shapeAppearanceLargeComponent">
 
-            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-                android:id="@+id/drag_handle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+<!--            <com.google.android.material.bottomsheet.BottomSheetDragHandleView-->
+<!--                android:id="@+id/drag_handle"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
 <!--        <LinearLayout-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="match_parent"-->
@@ -123,7 +123,7 @@
 
 <!--    </LinearLayout>-->
 
-    <include layout="@layout/bottom_sheet" />
+<!--    <include layout="@layout/bottom_sheet" />-->
 
 </FrameLayout>
 
