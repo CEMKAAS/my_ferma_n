@@ -309,6 +309,7 @@ public class AddIncubatorFragment extends Fragment implements View.OnClickListen
         Calendar calendar = Calendar.getInstance();
         data.getEditText().setText(calendar.get(Calendar.DAY_OF_MONTH) + "." + (calendar.get(Calendar.MONTH) + 1) + "." + calendar.get(Calendar.YEAR));
 
+        // Настройка календаря
         CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder()
                 .setValidator(DateValidatorPointBackward.now())
                 .build();
@@ -318,6 +319,7 @@ public class AddIncubatorFragment extends Fragment implements View.OnClickListen
                 .setTitleText("Выберите даду закладки яиц").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build();
 
+        // Установка сколько всего яиц
         eggAll.getEditText().setText("0");
         data.getEditText().setOnClickListener(new View.OnClickListener() {
             @Override

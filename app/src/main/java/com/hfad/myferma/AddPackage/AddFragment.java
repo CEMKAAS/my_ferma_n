@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.myferma.MainActivity;
 import com.hfad.myferma.R;
@@ -222,7 +223,18 @@ public class AddFragment extends Fragment implements View.OnClickListener {
             addEdit.getEditText().getText().clear();
             addEdit.setEndIconDrawable(R.drawable.baseline_done_24);
             addEdit.getEndIconDrawable();
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
+            bottomSheetDialog.setContentView(R.layout.fragment_bottom);
 
+            AutoCompleteTextView animalsSpinerSheet = bottomSheetDialog.findViewById(R.id.animals_spiner_sheet);
+            TextInputLayout dataSheet = bottomSheetDialog.findViewById(R.id.data_sheet);
+            Button buttonSheet = bottomSheetDialog.findViewById(R.id.button_sheet);
+            buttonSheet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(), "Copy is Clicked ", Toast.LENGTH_LONG).show();
+                }
+            });
             Toast.makeText(getActivity(), "Добавлено " + inputUnit + unit, Toast.LENGTH_SHORT).show();
         } else {
             addEdit.setError("Введите кол-во!");

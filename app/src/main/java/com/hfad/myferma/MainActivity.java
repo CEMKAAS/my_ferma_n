@@ -14,9 +14,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -26,6 +29,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.myferma.AddPackage.AddFragment;
 import com.hfad.myferma.AddPackage.AddManagerFragment;
 import com.hfad.myferma.ExpensesPackage.ExpensesFragment;
@@ -188,9 +192,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.delete:
                     beginIncubator();
-                case R.id.filler:
-//                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    showBottomSheetDialog();
+//                case R.id.filler:
+////                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//                    showBottomSheetDialog();
             }
             return true;
         });
@@ -454,10 +458,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void showBottomSheetDialog() {
+    public void showBottomSheetDialog() {
 
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(R.layout.fragment_bottom);
+
+        AutoCompleteTextView animalsSpinerSheet = bottomSheetDialog.findViewById(R.id.animals_spiner_sheet);
+        TextInputLayout dataSheet = bottomSheetDialog.findViewById(R.id.data_sheet);
+        Button buttonSheet = bottomSheetDialog.findViewById(R.id.button_sheet);
+        buttonSheet.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(getApplicationContext(), "Copy is Clicked ", Toast.LENGTH_LONG).show();
+    }
+});
 
 //        LinearLayout copy = bottomSheetDialog.findViewById(R.id.copyLinearLayout);
 //        LinearLayout share = bottomSheetDialog.findViewById(R.id.shareLinearLayout);
