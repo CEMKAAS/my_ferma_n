@@ -19,10 +19,12 @@ import com.hfad.myferma.R;
 import com.hfad.myferma.incubator.ListAdapterIncubator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyViewHolder> {
 
     private ArrayList id, title, disc, day,mount,year;
+    private List<ProductDB> productDB;
 
     private Listener listener;
     public static interface Listener {
@@ -38,6 +40,11 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
         this.year = yearAdd;
 
     }
+
+    public CustomAdapterAdd(List<ProductDB> productDBS){
+        this.productDB = productDBS;
+    }
+
     public void setListener(CustomAdapterAdd.Listener listener) {
         this.listener = listener;
     }
@@ -53,22 +60,30 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
+//        StringBuilder date = new StringBuilder();
+//
+//        holder.idTxt.setText(String.valueOf(id.get(position)));
+//        holder.titleTxt.setText(String.valueOf(title.get(position)));
+//        holder.discTxt.setText(String.valueOf(disc.get(position)));
+//
+//        String mount1 = String.valueOf(mount.get(position));
+//        String year1 = String.valueOf(year.get(position));
+//        String day1 = String.valueOf(day.get(position));
+//        date.append(day1);
+//        date.append(".");
+//        date.append(mount1);
+//        date.append(".");
+//        date.append(year1);
+//
+//        holder.calendarTxt.setText(date);
+
+
         StringBuilder date = new StringBuilder();
 
-        holder.idTxt.setText(String.valueOf(id.get(position)));
-        holder.titleTxt.setText(String.valueOf(title.get(position)));
-        holder.discTxt.setText(String.valueOf(disc.get(position)));
-
-        String mount1 = String.valueOf(mount.get(position));
-        String year1 = String.valueOf(year.get(position));
-        String day1 = String.valueOf(day.get(position));
-        date.append(day1);
-        date.append(".");
-        date.append(mount1);
-        date.append(".");
-        date.append(year1);
-
-        holder.calendarTxt.setText(date);
+        holder.idTxt.setText(String.valueOf(productDB.get(position).getId()));
+        holder.titleTxt.setText(String.valueOf(productDB.get(position).getName()));
+        holder.discTxt.setText(String.valueOf(productDB.get(position).getDisc()));
+        holder.calendarTxt.setText(String.valueOf(productDB.get(position).getData()));
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +99,7 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
 
     @Override
     public int getItemCount() {
-        return id.size();
+        return productDB.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
