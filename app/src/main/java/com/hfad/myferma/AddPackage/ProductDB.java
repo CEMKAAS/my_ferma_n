@@ -10,9 +10,9 @@ public class ProductDB {
 
     private  String data;
 
-    private  Double price;
+    private  int price;
 
-    public ProductDB(int id, String name, Double disc, String data, Double price) {
+    public ProductDB(int id, String name, Double disc, String data, int price) {
         this.id = id;
         this.name = name;
         this.disc = disc;
@@ -52,11 +52,11 @@ public class ProductDB {
         this.data = data;
     }
 
-    public Double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 }

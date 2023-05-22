@@ -40,7 +40,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 public class AddManagerFragment extends Fragment {
@@ -64,10 +66,10 @@ public class AddManagerFragment extends Fragment {
 
     private String appBarManager, statusPrice, priceDics;
 
-    private  Cursor cursorManager;
+    private Cursor cursorManager;
     private int visibility, myRow;
 
-    public AddManagerFragment(String appBarManager, Cursor cursorManager, int visibility, String statusPrice, String priceDics, int myRow ){
+    public AddManagerFragment(String appBarManager, Cursor cursorManager, int visibility, String statusPrice, String priceDics, int myRow) {
         this.appBarManager = appBarManager;
         this.cursorManager = cursorManager;
         this.visibility = visibility;
@@ -75,7 +77,6 @@ public class AddManagerFragment extends Fragment {
         this.priceDics = priceDics;
         this.myRow = myRow;
     }
-
 
 
     @Override
@@ -217,37 +218,65 @@ public class AddManagerFragment extends Fragment {
 
     //Добавляем продукцию в список
     public void add() {
-        Cursor cursor = myDB.readAllDataProduct();
+        if (!statusPrice.equals("Нет")) {
 
-        while (cursor.moveToNext()) {
-            String product = cursor.getString(1);
-            productList.add(product);
+            Cursor cursor = myDB.readAllDataProduct();
+
+            while (cursor.moveToNext()) {
+                String product = cursor.getString(1);
+                productList.add(product);
+            }
+            cursor.close();
+
+            productListAll = (ArrayList<String>) productList.clone();
+
+
+        } else {
+
+            Set<String> tempList = new HashSet<>();
+            Cursor cursor = myDB.readAllDataExpenses();
+
+            while (cursor.moveToNext()) {
+                String string1 = cursor.getString(1);
+                tempList.add(string1);
+            }
+            cursor.close();
+
+            for (String nameExpenses : tempList) {
+                productListAll.add(nameExpenses);
+            }
+
         }
-        cursor.close();
-
-        productListAll = (ArrayList<String>) productList.clone();
         productListAll.add("Все");
     }
 
-    //Добавляем базу данных в лист
+    //Добавляем базу данных в лист //TODO Надо скоратить
     void storeDataInArraysClass(Cursor cursor) {
         if (cursor.getCount() == 0) {
             empty_imageview.setVisibility(View.VISIBLE);
             no_data.setVisibility(View.VISIBLE);
+        } else if (statusPrice.equals("Нет")) {
+            storeDataInArraysClassLogic(cursor, 0);
         } else {
-            cursor.moveToLast();
-            product.add(new ProductDB(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2),
-                    cursor.getString(3) + "." + cursor.getString(4) + "." + cursor.getString(5), cursor.getDouble(6)));
-            while (cursor.moveToPrevious()) {
-                product.add(new ProductDB(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2),
-                        cursor.getString(3) + "." + cursor.getString(4) + "." + cursor.getString(5), cursor.getDouble(6)));
-            }
-            cursor.close();
-            empty_imageview.setVisibility(View.GONE);
-            no_data.setVisibility(View.GONE);
+            storeDataInArraysClassLogic(cursor, 6);
         }
         productNow.addAll(product);
     }
+
+    public void storeDataInArraysClassLogic(Cursor cursor, int id){
+        cursor.moveToLast();
+        product.add(new ProductDB(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2),
+                cursor.getString(3) + "." + cursor.getString(4) + "." + cursor.getString(5), cursor.getInt(id)));
+        while (cursor.moveToPrevious()) {
+            product.add(new ProductDB(cursor.getInt(0), cursor.getString(1), cursor.getDouble(2),
+                    cursor.getString(3) + "." + cursor.getString(4) + "." + cursor.getString(5), cursor.getInt(id)));
+        }
+        cursor.close();
+        empty_imageview.setVisibility(View.GONE);
+        no_data.setVisibility(View.GONE);
+    }
+
+
 
     public void filter() throws ParseException {
 

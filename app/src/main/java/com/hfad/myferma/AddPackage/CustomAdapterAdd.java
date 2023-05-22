@@ -8,6 +8,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyViewHolder> {
-
-    private ArrayList id, title, disc, day,mount,year;
     private List<ProductDB> productDB;
 
     private int myRow;
@@ -57,6 +56,11 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
         holder.titleTxt.setText(String.valueOf(productDB.get(position).getName()));
         holder.discTxt.setText(String.valueOf(productDB.get(position).getDisc()));
         holder.calendarTxt.setText(String.valueOf(productDB.get(position).getData()));
+        if (R.layout.my_row_write_off==myRow) {
+            holder.photo.setImageResource(productDB.get(position).getPrice());
+        }else if (R.layout.my_row_sale==myRow) {
+            holder.sixColum.setText(String.valueOf(productDB.get(position).getPrice()));
+        }
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,8 +79,10 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView idTxt, titleTxt, discTxt,calendarTxt;
+        TextView idTxt, titleTxt, discTxt,calendarTxt, sixColum ;
         LinearLayout mainLayout;
+
+        ImageView photo;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -85,7 +91,14 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
             discTxt = itemView.findViewById(R.id.disc_txt);
             calendarTxt = itemView.findViewById(R.id.calendar_txt);
 
+            if (R.layout.my_row_write_off==myRow) {
+                photo = (ImageView) itemView.findViewById(R.id.status_txt);
+            }else if (R.layout.my_row_sale==myRow) {
+                sixColum = itemView.findViewById(R.id.six_column);
+            }
+
             mainLayout = itemView.findViewById(R.id.mainLayout);
+
             //Animate Recyclerview
 //            Animation translate_anim = AnimationUtils.loadAnimation(context, R.anim.translate_anim);
 //            mainLayout.setAnimation(translate_anim);

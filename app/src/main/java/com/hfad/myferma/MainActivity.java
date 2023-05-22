@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.expenses_button:
                     replaceFragment(new ExpensesFragment());
-                    fba(new AddManagerFragment("Мои Покупки", myDB.readAllDataExpenses(), View.GONE, "Цена", "Цена", R.layout.my_row));
+                    fba(new AddManagerFragment("Мои Покупки", myDB.readAllDataExpenses(), View.GONE, "Нет", "Цена", R.layout.my_row));
                     break;
 
             }

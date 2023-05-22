@@ -3,7 +3,7 @@ package com.hfad.myferma.db;
 public class MyConstanta {
 
     public static final String DB_NAME = "my_db.db"; //База данных
-    public static final int DB_VERSION = 7; //Версия базы данных
+    public static final int DB_VERSION = 8; //Версия базы данных
 
     public static final String TABLE_NAME = "МyFerma"; // Название таблицы
     public static final String _ID = "_id"; // Индефикатор НУМЕРАЦИЯ СТРОК
@@ -22,7 +22,7 @@ public class MyConstanta {
     public static final String TABLE_NAMEEXPENSES = "МyFermaEXPENSES"; // Название таблицы
     public static final String TITLEEXPENSES = "titleEXPENSES"; // Название описание (название продукта) название Купленого товара
     public static final String DISCROTIONEXPENSES = "discEXPENSES"; //Заголовок (кол-во) цена товара
-
+    public static final String COUNTEXPENSES = "countEXPENSES"; //Заголовок кол-во товара
     public static final String TABLE_NAMEPRICE = "МyFermaPRICE"; // Название таблицы
     public static final String TITLEPRISE = "titlePRICE"; // Название описание (название продукта) название товара
     public static final String DISCROTIONPRICE = "discPRICE"; //Заголовок (кол-во) цена товара
@@ -196,7 +196,7 @@ public class MyConstanta {
     //Таблица по покупкам //TODO Возможно тут ошибка! REAL
     public static final String TABLE_STRUCTUREEXPENSES = "CREATE TABLE IF NOT EXISTS " +
             TABLE_NAMEEXPENSES + " (" + _ID + " INTEGER PRIMARY KEY," + TITLEEXPENSES + " TEXT," +
-            DISCROTIONEXPENSES + " REAL," + DAY + " INTEGER," + MOUNT + " INTEGER," + YEAR + " INTEGER)";  // Структура таблицы
+            DISCROTIONEXPENSES + " REAL," + DAY + " INTEGER," + MOUNT + " INTEGER," + YEAR + " INTEGER," + COUNTEXPENSES + " REAL)";  // Структура таблицы
 
     //Таблица по списанию
     public static final String TABLE_STRUCTUREWRITEOFF = "CREATE TABLE IF NOT EXISTS " +
