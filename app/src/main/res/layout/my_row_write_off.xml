@@ -89,7 +89,7 @@
 
         <ImageView
             android:layout_height="match_parent"
-            android:layout_width="61dp"
+            android:layout_width="match_parent"
             android:id="@+id/status_txt"
             android:textStyle="bold"
             android:gravity="center"
