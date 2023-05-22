@@ -46,13 +46,9 @@ import java.util.TimeZone;
 public class AddManagerFragment extends Fragment {
     private RecyclerView recyclerView;
     private ImageView empty_imageview;
-    private TextView no_data;
+    private TextView no_data, sixColumn, dicsPrice;
     private MyFermaDatabaseHelper myDB;
-    private ArrayList<String> id, title, disc, day, mount, year, data;
     private CustomAdapterAdd customAdapterAdd;
-
-    private int mount1 = 0;
-
     private ArrayList<String> productList, productListAll;
     private ArrayAdapter<String> arrayAdapterProduct;
 
@@ -66,20 +62,39 @@ public class AddManagerFragment extends Fragment {
 
     private Date dateFirst, dateEnd;
 
+    private String appBarManager, statusPrice, priceDics;
+
+    private  Cursor cursorManager;
+    private int visibility, myRow;
+
+    public AddManagerFragment(String appBarManager, Cursor cursorManager, int visibility, String statusPrice, String priceDics, int myRow ){
+        this.appBarManager = appBarManager;
+        this.cursorManager = cursorManager;
+        this.visibility = visibility;
+        this.statusPrice = statusPrice;
+        this.priceDics = priceDics;
+        this.myRow = myRow;
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_add_manager, container, false);
+        //Подключение к базе данных
         myDB = new MyFermaDatabaseHelper(getActivity());
         productList = new ArrayList<>();
         productListAll = new ArrayList<>();
+        //Добавление товара в лист
         add();
-
+        //Создание модального bottomSheet
         showBottomSheetDialog();
 
+        //Настройка кнопки и верхнего бара
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.getMenu().findItem(R.id.filler).setVisible(true);
+        appBar.setTitle(appBarManager);
         appBar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.filler:
@@ -89,7 +104,7 @@ public class AddManagerFragment extends Fragment {
             return true;
         });
 
-        // Настройка календаря
+        // Настройка календаря на период
         CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder()
                 .setValidator(DateValidatorPointBackward.now())
                 .build();
@@ -134,12 +149,13 @@ public class AddManagerFragment extends Fragment {
             }
         });
 
+        // Настройка кнопки в bottomSheet
         buttonSheet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     filter();
-                    customAdapterAdd = new CustomAdapterAdd(productNow);
+                    customAdapterAdd = new CustomAdapterAdd(productNow, myRow);
 
                     recyclerView.setAdapter(customAdapterAdd);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -156,32 +172,30 @@ public class AddManagerFragment extends Fragment {
         ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) getActivity().findViewById(R.id.extended_fab);
         fab.setVisibility(View.GONE);
 
+        //Создание отображения списка
+        sixColumn = layout.findViewById(R.id.six_column);
+        dicsPrice = layout.findViewById(R.id.dics_price);
         recyclerView = layout.findViewById(R.id.recyclerView);
         empty_imageview = layout.findViewById(R.id.empty_imageview);
         no_data = layout.findViewById(R.id.no_data);
 
-
-        id = new ArrayList<>();
-        title = new ArrayList<>();
-        disc = new ArrayList<>();
-        day = new ArrayList<>();
-        mount = new ArrayList<>();
-        year = new ArrayList<>();
-        data = new ArrayList<>();
+        sixColumn.setVisibility(visibility);
+        sixColumn.setText(statusPrice);
+        dicsPrice.setText(priceDics);
 
         product = new ArrayList<>();
         productNow = new ArrayList<>();
 
-        no_data = layout.findViewById(R.id.no_data);
+        //Добавдение товаров в лист
+        storeDataInArraysClass(cursorManager);
 
-//        storeDataInArrays();
-
-        storeDataInArraysClass();
-
-        customAdapterAdd = new CustomAdapterAdd(productNow);
+        //Создание адаптера
+        customAdapterAdd = new CustomAdapterAdd(productNow, myRow);
 
         recyclerView.setAdapter(customAdapterAdd);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        //Запускаем при нажатии
         customAdapterAdd.setListener(new CustomAdapterAdd.Listener() {
             @Override
             public void onClick(int position) {
@@ -215,41 +229,8 @@ public class AddManagerFragment extends Fragment {
         productListAll.add("Все");
     }
 
-    void storeDataInArrays() {
-        Cursor cursor = myDB.readAllData();
-        if (cursor.getCount() == 0) {
-            empty_imageview.setVisibility(View.VISIBLE);
-            no_data.setVisibility(View.VISIBLE);
-        } else {
-            cursor.moveToLast();
-            id.add(cursor.getString(0));
-            title.add(cursor.getString(1));
-            disc.add(cursor.getString(2));
-            data.add(cursor.getString(3) + "." + cursor.getString(4) + "." + cursor.getString(5));
-
-            day.add(cursor.getString(3));
-            mount.add(cursor.getString(4));
-            year.add(cursor.getString(5));
-
-            while (cursor.moveToPrevious()) {
-                id.add(cursor.getString(0));
-                title.add(cursor.getString(1));
-                disc.add(cursor.getString(2));
-                data.add(cursor.getString(3) + "." + cursor.getString(4) + "." + cursor.getString(5));
-
-                day.add(cursor.getString(3));
-                mount.add(cursor.getString(4));
-                year.add(cursor.getString(5));
-            }
-            cursor.close();
-            empty_imageview.setVisibility(View.GONE);
-            no_data.setVisibility(View.GONE);
-        }
-    }
-
     //Добавляем базу данных в лист
-    void storeDataInArraysClass() {
-        Cursor cursor = myDB.readAllData();
+    void storeDataInArraysClass(Cursor cursor) {
         if (cursor.getCount() == 0) {
             empty_imageview.setVisibility(View.VISIBLE);
             no_data.setVisibility(View.VISIBLE);
@@ -313,6 +294,7 @@ public class AddManagerFragment extends Fragment {
         }
     }
 
+    //Добавляем bottobSheet
     public void showBottomSheetDialog() {
 
         bottomSheetDialog = new BottomSheetDialog(getActivity());

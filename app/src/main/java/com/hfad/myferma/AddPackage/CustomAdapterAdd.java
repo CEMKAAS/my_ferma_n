@@ -26,23 +26,15 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
     private ArrayList id, title, disc, day,mount,year;
     private List<ProductDB> productDB;
 
+    private int myRow;
     private Listener listener;
     public static interface Listener {
         public void onClick(int position);
     }
-    public CustomAdapterAdd(ArrayList idAdd, ArrayList titleAdd, ArrayList discAdd,
-                     ArrayList dayAdd, ArrayList mountAdd, ArrayList yearAdd){
-        this.id = idAdd;
-        this.title = titleAdd;
-        this.disc = discAdd;
-        this.day = dayAdd;
-        this.mount = mountAdd;
-        this.year = yearAdd;
 
-    }
-
-    public CustomAdapterAdd(List<ProductDB> productDBS){
+    public CustomAdapterAdd(List<ProductDB> productDBS, int myRow){
         this.productDB = productDBS;
+        this.myRow = myRow;
     }
 
     public void setListener(CustomAdapterAdd.Listener listener) {
@@ -53,32 +45,13 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.my_row, parent, false);
+        View view = inflater.inflate(myRow, parent, false);
         return new MyViewHolder(view);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-//        StringBuilder date = new StringBuilder();
-//
-//        holder.idTxt.setText(String.valueOf(id.get(position)));
-//        holder.titleTxt.setText(String.valueOf(title.get(position)));
-//        holder.discTxt.setText(String.valueOf(disc.get(position)));
-//
-//        String mount1 = String.valueOf(mount.get(position));
-//        String year1 = String.valueOf(year.get(position));
-//        String day1 = String.valueOf(day.get(position));
-//        date.append(day1);
-//        date.append(".");
-//        date.append(mount1);
-//        date.append(".");
-//        date.append(year1);
-//
-//        holder.calendarTxt.setText(date);
-
-
-        StringBuilder date = new StringBuilder();
 
         holder.idTxt.setText(String.valueOf(productDB.get(position).getId()));
         holder.titleTxt.setText(String.valueOf(productDB.get(position).getName()));
@@ -93,8 +66,6 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
                 }
             }
         });
-
-
     }
 
     @Override

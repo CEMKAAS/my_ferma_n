@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.hfad.myferma.AddPackage.AddManagerFragment;
 import com.hfad.myferma.MainActivity;
 import com.hfad.myferma.R;
 import com.hfad.myferma.SalePackage.SaleChartFragment;
@@ -212,11 +213,10 @@ public class WriteOffFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.extended_fab:
-                Intent intent = new Intent(getActivity(), WriteOffActivity.class);
-                startActivity(intent);
+                moveNextFragment(new AddManagerFragment("Мои Продажи", myDB.readAllDataWriteOff(), View.VISIBLE,"Статус", "Кол-во", R.layout.my_row_write_off));
                 break;
             case R.id.writeOffChart_button:
-                writeOffChart(v);
+                moveNextFragment(new WriteOffChartFragment());
                 break;
         }
     }
@@ -302,10 +302,9 @@ public class WriteOffFragment extends Fragment implements View.OnClickListener {
         return true;
     }
 
-    public void writeOffChart(View view){
-        WriteOffChartFragment writeOffChartFragment = new WriteOffChartFragment();
+    public void moveNextFragment(Fragment fragment){
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.conteiner, writeOffChartFragment, "visible_fragment")
+                .replace(R.id.conteiner, fragment, "visible_fragment")
                 .addToBackStack(null)
                 .commit();
     }

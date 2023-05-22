@@ -130,20 +130,17 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.add_button:
                     replaceFragment(new AddFragment());
-                    appBar.setTitle("Мои Товар");
-                    fba(new AddManagerFragment());
+                    fba(new AddManagerFragment("Мои Товар", myDB.readAllData(), View.GONE, "Цена", "Кол-во", R.layout.my_row));
                     break;
 
                 case R.id.sale_button:
                     replaceFragment(new SaleFragment());
-                    appBar.setTitle("Мой Продажи");
-//                    fba(SaleActivity.class);
+                    fba(new AddManagerFragment("Мои Продажи", myDB.readAllDataSale(), View.VISIBLE, "Цена", "Кол-во", R.layout.my_row_sale));
                     break;
 
                 case R.id.expenses_button:
                     replaceFragment(new ExpensesFragment());
-                    appBar.setTitle("Мои Покупки");
-//                    fba(ExpensesActivity.class);
+                    fba(new AddManagerFragment("Мои Покупки", myDB.readAllDataExpenses(), View.GONE, "Цена", "Цена", R.layout.my_row));
                     break;
 
             }
