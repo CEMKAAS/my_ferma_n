@@ -33,6 +33,7 @@ import com.hfad.myferma.R;
 import com.hfad.myferma.bottomFragment;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.incubator.ListAdapterIncubator;
+import com.hfad.myferma.incubator.NowArhiveFragment;
 import com.hfad.myferma.incubator.editDayIncubatorFragment;
 
 import java.text.ParseException;
@@ -335,5 +336,19 @@ public class AddManagerFragment extends Fragment {
         buttonSheet = bottomSheetDialog.findViewById(R.id.button_sheet);
     }
 
+    public void addChart(String id) {
+        //todo
+        NowArhiveFragment incubatorMenuFragment = new NowArhiveFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id);
+        incubatorMenuFragment.setArguments(bundle);
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.conteiner, incubatorMenuFragment, "visible_fragment")
+                .addToBackStack(null)
+                .commit();
+
+    }
 
 }
