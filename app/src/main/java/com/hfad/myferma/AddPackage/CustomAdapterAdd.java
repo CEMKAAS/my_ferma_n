@@ -28,7 +28,7 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
     private int myRow;
     private Listener listener;
     public static interface Listener {
-        public void onClick(int position);
+        public void onClick(int position, ProductDB productDB);
     }
 
     public CustomAdapterAdd(List<ProductDB> productDBS, int myRow){
@@ -66,7 +66,7 @@ public class CustomAdapterAdd extends RecyclerView.Adapter<CustomAdapterAdd.MyVi
             @Override
             public void onClick(View view) {
                 if (listener != null) {
-                    listener.onClick(position);
+                    listener.onClick(position, productDB.get(position));
                 }
             }
         });

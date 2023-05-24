@@ -54,7 +54,6 @@ public class AddManagerFragment extends Fragment {
     private CustomAdapterAdd customAdapterAdd;
     private ArrayList<String> productList, productListAll;
     private ArrayAdapter<String> arrayAdapterProduct;
-
     private AutoCompleteTextView animalsSpinerSheet;
     private TextInputLayout dataSheet;
     private Button buttonSheet;
@@ -200,10 +199,11 @@ public class AddManagerFragment extends Fragment {
         //Запускаем при нажатии
         customAdapterAdd.setListener(new CustomAdapterAdd.Listener() {
             @Override
-            public void onClick(int position) {
-
+            public void onClick(int position, ProductDB productDB) {
+                addChart(productDB);
             }
         });
+
         return layout;
     }
 
@@ -336,16 +336,16 @@ public class AddManagerFragment extends Fragment {
         buttonSheet = bottomSheetDialog.findViewById(R.id.button_sheet);
     }
 
-    public void addChart(String id) {
+    public void addChart(ProductDB productDB) {
         //todo
-        NowArhiveFragment incubatorMenuFragment = new NowArhiveFragment();
-
+        UpdateProductFragment updateProductFragment = new UpdateProductFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("id", id);
-        incubatorMenuFragment.setArguments(bundle);
+        bundle.putParcelable("fd", productDB);
+        bundle.putString("id", appBarManager);
+        updateProductFragment.setArguments(bundle);
 
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.conteiner, incubatorMenuFragment, "visible_fragment")
+                .replace(R.id.conteiner, updateProductFragment, "visible_fragment")
                 .addToBackStack(null)
                 .commit();
 
