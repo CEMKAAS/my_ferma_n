@@ -316,7 +316,7 @@ public class AddIncubatorFragment extends Fragment implements View.OnClickListen
 
         datePicker = MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(constraintsBuilder)
-                .setTitleText("Выберите даду закладки яиц").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setTitleText("Выберите дату закладки яиц").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build();
 
         // Установка сколько всего яиц
