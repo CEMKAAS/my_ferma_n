@@ -1,13 +1,16 @@
 package com.hfad.myferma.AddPackage;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +31,11 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.hfad.myferma.ExpensesPackage.ExpensesFragment;
 import com.hfad.myferma.MainActivity;
 import com.hfad.myferma.R;
+import com.hfad.myferma.SalePackage.SaleFragment;
+import com.hfad.myferma.WriteOff.WriteOffFragment;
 import com.hfad.myferma.bottomFragment;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.incubator.ListAdapterIncubator;
@@ -46,7 +52,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-public class AddManagerFragment extends Fragment {
+public class AddManagerFragment extends Fragment  implements FragmentKeyeventListenerManager  {
     private RecyclerView recyclerView;
     private ImageView empty_imageview;
     private TextView no_data, sixColumn, dicsPrice;
@@ -95,14 +101,21 @@ public class AddManagerFragment extends Fragment {
         //Настройка кнопки и верхнего бара
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.getMenu().findItem(R.id.filler).setVisible(true);
+        appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
         appBar.setTitle(appBarManager);
         appBar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.filler:
-
                     bottomSheetDialog.show();
             }
             return true;
+        });
+
+        appBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backToGo();
+            }
         });
 
         // Настройка календаря на период
@@ -336,6 +349,15 @@ public class AddManagerFragment extends Fragment {
         buttonSheet = bottomSheetDialog.findViewById(R.id.button_sheet);
     }
 
+//    @Override
+//    public void onAttach(@NonNull Context context) {
+//        super.onAttach(context);
+//
+//        MainActivity mainActivity = (MainActivity) getActivity();
+//
+//        mainActivity.setFragmentKeyeventListenerMager(this);
+//    }
+
     public void addChart(ProductDB productDB) {
         //todo
         UpdateProductFragment updateProductFragment = new UpdateProductFragment();
@@ -350,5 +372,29 @@ public class AddManagerFragment extends Fragment {
                 .commit();
 
     }
+    public void backToGo(){
+        if (appBarManager.equals("Мои Товар")) {
+            backToGoFragment(new AddFragment());
+        } else if (appBarManager.equals("Мои Продажи")) {
+            backToGoFragment(new SaleFragment());
+        } else if (appBarManager.equals("Мои Покупки")) {
+            backToGoFragment(new ExpensesFragment());
+        } else if (appBarManager.equals("Мои Списания")) {
+            backToGoFragment(new WriteOffFragment());
+        }
+    }
 
+    public void backToGoFragment (Fragment fragment){
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.conteiner,fragment, "visible_fragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public boolean onFragmentKeyEventManager(KeyEvent event) {
+        backToGo();
+        return false;
+    }
 }

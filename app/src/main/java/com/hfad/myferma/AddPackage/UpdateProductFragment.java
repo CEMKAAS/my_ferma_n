@@ -1,11 +1,14 @@
 package com.hfad.myferma.AddPackage;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +17,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
+import com.hfad.myferma.MainActivity;
 import com.hfad.myferma.R;
 import com.hfad.myferma.db.MyConstanta;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
@@ -31,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class UpdateProductFragment extends Fragment {
+public class UpdateProductFragment extends Fragment implements FragmentKeyeventListener {
 
     private TextView textUnit;
 
@@ -64,6 +69,16 @@ public class UpdateProductFragment extends Fragment {
             productDB = bundle.getParcelable("fd");
             id = bundle.getString("id");
         }
+        MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
+        appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
+        appBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backToGo();
+            }
+        });
+
+
 
         textUnit = layout.findViewById(R.id.text_unit);
         titleExpenses = layout.findViewById(R.id.tilleExpenses_input);
@@ -100,7 +115,7 @@ public class UpdateProductFragment extends Fragment {
 
         datePicker = MaterialDatePicker.Builder.datePicker()
                 .setCalendarConstraints(constraintsBuilder)
-                .setTitleText("Выберите дату").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setTitleText("Выберите дату").setSelection(MaterialDatePicker.todayInUtcMilliseconds()) //Todo выбирать дату из EditText
                 .build();
 
         titleData.getEditText().setOnClickListener(new View.OnClickListener() {
@@ -179,8 +194,6 @@ public class UpdateProductFragment extends Fragment {
                 }
             }
         });
-
-
         return layout;
     }
 
@@ -211,7 +224,6 @@ public class UpdateProductFragment extends Fragment {
         } else {
             myDB.updateData(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2]);
         }
-
     }
 
 
@@ -247,7 +259,6 @@ public class UpdateProductFragment extends Fragment {
             titleCount.setError("Нелья уйти в минус!");
             titleCount.getError();
         } else {
-            //TODO Отрицание
             myDB.updateDataSale(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2], Double.valueOf(productDB.getPrice()));
         }
     }
@@ -282,7 +293,6 @@ public class UpdateProductFragment extends Fragment {
             titleCount.setError("Яйца не могут быть дробными...");
             titleCount.getError();
         } else {
-            //TODO Отрицание
             myDB.updateDataExpenses(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2]);
         }
     }
@@ -378,10 +388,6 @@ public class UpdateProductFragment extends Fragment {
         return tempList;
     }
 
-
-//
-
-
     public void delete() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         builder.setTitle("Удалить " + textUnit.getText().toString() + " ?");
@@ -391,15 +397,16 @@ public class UpdateProductFragment extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (id.equals("Мои Товар")) {
                     myDB.deleteOneRow(String.valueOf(productDB.getId()));
-
+                    backToGo();
                 } else if (id.equals("Мои Продажи")) {
                    myDB.deleteOneRowSale(String.valueOf(productDB.getId()));
-
+                    backToGo();
                 } else if (id.equals("Мои Покупки")) {
                    myDB.deleteOneRowExpenses(String.valueOf(productDB.getId()));
-
+                    backToGo();;
                 } else if (id.equals("Мои Списания")) {
                     myDB.deleteOneRowWriteOff(String.valueOf(productDB.getId()));
+                    backToGo();
                 }
             }
         });
@@ -413,4 +420,43 @@ public class UpdateProductFragment extends Fragment {
     }
 
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+
+        mainActivity.setFragmentKeyeventListener(this);
+    }
+
+    public void backToGo(){
+        AddManagerFragment addManagerFragment = null;
+
+        if (id.equals("Мои Товар")) {
+            addManagerFragment = new AddManagerFragment("Мои Товар", myDB.readAllData(), View.GONE, "Цена", "Кол-во", R.layout.my_row);
+
+        } else if (id.equals("Мои Продажи")) {
+            addManagerFragment = new AddManagerFragment("Мои Продажи", myDB.readAllDataSale(), View.VISIBLE, "Цена", "Кол-во", R.layout.my_row_sale);
+
+        } else if (id.equals("Мои Покупки")) {
+            addManagerFragment = new AddManagerFragment("Мои Покупки", myDB.readAllDataExpenses(), View.GONE, "Нет", "Цена", R.layout.my_row);
+
+        } else if (id.equals("Мои Списания")) {
+
+            addManagerFragment = new AddManagerFragment("Мои Списания", myDB.readAllDataWriteOff(), View.VISIBLE,"Статус", "Кол-во", R.layout.my_row_write_off);
+        }
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.conteiner, addManagerFragment, "visible_fragment")
+                .addToBackStack(null)
+                .commit();
+    }
+
+
+    @Override
+    public boolean onFragmentKeyEvent(KeyEvent event) {
+        backToGo();
+
+        return false;
+    }
 }

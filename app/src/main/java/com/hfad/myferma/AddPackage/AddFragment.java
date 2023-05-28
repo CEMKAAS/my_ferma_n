@@ -19,12 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.myferma.MainActivity;
 import com.hfad.myferma.R;
 import com.hfad.myferma.db.MyConstanta;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.db.MydbManagerMetod;
+import com.hfad.myferma.incubator.AddIncubatorFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -58,6 +60,12 @@ public class AddFragment extends Fragment implements View.OnClickListener {
         //Установка EditText
         addEdit = layout.findViewById(R.id.add_edit);
         addEdit.getEditText().setOnEditorActionListener(editorListenerAdd);
+
+        ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) getActivity().findViewById(R.id.extended_fab);
+        fab.show();
+        fab.setText("Журнал");
+        fab.setIconResource(R.drawable.ic_action_book);
+        fab.getIcon();
 
         // Установка спинера
         animals_spiner = (AutoCompleteTextView) layout.findViewById(R.id.animals_spiner);
@@ -171,6 +179,9 @@ public class AddFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.addChart_button:
                 addChart(new AddChartFragment());
+                break;
+            case R.id.extended_fab:
+                addChart(new AddManagerFragment("Мои Товар", myDB.readAllData(), View.GONE, "Цена", "Кол-во", R.layout.my_row));
                 break;
         }
     }

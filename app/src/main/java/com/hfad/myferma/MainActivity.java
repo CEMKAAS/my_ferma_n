@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -32,6 +33,9 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.myferma.AddPackage.AddFragment;
 import com.hfad.myferma.AddPackage.AddManagerFragment;
+import com.hfad.myferma.AddPackage.FragmentKeyeventListener;
+import com.hfad.myferma.AddPackage.FragmentKeyeventListenerManager;
+import com.hfad.myferma.AddPackage.UpdateProductFragment;
 import com.hfad.myferma.ExpensesPackage.ExpensesFragment;
 import com.hfad.myferma.Finance.FinanceFragment;
 import com.hfad.myferma.Finance.PriceFragment;
@@ -68,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
 
     private InterstitialAd mInterstitialAd;
     private int position = 0;
+    FragmentKeyeventListener fragmentKeyeventListener;
+
+    FragmentKeyeventListenerManager  fragmentKeyeventListenerFF;
 
     private FrameLayout llBottomSheet;
     //    WriteOffFragment writeOffFragment;
@@ -291,6 +298,8 @@ public class MainActivity extends AppCompatActivity {
                     fbaShowBackIncubator();
                     position = 0;
                 }
+                if (fragment instanceof UpdateProductFragment) {
+                }
                 binding.navView.getMenu().getItem(position).setChecked(true);
             }
         }
@@ -455,29 +464,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void showBottomSheetDialog() {
-
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-        bottomSheetDialog.setContentView(R.layout.fragment_bottom);
-
-        AutoCompleteTextView animalsSpinerSheet = bottomSheetDialog.findViewById(R.id.animals_spiner_sheet);
-        TextInputLayout dataSheet = bottomSheetDialog.findViewById(R.id.data_sheet);
-        Button buttonSheet = bottomSheetDialog.findViewById(R.id.button_sheet);
-        buttonSheet.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        Toast.makeText(getApplicationContext(), "Copy is Clicked ", Toast.LENGTH_LONG).show();
-    }
-});
-
-//        LinearLayout copy = bottomSheetDialog.findViewById(R.id.copyLinearLayout);
-//        LinearLayout share = bottomSheetDialog.findViewById(R.id.shareLinearLayout);
-//        LinearLayout upload = bottomSheetDialog.findViewById(R.id.uploadLinearLayout);
-//        LinearLayout download = bottomSheetDialog.findViewById(R.id.download);
-//        LinearLayout delete = bottomSheetDialog.findViewById(R.id.delete);
-
-        bottomSheetDialog.show();
-    }
+//    public void showBottomSheetDialog() {
+//
+//        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+//        bottomSheetDialog.setContentView(R.layout.fragment_bottom);
+//
+//        AutoCompleteTextView animalsSpinerSheet = bottomSheetDialog.findViewById(R.id.animals_spiner_sheet);
+//        TextInputLayout dataSheet = bottomSheetDialog.findViewById(R.id.data_sheet);
+//        Button buttonSheet = bottomSheetDialog.findViewById(R.id.button_sheet);
+//        buttonSheet.setOnClickListener(new View.OnClickListener() {
+//    @Override
+//    public void onClick(View v) {
+//        Toast.makeText(getApplicationContext(), "Copy is Clicked ", Toast.LENGTH_LONG).show();
+//    }
+//});
+//
+////        LinearLayout copy = bottomSheetDialog.findViewById(R.id.copyLinearLayout);
+////        LinearLayout share = bottomSheetDialog.findViewById(R.id.shareLinearLayout);
+////        LinearLayout upload = bottomSheetDialog.findViewById(R.id.uploadLinearLayout);
+////        LinearLayout download = bottomSheetDialog.findViewById(R.id.download);
+////        LinearLayout delete = bottomSheetDialog.findViewById(R.id.delete);
+//
+//        bottomSheetDialog.show();
+//    }
 
 
     //Переход на фрагменты
@@ -570,7 +579,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
 
+        if (fragmentKeyeventListenerFF !=null) {
+            fragmentKeyeventListenerFF.onFragmentKeyEventManager(event);
+            return true;
+        }
+
+//        if (fragmentKeyeventListener!=null){
+//            fragmentKeyeventListener.onFragmentKeyEvent(event);
+//            return true;
+//        }
+
+        return super.dispatchKeyEvent(event);
+    }
+
+    public void setFragmentKeyeventListener(FragmentKeyeventListener fragmentKeyeventListener) {
+        this.fragmentKeyeventListener = fragmentKeyeventListener;
+    }
+//    public void setFragmentKeyeventListenerMager(FragmentKeyeventListenerManager fragmentKeyeventListenerFF) {
+//        this.fragmentKeyeventListenerFF = fragmentKeyeventListenerFF;
+//    }
 
     // показывать фаб кнопку при нажатие назад
     public void fbaShowBack() {

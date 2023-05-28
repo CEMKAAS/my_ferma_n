@@ -32,14 +32,4 @@ public class bottomFragment extends BottomSheetDialogFragment {
         return layout;
     }
 
-
-    public void sad (){
-        buttonSheet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "sds ", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
 }
