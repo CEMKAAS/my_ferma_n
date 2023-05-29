@@ -2,7 +2,6 @@ package com.hfad.myferma;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,17 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.hfad.myferma.AddPackage.AddActivity;
-import com.hfad.myferma.db.MyConstanta;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 
 import java.util.ArrayList;

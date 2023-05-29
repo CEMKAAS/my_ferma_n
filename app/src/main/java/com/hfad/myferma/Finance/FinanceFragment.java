@@ -41,7 +41,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 
-public class FinanceFragment extends Fragment implements View.OnClickListener{
+public class FinanceFragment extends Fragment implements View.OnClickListener {
 
     private MyFermaDatabaseHelper myDB;
     private RecyclerView recyclerView;
@@ -52,6 +52,7 @@ public class FinanceFragment extends Fragment implements View.OnClickListener{
     private BottomSheetDialog bottomSheetDialog;
     private MaterialDatePicker<Pair<Long, Long>> datePicker;
     private Date dateFirst, dateEnd;
+    private Map<String, Double> tempList;
 
     // Прогрузка фрагмента и его активных частей
     @Override
@@ -73,11 +74,12 @@ public class FinanceFragment extends Fragment implements View.OnClickListener{
         //Настройка листа
         productList = new ArrayList();
         add();
-
+        //Настройка мапы
+        addProduct();
         // Настраиваем адаптер
         recyclerView = layout.findViewById(R.id.recyclerView);
 
-        ProductAdapter productAdapter = new ProductAdapter(addProduct(),"Продали ", " ₽" );
+        ProductAdapter productAdapter = new ProductAdapter(tempList, "Продали ", " ₽");
 
         recyclerView.setAdapter(productAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -91,9 +93,9 @@ public class FinanceFragment extends Fragment implements View.OnClickListener{
         TextView totalExpensesText = (TextView) layout.findViewById(R.id.totalExpenses_text);
         TextView clearFinanceText = (TextView) layout.findViewById(R.id.clearFinance_text);
 
-        totalAmountText.setText(" " +String.valueOf(f.format(totalAmount()))+ " ₽");
-        totalExpensesText.setText(" " +String.valueOf(f.format(totalExpenses()))+ " ₽");
-        clearFinanceText.setText(" " +String.valueOf(f.format(clearFinance))+ " ₽");
+        totalAmountText.setText(" " + String.valueOf(f.format(totalAmount())) + " ₽");
+        totalExpensesText.setText(" " + String.valueOf(f.format(totalExpenses())) + " ₽");
+        clearFinanceText.setText(" " + String.valueOf(f.format(clearFinance)) + " ₽");
 
 
         //Создание модального bottomSheet
@@ -161,8 +163,12 @@ public class FinanceFragment extends Fragment implements View.OnClickListener{
         buttonSheet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //                    filter();
-                ProductAdapter productAdapter = new ProductAdapter(addProduct(),"Продали ", " ₽" );
+                try {
+                    filter();
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                ProductAdapter productAdapter = new ProductAdapter(addProduct(), "Продали ", " ₽");
 
                 recyclerView.setAdapter(productAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -197,7 +203,7 @@ public class FinanceFragment extends Fragment implements View.OnClickListener{
 
     //Считаем сумму по каждому продукту
     public Map addProduct() {
-        Map<String, Double> tempList = new HashMap<>();
+       tempList = new HashMap<>();
         for (String product : productList) {
 
             Cursor cursor = myDB.idProduct1(MyConstanta.TABLE_NAMESALE, MyConstanta.TITLESale, product);
@@ -224,17 +230,17 @@ public class FinanceFragment extends Fragment implements View.OnClickListener{
     //расчеты
     // Общая прибыль
     public double totalAmount() {
-            Cursor cursor = myDB.readAllDataSale();
-            double sum = 0;
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                    double productUnit = cursor.getDouble(6);
-                    sum += productUnit;
-                    }
-                cursor.close();
-            } else {
-               return 0;
+        Cursor cursor = myDB.readAllDataSale();
+        double sum = 0;
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                double productUnit = cursor.getDouble(6);
+                sum += productUnit;
             }
+            cursor.close();
+        } else {
+            return 0;
+        }
         return sum;
     }
 
@@ -287,51 +293,49 @@ public class FinanceFragment extends Fragment implements View.OnClickListener{
     }
 
 
-//    public void filter() throws ParseException {
-//
-//        productNow.clear();
-//        String animalsSpinerSheetText = animalsSpinerSheet.getText().toString();
-//        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-//
-//        if (animalsSpinerSheetText.equals("Все") && dataSheet.getEditText().getText().toString().equals("")) {
-//            productNow.addAll(product);
-//        } else if (animalsSpinerSheetText.equals("Все") && !dataSheet.getEditText().getText().toString().equals("")) {
-//
-//            for (ProductDB productDB : product) {
-//
-//                Date dateNow = format.parse(productDB.getData());
-//
-//                if ((dateFirst.before(dateNow) && dateEnd.before(dateNow)) || dateFirst.equals(dateNow) || dateEnd.equals(dateNow)) {
-//                    productNow.add(productDB);
-//                }
-//
-//            }
-//
-//        } else if (!animalsSpinerSheetText.equals("Все") && dataSheet.getEditText().getText().toString().equals("")) {
-//
-//            for (ProductDB productDB : product) {
-//
-//                if (animalsSpinerSheetText.equals(productDB.getName())) {
-//                    productNow.add(productDB);
-//                }
-//            }
-//
-//        } else {
-//
-//            for (ProductDB productDB : product) {
-//
-//                if (animalsSpinerSheetText.equals(productDB.getName())) {
-//
-//                    Date dateNow = format.parse(productDB.getData());
-//
-//                    if ((dateFirst.before(dateNow) && dateEnd.after(dateNow)) || dateFirst.equals(dateNow) || dateEnd.equals(dateNow)) {
-//                        productNow.add(productDB);
-//                    }
-//                }
-//            }
-//        }
-//    }
+    public void filter() throws ParseException {
+
+        tempList.clear();
+
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+
+        for (String product : productList) {
+
+            Cursor cursor = myDB.idProduct1(MyConstanta.TABLE_NAMESALE, MyConstanta.TITLESale, product);
+            double sumSale = 0;
+
+            if (cursor != null && cursor.getCount() != 0) {
+
+                while (cursor.moveToNext()) {
+                    String data = cursor.getString(3) + "." + cursor.getString(4) + "." + cursor.getString(5);
+                    Date dateNow = format.parse(data);
+
+                    if ((dateFirst.before(dateNow) && dateEnd.before(dateNow)) || dateFirst.equals(dateNow) || dateEnd.equals(dateNow)) {
+                        Double productUnit = cursor.getDouble(6);
+
+                        if (tempList.get(product) == null) {
+                            tempList.put(product, productUnit);
 
 
+                        } else {
+                            double sum = tempList.get(product) + productUnit;
+                            tempList.put(product, sum);
+                        }
+
+                        sumSale += productUnit;
+
+                    }
+                }
+                cursor.close();
+            } else {
+                tempList.put(product, 0.0);
+            }
+        }
+
+        totalAmountText.setText(" " + String.valueOf(f.format(totalAmount())) + " ₽");
+        totalExpensesText.setText(" " + String.valueOf(f.format(totalExpenses())) + " ₽");
+        clearFinanceText.setText(" " + String.valueOf(f.format(clearFinance)) + " ₽");
+
+    }
 
 }

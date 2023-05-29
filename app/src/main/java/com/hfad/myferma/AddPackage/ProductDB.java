@@ -6,13 +6,9 @@ import android.os.Parcelable;
 public class ProductDB implements Parcelable {
 
     private int id;
-
     private  String name;
-
     private  Double disc;
-
     private  String data;
-
     private  int price;
 
     public ProductDB(int id, String name, Double disc, String data, int price) {

@@ -39,13 +39,9 @@ import java.util.TimeZone;
 public class UpdateProductFragment extends Fragment implements FragmentKeyeventListener {
 
     private TextView textUnit;
-
     private TextInputLayout titleExpenses, titleCount, titleData, titlePrice, menu;
-
     private Button updateButton, deleteButton;
-
     private AutoCompleteTextView writeOffSpiner;
-
     private ProductDB productDB;
     private String id, oldCount, nowCount;
     private MyFermaDatabaseHelper myDB;
@@ -62,13 +58,16 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
 
         View layout = inflater.inflate(R.layout.fragment_update_product, container, false);
 
+        //Подкючаемся к БД
         myDB = new MyFermaDatabaseHelper(getActivity());
 
+        // Получаем информацию из предыдущего фрагмента
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             productDB = bundle.getParcelable("fd");
             id = bundle.getString("id");
         }
+        // Настройка аппбара и настройка стрелки, чтобы вернутся назад
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
         appBar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -78,8 +77,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
             }
         });
 
-
-
+        // Подключаемся к фронту
         textUnit = layout.findViewById(R.id.text_unit);
         titleExpenses = layout.findViewById(R.id.tilleExpenses_input);
         titleCount = layout.findViewById(R.id.titleSale_input);
@@ -90,6 +88,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         updateButton = layout.findViewById(R.id.update_button);
         deleteButton = layout.findViewById(R.id.delete_button);
 
+        // Настройка фронта
         textUnit.setText(productDB.getName());
         titleExpenses.getEditText().setText(productDB.getName());
         titleCount.getEditText().setText(productDB.getDisc().toString());
@@ -102,11 +101,9 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
             writeOffSpiner.setText("На утилизацию", false);
         }
 
+        // сохраняем значение, которое было изначально
         oldCount = titleCount.getEditText().getText().toString().trim().replaceAll(",", ".").replaceAll("[^\\d.]", "");
 
-
-        Calendar calendar = Calendar.getInstance();
-        titleData.getEditText().setText(productDB.getData());
 
         // Настройка календаря
         CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder()
@@ -136,13 +133,15 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
             }
         });
 
+        // Настройка видимости фронта
         titleExpenses.setVisibility(View.GONE);
         menu.setVisibility(View.GONE);
 
+        //Для товаров
         if (id.equals("Мои Товар")) {
             titlePrice.setVisibility(View.GONE);
+            // для покупок
         } else if (id.equals("Мои Покупки")) {
-
             titleExpenses.setVisibility(View.VISIBLE);
 
             textUnit.setVisibility(View.GONE);
@@ -151,12 +150,11 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
             titleCount.setHint("Цена");
             titleCount.setHelperText("Укажите цену за товар");
             titleCount.getEditText().setText(String.valueOf(productDB.getPrice()));
-
+            // для списаний
         } else if (id.equals("Мои Списания")) {
             titlePrice.setVisibility(View.GONE);
             menu.setVisibility(View.VISIBLE);
         }
-
 
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,23 +170,28 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
                     myExpenses();
 
                 } else if (id.equals("Мои Списания")) {
-
                     myWriteOff();
+
                 }
             }
         });
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String product = textUnit.getText().toString();
                 String count = oldCount;
 
+                // Проверяем если мы удалим в продажах, товаров и списаниях, уйдем ли мы в минус
                 if (id.equals("Мои Товар") || id.equals("Мои Продажи") || id.equals("Мои Списания")) {
+                    // Проверяем если мы удалим, уйдем ли мы в минус
                     if (sumDelete(product, count) <= 0) {
                         Toast.makeText(getActivity(), "Нелья уйти в минус!", Toast.LENGTH_SHORT).show();
                     } else {
                         delete();
                     }
+                    // удаляем, если это покупки
                 } else {
                     delete();
                 }
@@ -197,10 +200,13 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         return layout;
     }
 
+    // Мои продукты
     public void myProduct() {
+
         String product = textUnit.getText().toString();
         String count = titleCount.getEditText().getText().toString().trim().replaceAll(",", ".").replaceAll("[^\\d.]", "");
         String[] data = titleData.getEditText().getText().toString().split("\\.");
+
         //убираем ошибку
         titleCount.setErrorEnabled(false);
         titleData.setErrorEnabled(false);
@@ -227,6 +233,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
     }
 
 
+    //Мои продажи
     public void mySale() {
         String product = textUnit.getText().toString();
         String count = titleCount.getEditText().getText().toString().trim().replaceAll(",", ".").replaceAll("[^\\d.]", "");
@@ -263,7 +270,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         }
     }
 
-
+    // Мои продажи
     public void myExpenses() {
         String product = titleExpenses.getEditText().getText().toString();
         String count = titleCount.getEditText().getText().toString().trim().replaceAll(",", ".").replaceAll("[^\\d.]", "");
@@ -273,7 +280,6 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         titleExpenses.setErrorEnabled(false);
         titleCount.setErrorEnabled(false);
         titleData.setErrorEnabled(false);
-
 
         //вывод ошибки
         if (count.equals("") || data.equals("") || product.equals("")) {
@@ -297,11 +303,13 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         }
     }
 
+    //Мои списания
     public void myWriteOff() {
 
         String product = textUnit.getText().toString();
         String count = titleCount.getEditText().getText().toString().trim().replaceAll(",", ".").replaceAll("[^\\d.]", "");
         String[] data = titleData.getEditText().getText().toString().split("\\.");
+
         //убираем ошибку
         titleCount.setErrorEnabled(false);
         titleData.setErrorEnabled(false);
@@ -328,7 +336,6 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
 
     }
 
-
     //Проверяем есть ли запятая или нет в яйцах
     public boolean containsEgg(String title, String count) {
         if (title.equals("Яйца")) {
@@ -339,6 +346,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         return false;
     }
 
+    //Считаем сколько у нас товара на текущий момент
     public Double sum(String product, String count) {
         double a = add(product);
         double b = Double.valueOf(oldCount);
@@ -347,6 +355,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         return d;
     }
 
+    //Считаем сколько у нас товара на текущий момент
     public Double sumDelete(String product, String count) {
         double a = add(product);
         double c = Double.valueOf(count);
@@ -354,6 +363,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         return d;
     }
 
+    //Считаем сколько данного товара на данный момент
     public double add(String product) {
 
         double tempList = 0;
@@ -388,6 +398,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         return tempList;
     }
 
+    //Удаляем и возвращаемся назад
     public void delete() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         builder.setTitle("Удалить " + textUnit.getText().toString() + " ?");
@@ -429,6 +440,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         mainActivity.setFragmentKeyeventListener(this);
     }
 
+    //Логика возвращения назад
     public void backToGo(){
         AddManagerFragment addManagerFragment = null;
 
@@ -453,10 +465,10 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
     }
 
 
+    //Возвращаемся назад при нажатии на клавишу
     @Override
     public boolean onFragmentKeyEvent(KeyEvent event) {
         backToGo();
-
         return false;
     }
 }

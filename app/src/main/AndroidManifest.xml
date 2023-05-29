@@ -18,55 +18,7 @@
             android:name=".ChartActivity"
             android:exported="false" />
         <activity
-            android:name=".WriteOff.UpdateWriteOffActivity"
-            android:exported="false" />
-        <activity
-            android:name=".WriteOff.WriteOffActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ExpensesPackage.UpdateActivityExpenses"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ExpensesPackage.ExpensesActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".SalePackage.UpdateActivitySale"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".SalePackage.SaleActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".SalePackage.CustomAdapterSale"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".AddPackage.UpdateActivityAdd"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".AddPackage.AddActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

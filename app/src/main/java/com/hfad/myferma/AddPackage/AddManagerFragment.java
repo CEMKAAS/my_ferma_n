@@ -65,13 +65,9 @@ public class AddManagerFragment extends Fragment  implements FragmentKeyeventLis
     private Button buttonSheet;
     private BottomSheetDialog bottomSheetDialog;
     private MaterialDatePicker<Pair<Long, Long>> datePicker;
-
     private List<ProductDB> product, productNow;
-
     private Date dateFirst, dateEnd;
-
     private String appBarManager, statusPrice, priceDics;
-
     private Cursor cursorManager;
     private int visibility, myRow;
 
@@ -83,7 +79,6 @@ public class AddManagerFragment extends Fragment  implements FragmentKeyeventLis
         this.priceDics = priceDics;
         this.myRow = myRow;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -295,6 +290,7 @@ public class AddManagerFragment extends Fragment  implements FragmentKeyeventLis
     public void filter() throws ParseException {
 
         productNow.clear();
+
         String animalsSpinerSheetText = animalsSpinerSheet.getText().toString();
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 

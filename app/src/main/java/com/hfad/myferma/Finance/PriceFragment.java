@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.myferma.R;
@@ -41,6 +42,17 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
         layout = inflater.inflate(R.layout.fragment_price, container, false);
         myDB = new MyFermaDatabaseHelper(getActivity());
         productList = new ArrayList();
+
+        // Настройка аппбара настройка стелочки назад
+        MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
+        appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
+        appBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
         add();
         addMap();
         onBackPressed();
