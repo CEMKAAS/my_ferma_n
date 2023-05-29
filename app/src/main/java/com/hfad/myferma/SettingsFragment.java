@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.db.MydbManagerMetod;
@@ -45,6 +46,10 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
         //Подключение к базе данных
         myDB = new MyFermaDatabaseHelper(getActivity());
+
+        //Убираем Фаб
+        ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) getActivity().findViewById(R.id.extended_fab);
+        fab.setVisibility(View.GONE);
 
         // устнановка кнопок
         Button addProductButton = (Button) layout.findViewById(R.id.add_product_button);

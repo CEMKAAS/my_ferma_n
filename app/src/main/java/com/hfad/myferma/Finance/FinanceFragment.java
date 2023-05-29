@@ -23,8 +23,10 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.myferma.AddPackage.CustomAdapterAdd;
 import com.hfad.myferma.AddPackage.ProductDB;
+import com.hfad.myferma.InfoFragment;
 import com.hfad.myferma.ProductAdapter;
 import com.hfad.myferma.R;
+import com.hfad.myferma.SettingsFragment;
 import com.hfad.myferma.db.MyConstanta;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.db.MydbManagerMetod;
@@ -53,6 +55,8 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
     private MaterialDatePicker<Pair<Long, Long>> datePicker;
     private Date dateFirst, dateEnd;
     private Map<String, Double> tempList;
+
+    private  TextView totalAmountText, totalExpensesText, clearFinanceText;
 
     // Прогрузка фрагмента и его активных частей
     @Override
@@ -89,9 +93,9 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
         double totalExpenses = totalExpenses();
         double clearFinance = totalAmount - totalExpenses;
 
-        TextView totalAmountText = (TextView) layout.findViewById(R.id.totalAmount_text);
-        TextView totalExpensesText = (TextView) layout.findViewById(R.id.totalExpenses_text);
-        TextView clearFinanceText = (TextView) layout.findViewById(R.id.clearFinance_text);
+       totalAmountText = (TextView) layout.findViewById(R.id.totalAmount_text);
+       totalExpensesText = (TextView) layout.findViewById(R.id.totalExpenses_text);
+       clearFinanceText = (TextView) layout.findViewById(R.id.clearFinance_text);
 
         totalAmountText.setText(" " + String.valueOf(f.format(totalAmount())) + " ₽");
         totalExpensesText.setText(" " + String.valueOf(f.format(totalExpenses())) + " ₽");
@@ -109,6 +113,14 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
             switch (item.getItemId()) {
                 case R.id.filler:
                     bottomSheetDialog.show();
+                case R.id.more:
+                    replaceFragment(new InfoFragment());
+                    appBar.setTitle("Информация");
+                    break;
+                case R.id.setting:
+                    replaceFragment(new SettingsFragment());
+                    appBar.setTitle("Мои настройки");
+                    break;
             }
             return true;
         });
@@ -168,7 +180,7 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
-                ProductAdapter productAdapter = new ProductAdapter(addProduct(), "Продали ", " ₽");
+                ProductAdapter productAdapter = new ProductAdapter(tempList, "Продали ", " ₽");
 
                 recyclerView.setAdapter(productAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -299,10 +311,12 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
 
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
+        double totalAmountD = 0;
+        double totalExpenses = 0;
+
         for (String product : productList) {
 
             Cursor cursor = myDB.idProduct1(MyConstanta.TABLE_NAMESALE, MyConstanta.TITLESale, product);
-            double sumSale = 0;
 
             if (cursor != null && cursor.getCount() != 0) {
 
@@ -310,19 +324,18 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                     String data = cursor.getString(3) + "." + cursor.getString(4) + "." + cursor.getString(5);
                     Date dateNow = format.parse(data);
 
-                    if ((dateFirst.before(dateNow) && dateEnd.before(dateNow)) || dateFirst.equals(dateNow) || dateEnd.equals(dateNow)) {
+                    if ((dateFirst.before(dateNow) && dateEnd.after(dateNow)) || dateFirst.equals(dateNow) || dateEnd.equals(dateNow)) {
                         Double productUnit = cursor.getDouble(6);
 
                         if (tempList.get(product) == null) {
                             tempList.put(product, productUnit);
-
 
                         } else {
                             double sum = tempList.get(product) + productUnit;
                             tempList.put(product, sum);
                         }
 
-                        sumSale += productUnit;
+                        totalAmountD += productUnit;
 
                     }
                 }
@@ -332,10 +345,40 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        totalAmountText.setText(" " + String.valueOf(f.format(totalAmount())) + " ₽");
-        totalExpensesText.setText(" " + String.valueOf(f.format(totalExpenses())) + " ₽");
+        Cursor cursorExpens = myDB.readAllDataExpenses();
+
+
+        if (cursorExpens != null && cursorExpens.getCount() != 0) {
+            while (cursorExpens.moveToNext()) {
+
+                String data = cursorExpens.getString(3) + "." + cursorExpens.getString(4) + "." + cursorExpens.getString(5);
+                Date dateNow = format.parse(data);
+
+                if ((dateFirst.before(dateNow) && dateEnd.after(dateNow)) || dateFirst.equals(dateNow) || dateEnd.equals(dateNow)) {
+
+                    double productUnit = cursorExpens.getDouble(2);
+                    totalExpenses += productUnit;
+
+                }
+
+            }
+            cursorExpens.close();
+        }
+
+        double clearFinance = totalAmountD - totalExpenses;
+
+
+        totalAmountText.setText(" " + String.valueOf(f.format(totalAmountD)) + " ₽");
+        totalExpensesText.setText(" " + String.valueOf(f.format(totalExpenses)) + " ₽");
         clearFinanceText.setText(" " + String.valueOf(f.format(clearFinance)) + " ₽");
 
+    }
+
+    private void replaceFragment(Fragment fragment) {
+      getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.conteiner, fragment, "visible_fragment")
+                .addToBackStack(null)
+                .commit();
     }
 
 }

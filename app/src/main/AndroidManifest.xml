@@ -15,9 +15,6 @@
         android:windowSoftInputMode="adjustResize"
         tools:targetApi="32">
         <activity
-            android:name=".ChartActivity"
-            android:exported="false" />
-        <activity
             android:name=".SalePackage.CustomAdapterSale"
             android:exported="false">
             <meta-data

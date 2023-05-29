@@ -302,7 +302,7 @@ public class AddManagerFragment extends Fragment  implements FragmentKeyeventLis
 
                 Date dateNow = format.parse(productDB.getData());
 
-                if ((dateFirst.before(dateNow) && dateEnd.before(dateNow)) || dateFirst.equals(dateNow) || dateEnd.equals(dateNow)) {
+                if ((dateFirst.before(dateNow) && dateEnd.after(dateNow)) || dateFirst.equals(dateNow) || dateEnd.equals(dateNow)) {
                     productNow.add(productDB);
                 }
 
@@ -345,14 +345,14 @@ public class AddManagerFragment extends Fragment  implements FragmentKeyeventLis
         buttonSheet = bottomSheetDialog.findViewById(R.id.button_sheet);
     }
 
-//    @Override
-//    public void onAttach(@NonNull Context context) {
-//        super.onAttach(context);
-//
-//        MainActivity mainActivity = (MainActivity) getActivity();
-//
-//        mainActivity.setFragmentKeyeventListenerMager(this);
-//    }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+
+        mainActivity.setFragmentKeyeventListenerMager(this);
+    }
 
     public void addChart(ProductDB productDB) {
         //todo

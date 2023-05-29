@@ -37,6 +37,8 @@ import com.hfad.myferma.AddPackage.FragmentKeyeventListener;
 import com.hfad.myferma.AddPackage.FragmentKeyeventListenerManager;
 import com.hfad.myferma.AddPackage.UpdateProductFragment;
 import com.hfad.myferma.ExpensesPackage.ExpensesFragment;
+import com.hfad.myferma.Finance.FinanceChart2Fragment;
+import com.hfad.myferma.Finance.FinanceChartFragment;
 import com.hfad.myferma.Finance.FinanceFragment;
 import com.hfad.myferma.Finance.PriceFragment;
 import com.hfad.myferma.SalePackage.SaleFragment;
@@ -241,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
                     fab.setVisibility(View.GONE);
                     appBar.setNavigationIcon(null);
                     appBar.getMenu().findItem(R.id.delete).setVisible(false);
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
                 if (fragment instanceof FinanceFragment) {
                     position = 1;
@@ -259,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
                     fab.setVisibility(View.GONE);
                     appBar.getMenu().findItem(R.id.delete).setVisible(false);
                     appBar.setNavigationIcon(null);
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
                 if (fragment instanceof AddFragment) {
                     appBar.setTitle("Мои Товары");
@@ -266,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
                     position = 2;
                     appBar.getMenu().findItem(R.id.delete).setVisible(false);
                     appBar.setNavigationIcon(null);
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
                 if (fragment instanceof SaleFragment) {
                     appBar.setTitle("Мои Продажи");
@@ -273,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
                     position = 3;
                     appBar.getMenu().findItem(R.id.delete).setVisible(false);
                     appBar.setNavigationIcon(null);
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
                 if (fragment instanceof ExpensesFragment) {
                     appBar.setTitle("Мои Покупки");
@@ -280,12 +286,15 @@ public class MainActivity extends AppCompatActivity {
                     position = 4;
                     appBar.getMenu().findItem(R.id.delete).setVisible(false);
                     appBar.setNavigationIcon(null);
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
                 if (fragment instanceof InfoFragment) {
                     appBar.setTitle("Информация");
                     fab.hide();
                     fab.setVisibility(View.GONE);
                     appBar.getMenu().findItem(R.id.delete).setVisible(false);
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
+
                 }
                 if (fragment instanceof WriteOffFragment) {
                     appBar.setTitle("Мои Списания");
@@ -293,12 +302,19 @@ public class MainActivity extends AppCompatActivity {
                     position = 0;
                     appBar.getMenu().findItem(R.id.delete).setVisible(false);
                     appBar.setNavigationIcon(null);
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
                 if (fragment instanceof IncubatorMenuFragment) {
                     fbaShowBackIncubator();
                     position = 0;
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
-                if (fragment instanceof UpdateProductFragment) {
+
+                if(fragment instanceof FinanceChartFragment){
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
+                }
+                if(fragment instanceof FinanceChart2Fragment){
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
                 binding.navView.getMenu().getItem(position).setChecked(true);
             }
@@ -587,10 +603,10 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-//        if (fragmentKeyeventListener!=null){
-//            fragmentKeyeventListener.onFragmentKeyEvent(event);
-//            return true;
-//        }
+        if (fragmentKeyeventListener!=null){
+            fragmentKeyeventListener.onFragmentKeyEvent(event);
+            return true;
+        }
 
         return super.dispatchKeyEvent(event);
     }
@@ -598,9 +614,9 @@ public class MainActivity extends AppCompatActivity {
     public void setFragmentKeyeventListener(FragmentKeyeventListener fragmentKeyeventListener) {
         this.fragmentKeyeventListener = fragmentKeyeventListener;
     }
-//    public void setFragmentKeyeventListenerMager(FragmentKeyeventListenerManager fragmentKeyeventListenerFF) {
-//        this.fragmentKeyeventListenerFF = fragmentKeyeventListenerFF;
-//    }
+    public void setFragmentKeyeventListenerMager(FragmentKeyeventListenerManager fragmentKeyeventListenerFF) {
+        this.fragmentKeyeventListenerFF = fragmentKeyeventListenerFF;
+    }
 
     // показывать фаб кнопку при нажатие назад
     public void fbaShowBack() {
