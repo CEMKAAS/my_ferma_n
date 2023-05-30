@@ -54,9 +54,13 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
         });
 
         add();
+
         addMap();
+
         onBackPressed();
+
         editTxt();
+
         return layout;
     }
 
@@ -70,27 +74,32 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
         }
         cursor.close();
     }
-    // Формируем мапу из БД с ценой
+
+    // Формируем мапу из БД с ценой TODO чет я запутался
+
     public void addMap() {
         tempList = new HashMap<>();
-        Cursor cursor = myDB.readAllDataPrice();
-        if (cursor != null && cursor.getCount() != 0) {
-            while (cursor.moveToNext()) {
-                String product = cursor.getString(1);
-                Double price = cursor.getDouble(2);
-                tempList.put(product, price);
-            }
-            for (String product : productList) {
-                if (!tempList.containsKey(product)) {
+
+        for (String product : productList) {
+            Cursor cursor = myDB.readAllDataPrice();
+            if (cursor != null && cursor.getCount() != 0) {
+                while (cursor.moveToNext()) {
+                    if (cursor.getString(1).equals(product)){;
+                    Double price = cursor.getDouble(2);
+                    tempList.put(product, price);
+                    }
+                    else {
+                        tempList.put(product, 0.0);
+                    }
+                }
+            } else {
+                for (String product : productList) {
                     tempList.put(product, 0.0);
                 }
             }
-        } else {
-            for (String product : productList) {
-                tempList.put(product, 0.0);
-            }
+            cursor.close();
         }
-        cursor.close();
+
     }
 
     // Настраиваем программно EditText
@@ -133,7 +142,6 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
             p.getEditText().setText(String.valueOf(entry.getValue()));
             p.setEndIconOnClickListener(endIconClick(p, entry.getKey()));
             p.getEditText().setOnEditorActionListener(keyboardClick(p, entry.getKey()));
-
         }
     }
 

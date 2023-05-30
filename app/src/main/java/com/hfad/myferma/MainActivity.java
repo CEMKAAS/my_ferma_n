@@ -15,26 +15,18 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.myferma.AddPackage.AddFragment;
 import com.hfad.myferma.AddPackage.AddManagerFragment;
-import com.hfad.myferma.AddPackage.FragmentKeyeventListener;
-import com.hfad.myferma.AddPackage.FragmentKeyeventListenerManager;
 import com.hfad.myferma.AddPackage.UpdateProductFragment;
 import com.hfad.myferma.ExpensesPackage.ExpensesFragment;
 import com.hfad.myferma.Finance.FinanceChart2Fragment;
@@ -74,9 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
     private InterstitialAd mInterstitialAd;
     private int position = 0;
-    FragmentKeyeventListener fragmentKeyeventListener;
-
-    FragmentKeyeventListenerManager  fragmentKeyeventListenerFF;
 
     private FrameLayout llBottomSheet;
     //    WriteOffFragment writeOffFragment;
@@ -314,6 +303,9 @@ public class MainActivity extends AppCompatActivity {
                     appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
                 if(fragment instanceof FinanceChart2Fragment){
+                    appBar.getMenu().findItem(R.id.filler).setVisible(false);
+                }
+                if (fragment instanceof  UpdateProductFragment){
                     appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
                 binding.navView.getMenu().getItem(position).setChecked(true);
@@ -592,30 +584,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.create().show();
-    }
-
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-
-        if (fragmentKeyeventListenerFF !=null) {
-            fragmentKeyeventListenerFF.onFragmentKeyEventManager(event);
-            return true;
-        }
-
-        if (fragmentKeyeventListener!=null){
-            fragmentKeyeventListener.onFragmentKeyEvent(event);
-            return true;
-        }
-
-        return super.dispatchKeyEvent(event);
-    }
-
-    public void setFragmentKeyeventListener(FragmentKeyeventListener fragmentKeyeventListener) {
-        this.fragmentKeyeventListener = fragmentKeyeventListener;
-    }
-    public void setFragmentKeyeventListenerMager(FragmentKeyeventListenerManager fragmentKeyeventListenerFF) {
-        this.fragmentKeyeventListenerFF = fragmentKeyeventListenerFF;
     }
 
     // показывать фаб кнопку при нажатие назад

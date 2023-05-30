@@ -56,7 +56,7 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
     private Date dateFirst, dateEnd;
     private Map<String, Double> tempList;
 
-    private  TextView totalAmountText, totalExpensesText, clearFinanceText;
+    private  TextView totalAmountText, totalExpensesText, clearFinanceText, titleDate;
 
     // Прогрузка фрагмента и его активных частей
     @Override
@@ -96,11 +96,11 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
        totalAmountText = (TextView) layout.findViewById(R.id.totalAmount_text);
        totalExpensesText = (TextView) layout.findViewById(R.id.totalExpenses_text);
        clearFinanceText = (TextView) layout.findViewById(R.id.clearFinance_text);
+       titleDate = (TextView) layout.findViewById(R.id.titleDate);
 
         totalAmountText.setText(" " + String.valueOf(f.format(totalAmount())) + " ₽");
         totalExpensesText.setText(" " + String.valueOf(f.format(totalExpenses())) + " ₽");
         clearFinanceText.setText(" " + String.valueOf(f.format(clearFinance)) + " ₽");
-
 
         //Создание модального bottomSheet
         showBottomSheetDialog();
@@ -108,11 +108,12 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
         //Настройка кнопки и верхнего бара
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.getMenu().findItem(R.id.filler).setVisible(true);
-        appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
+//        appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
         appBar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.filler:
                     bottomSheetDialog.show();
+                    break;
                 case R.id.more:
                     replaceFragment(new InfoFragment());
                     appBar.setTitle("Информация");
@@ -124,7 +125,6 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
             }
             return true;
         });
-
 
         // Настройка календаря на период
         CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder()
@@ -166,6 +166,7 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
                             throw new RuntimeException(e);
                         }
                         dataSheet.getEditText().setText(formattedDate1 + "-" + formattedDate2);
+                        titleDate.setText(formattedDate1 + "-" + formattedDate2);
                     }
                 });
             }
@@ -242,33 +243,33 @@ public class FinanceFragment extends Fragment implements View.OnClickListener {
     //расчеты
     // Общая прибыль
     public double totalAmount() {
+
         Cursor cursor = myDB.readAllDataSale();
         double sum = 0;
-        if (cursor != null) {
+
+        if (cursor != null && cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 double productUnit = cursor.getDouble(6);
                 sum += productUnit;
             }
             cursor.close();
-        } else {
-            return 0;
         }
+
         return sum;
     }
 
     // Общие расходы
     public double totalExpenses() {
+
         Cursor cursor = myDB.readAllDataExpenses();
         double sum = 0;
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() != 0) {
             while (cursor.moveToNext()) {
                 double productUnit = cursor.getDouble(2);
                 sum += productUnit;
             }
             cursor.close();
-        } else {
-            return 0;
         }
 
         return sum;

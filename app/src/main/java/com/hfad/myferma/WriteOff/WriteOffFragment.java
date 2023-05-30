@@ -68,6 +68,7 @@ public class WriteOffFragment extends Fragment implements View.OnClickListener {
         // Установка EditText
         addWriteOffEdit = layout.findViewById(R.id.add_edit);
         addWriteOffEdit.getEditText().setOnEditorActionListener(editorListenerWriteOff);
+
         //Установка Radio
         radioGroup = (RadioGroup) layout.findViewById(R.id.radioGroup);
         radioButton1 = (RadioButton) layout.findViewById(R.id.radio_button_1);
@@ -79,7 +80,7 @@ public class WriteOffFragment extends Fragment implements View.OnClickListener {
         error = (TextView) layout.findViewById(R.id.errorText);
 
         animals_spiner = (AutoCompleteTextView) layout.findViewById(R.id.animals_spiner);
-        animals_spiner.setText("Яйца", false);
+        animals_spiner.setText(productList.get(0), false);
 
         f = new DecimalFormat("0");
 
@@ -294,7 +295,7 @@ public class WriteOffFragment extends Fragment implements View.OnClickListener {
 
     //проверка что не уйдем в минус
     boolean comparison(String animalsType, double inputUnit) {
-        if (tempList.get(animalsType) - inputUnit < 0) {
+        if (tempList.get(animalsType) - inputUnit <= 0) {
             addWriteOffEdit.setError("Нет столько товара на складе");
             addWriteOffEdit.getError();
             return false;

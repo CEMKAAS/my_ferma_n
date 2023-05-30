@@ -22,7 +22,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     private Map<String, Double> produtsMap;
     private List<String> productsList;
     private List<Double> unitList;
-
     private String name, suffix;
 
     public ProductAdapter(Map<String, Double> productsMapList, String name, String suffix) {
@@ -50,7 +49,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull final ProductAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
-        holder.products.setText(name + productsList.get(position));
+        holder.products.setText(name);
+        holder.count.setText(productsList.get(position));
         holder.unit.setText(String.valueOf(unitList.get(position)) + suffix);
 
     }
@@ -62,12 +62,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView products, unit;
+        TextView products, unit, count;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
             products = itemView.findViewById(R.id.products_text);
             unit = itemView.findViewById(R.id.unit_text);
+            count = itemView.findViewById(R.id.count_text);
         }
     }
 }

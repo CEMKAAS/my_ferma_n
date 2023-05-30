@@ -136,13 +136,6 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     public void deleteProduct() {
         String nameProduct = addProduct.getText().toString();
         menuProducts.setErrorEnabled(false);
-        if (nameProduct.equals("Яйца") || nameProduct.equals("Молоко") || nameProduct.equals("Мясо")) {
-
-            menuProducts.setError("Данный товар нельзя удалить, так как он является основным");
-            menuProducts.getError();
-
-        } else {
-
             if (arrayListProduct.contains(nameProduct)) {
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
                 builder.setTitle("Удалить товар?");
@@ -174,7 +167,5 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 menuProducts.setError("Такого товара нет");
                 menuProducts.getError();
             }
-
         }
-    }
 }

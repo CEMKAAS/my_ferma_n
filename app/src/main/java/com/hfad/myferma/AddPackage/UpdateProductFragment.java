@@ -24,8 +24,13 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
+import com.hfad.myferma.ExpensesPackage.ExpensesFragment;
+import com.hfad.myferma.InfoFragment;
 import com.hfad.myferma.MainActivity;
 import com.hfad.myferma.R;
+import com.hfad.myferma.SalePackage.SaleFragment;
+import com.hfad.myferma.SettingsFragment;
+import com.hfad.myferma.WriteOff.WriteOffFragment;
 import com.hfad.myferma.db.MyConstanta;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.incubator.NowArhiveFragment;
@@ -36,7 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class UpdateProductFragment extends Fragment implements FragmentKeyeventListener {
+public class UpdateProductFragment extends Fragment {
 
     private TextView textUnit;
     private TextInputLayout titleExpenses, titleCount, titleData, titlePrice, menu;
@@ -48,14 +53,12 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
     private MaterialDatePicker datePicker;
 
     public UpdateProductFragment() {
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View layout = inflater.inflate(R.layout.fragment_update_product, container, false);
 
         //Подкючаемся к БД
@@ -67,6 +70,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
             productDB = bundle.getParcelable("fd");
             id = bundle.getString("id");
         }
+
         // Настройка аппбара и настройка стрелки, чтобы вернутся назад
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
@@ -75,6 +79,19 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
             public void onClick(View v) {
                 backToGo();
             }
+        });
+        appBar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.more:
+                    replaceFragment(new InfoFragment());
+                    appBar.setTitle("Информация");
+                    break;
+                case R.id.setting:
+                    replaceFragment(new SettingsFragment());
+                    appBar.setTitle("Мои настройки");
+                    break;
+            }
+            return true;
         });
 
         // Подключаемся к фронту
@@ -103,7 +120,6 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
 
         // сохраняем значение, которое было изначально
         oldCount = titleCount.getEditText().getText().toString().trim().replaceAll(",", ".").replaceAll("[^\\d.]", "");
-
 
         // Настройка календаря
         CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder()
@@ -314,6 +330,13 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         titleCount.setErrorEnabled(false);
         titleData.setErrorEnabled(false);
 
+        // Настройка картинок
+        int statusDrawable = R.drawable.baseline_cottage_24;
+        if (!writeOffSpiner.getText().equals("На собсвенные нужды")) {
+            statusDrawable = R.drawable.baseline_delete_24;
+        }
+
+
         //вывод ошибки
         if (count.equals("") || data.equals("")) {
             if (count.equals("")) {
@@ -331,7 +354,7 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
             titleCount.setError("Нелья уйти в минус!");
             titleCount.getError();
         } else {
-            myDB.updateDataWriteOff(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2], productDB.getPrice());
+            myDB.updateDataWriteOff(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2], statusDrawable);
         }
 
     }
@@ -430,16 +453,6 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
         builder.create().show();
     }
 
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        MainActivity mainActivity = (MainActivity) getActivity();
-
-        mainActivity.setFragmentKeyeventListener(this);
-    }
-
     //Логика возвращения назад
     public void backToGo(){
         AddManagerFragment addManagerFragment = null;
@@ -458,6 +471,16 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
             addManagerFragment = new AddManagerFragment("Мои Списания", myDB.readAllDataWriteOff(), View.VISIBLE,"Статус", "Кол-во", R.layout.my_row_write_off);
         }
 
+//        if (id.equals("Мои Товар")) {
+//            replaceFragment(new AddFragment());
+//        } else if (id.equals("Мои Продажи")) {
+//            replaceFragment(new SaleFragment());
+//        } else if (id.equals("Мои Покупки")) {
+//            replaceFragment(new ExpensesFragment());
+//        } else if (id.equals("Мои Списания")) {
+//            replaceFragment(new WriteOffFragment());
+//        }
+
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.conteiner, addManagerFragment, "visible_fragment")
                 .addToBackStack(null)
@@ -466,9 +489,10 @@ public class UpdateProductFragment extends Fragment implements FragmentKeyeventL
 
 
     //Возвращаемся назад при нажатии на клавишу
-    @Override
-    public boolean onFragmentKeyEvent(KeyEvent event) {
-        backToGo();
-        return false;
+    private void replaceFragment(Fragment fragment) {
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.conteiner, fragment, "visible_fragment")
+                .addToBackStack(null)
+                .commit();
     }
 }

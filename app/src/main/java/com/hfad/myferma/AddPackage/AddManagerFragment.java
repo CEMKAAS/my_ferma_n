@@ -32,9 +32,11 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.myferma.ExpensesPackage.ExpensesFragment;
+import com.hfad.myferma.InfoFragment;
 import com.hfad.myferma.MainActivity;
 import com.hfad.myferma.R;
 import com.hfad.myferma.SalePackage.SaleFragment;
+import com.hfad.myferma.SettingsFragment;
 import com.hfad.myferma.WriteOff.WriteOffFragment;
 import com.hfad.myferma.bottomFragment;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
@@ -52,7 +54,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-public class AddManagerFragment extends Fragment  implements FragmentKeyeventListenerManager  {
+public class AddManagerFragment extends Fragment {
     private RecyclerView recyclerView;
     private ImageView empty_imageview;
     private TextView no_data, sixColumn, dicsPrice;
@@ -102,6 +104,15 @@ public class AddManagerFragment extends Fragment  implements FragmentKeyeventLis
             switch (item.getItemId()) {
                 case R.id.filler:
                     bottomSheetDialog.show();
+                    break;
+                case R.id.more:
+                    replaceFragment(new InfoFragment());
+                    appBar.setTitle("Информация");
+                    break;
+                case R.id.setting:
+                    replaceFragment(new SettingsFragment());
+                    appBar.setTitle("Мои настройки");
+                    break;
             }
             return true;
         });
@@ -345,15 +356,6 @@ public class AddManagerFragment extends Fragment  implements FragmentKeyeventLis
         buttonSheet = bottomSheetDialog.findViewById(R.id.button_sheet);
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        MainActivity mainActivity = (MainActivity) getActivity();
-
-        mainActivity.setFragmentKeyeventListenerMager(this);
-    }
-
     public void addChart(ProductDB productDB) {
         //todo
         UpdateProductFragment updateProductFragment = new UpdateProductFragment();
@@ -388,9 +390,10 @@ public class AddManagerFragment extends Fragment  implements FragmentKeyeventLis
                 .commit();
     }
 
-    @Override
-    public boolean onFragmentKeyEventManager(KeyEvent event) {
-        backToGo();
-        return false;
+    private void replaceFragment(Fragment fragment) {
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.conteiner, fragment, "visible_fragment")
+                .addToBackStack(null)
+                .commit();
     }
 }

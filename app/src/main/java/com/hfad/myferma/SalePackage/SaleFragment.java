@@ -75,7 +75,7 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
         checkPrice = layout.findViewById(R.id.check_price);
         // Установка Spinner
         animals_spiner = (AutoCompleteTextView) layout.findViewById(R.id.animals_spiner);
-        animals_spiner.setText("Яйца", false);
+        animals_spiner.setText(productList.get(0), false);
         addPrice.setVisibility(View.GONE);
 
         f = new DecimalFormat("0");

@@ -69,7 +69,7 @@ public class AddFragment extends Fragment implements View.OnClickListener {
 
         // Установка спинера
         animals_spiner = (AutoCompleteTextView) layout.findViewById(R.id.animals_spiner);
-        animals_spiner.setText("Яйца", false);
+        animals_spiner.setText(productList.get(0), false);
 
         // Установка текста
         String product = animals_spiner.getText().toString();
