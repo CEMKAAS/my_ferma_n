@@ -250,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
                     fab.hide();
                     fab.setVisibility(View.GONE);
                     appBar.getMenu().findItem(R.id.delete).setVisible(false);
-                    appBar.setNavigationIcon(null);
                     appBar.getMenu().findItem(R.id.filler).setVisible(false);
                 }
                 if (fragment instanceof AddFragment) {

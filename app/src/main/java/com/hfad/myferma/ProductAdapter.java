@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hfad.myferma.incubator.ListAdapterIncubator;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     private List<String> productsList;
     private List<Double> unitList;
     private String name, suffix;
+    private DecimalFormat f, eggFormat;
 
     public ProductAdapter(Map<String, Double> productsMapList, String name, String suffix) {
         this.produtsMap = productsMapList;
@@ -34,6 +36,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                 produtsMap.entrySet()) {
             productsList.add(entry.getKey());
             unitList.add(entry.getValue());
+        }
+    }
+
+    public String unitString(String animals) {
+        if (suffix.equals(" Шт.")) {
+            if (animals.equals("Яйца")) {
+                return " шт.";
+            } else if (animals.equals("Молоко")) {
+                return " л.";
+            } else if (animals.equals("Мясо")) {
+                return " кг.";
+            } else {
+                return " ед.";
+            }
+        } else {
+            return " ₽";
         }
     }
 
@@ -49,9 +67,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull final ProductAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
+        String nameProuct = productsList.get(position);
         holder.products.setText(name);
-        holder.count.setText(productsList.get(position));
-        holder.unit.setText(String.valueOf(unitList.get(position)) + suffix);
+        holder.count.setText(nameProuct);
+
+        holder.unit.setText(String.valueOf(unitList.get(position)) + unitString(nameProuct));
 
     }
 
@@ -59,6 +79,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public int getItemCount() {
         return produtsMap.size();
     }
+
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -71,4 +92,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             count = itemView.findViewById(R.id.count_text);
         }
     }
+
+
 }

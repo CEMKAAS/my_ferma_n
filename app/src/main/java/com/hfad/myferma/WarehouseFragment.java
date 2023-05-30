@@ -37,6 +37,7 @@ public class WarehouseFragment extends Fragment implements View.OnClickListener 
     private MyFermaDatabaseHelper myDB;
     private RecyclerView recyclerView;
     private List<String> productList;
+    private String unit = null;
     private DecimalFormat f, eggFormat;
 
     //Создание фрагмента
@@ -62,7 +63,7 @@ public class WarehouseFragment extends Fragment implements View.OnClickListener 
         // Настраиваем адаптер
         recyclerView = layout.findViewById(R.id.recyclerView);
 
-        ProductAdapter productAdapter = new ProductAdapter(add1(),"", " Шт.");//TODO Suffix
+        ProductAdapter productAdapter = new ProductAdapter(add1(),"", " Шт.");
         recyclerView.setAdapter(productAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 

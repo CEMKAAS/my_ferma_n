@@ -35,6 +35,7 @@ import com.hfad.myferma.db.MyConstanta;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.incubator.NowArhiveFragment;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -51,7 +52,8 @@ public class UpdateProductFragment extends Fragment {
     private String id, oldCount, nowCount;
     private MyFermaDatabaseHelper myDB;
     private MaterialDatePicker datePicker;
-
+    private DecimalFormat f;
+    private String unit = null;
     public UpdateProductFragment() {
     }
 
@@ -107,8 +109,10 @@ public class UpdateProductFragment extends Fragment {
 
         // Настройка фронта
         textUnit.setText(productDB.getName());
+        unitString(productDB.getName());
         titleExpenses.getEditText().setText(productDB.getName());
-        titleCount.getEditText().setText(productDB.getDisc().toString());
+        titleCount.getEditText().setText(f.format(productDB.getDisc()));
+        titleCount.setSuffixText(unit);
         titleData.getEditText().setText(productDB.getData());
         titlePrice.getEditText().setText(String.valueOf(productDB.getPrice()));
 
@@ -202,7 +206,7 @@ public class UpdateProductFragment extends Fragment {
                 // Проверяем если мы удалим в продажах, товаров и списаниях, уйдем ли мы в минус
                 if (id.equals("Мои Товар") || id.equals("Мои Продажи") || id.equals("Мои Списания")) {
                     // Проверяем если мы удалим, уйдем ли мы в минус
-                    if (sumDelete(product, count) <= 0) {
+                    if (sumDelete(product, count) < 0) {
                         Toast.makeText(getActivity(), "Нелья уйти в минус!", Toast.LENGTH_SHORT).show();
                     } else {
                         delete();
@@ -240,7 +244,7 @@ public class UpdateProductFragment extends Fragment {
         } else if (containsEgg(product, count)) {
             titleCount.setError("Яйца не могут быть дробными...");
             titleCount.getError();
-        } else if (sum(product, count) <= 0) {
+        } else if (sum(product, count) < 0) {
             titleCount.setError("Нелья уйти в минус!");
             titleCount.getError();
         } else {
@@ -278,7 +282,7 @@ public class UpdateProductFragment extends Fragment {
         } else if (containsEgg(product, count)) {
             titleCount.setError("Яйца не могут быть дробными...");
             titleCount.getError();
-        } else if (sum(product, count) <= 0) {
+        } else if (sum(product, count) < 0) {
             titleCount.setError("Нелья уйти в минус!");
             titleCount.getError();
         } else {
@@ -350,7 +354,7 @@ public class UpdateProductFragment extends Fragment {
         } else if (containsEgg(product, count)) {
             titleCount.setError("Яйца не могут быть дробными...");
             titleCount.getError();
-        } else if (sum(product, count) <= 0) {
+        } else if (sum(product, count) < 0) {
             titleCount.setError("Нелья уйти в минус!");
             titleCount.getError();
         } else {
@@ -495,4 +499,24 @@ public class UpdateProductFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
+
+    public void unitString(String animals) {
+        if(!id.equals("Мои Покупки")) {
+            if (animals.equals("Яйца")) {
+                f = new DecimalFormat("0");
+                unit = " шт.";
+            } else if (animals.equals("Молоко")) {
+                f = new DecimalFormat("0.00");
+                unit = " л.";
+            } else if (animals.equals("Мясо")) {
+                f = new DecimalFormat("0.00");
+                unit = " кг.";
+            } else {
+                f = new DecimalFormat("0.00");
+                unit = " ед.";
+            }
+        }else {unit = " ₽";
+            f = new DecimalFormat("0.00");}
+    }
+
 }

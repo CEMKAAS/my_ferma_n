@@ -357,7 +357,6 @@ public class AddManagerFragment extends Fragment {
     }
 
     public void addChart(ProductDB productDB) {
-        //todo
         UpdateProductFragment updateProductFragment = new UpdateProductFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("fd", productDB);

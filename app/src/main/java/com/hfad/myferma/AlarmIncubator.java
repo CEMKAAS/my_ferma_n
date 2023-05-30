@@ -75,7 +75,7 @@ public class AlarmIncubator extends BroadcastReceiver {
             pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             builder.setContentTitle("Пора проверить инкубатор!")                           // required
-                    .setSmallIcon(R.drawable.ic_launcher_foreground) // required //TODO вставить значок
+                    .setSmallIcon(R.drawable.ic_launcher_foreground) // required
                     .setContentText("Проверьте температуру и влажность в инкубаторе!")  // required
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)

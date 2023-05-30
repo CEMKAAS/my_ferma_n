@@ -73,17 +73,23 @@ public class WriteOffChartFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
 
         // настройка спинеров
-        animals_spiner.setText("Яйца", false);
         mount_spiner.setText("За весь год", false);
         year_spiner.setText(String.valueOf(calendar.get(Calendar.YEAR)), false);
 
         //убириаем фаб кнопку
         ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) getActivity().findViewById(R.id.extended_fab);
         fab.setVisibility(View.GONE);
-        // Todo кнопка назад
+
         //настройка верхнего меню фаб кнопку
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.setTitle("Мои Списания - График");
+        appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
+        appBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
         //Логика просчета
         storeDataInArrays();

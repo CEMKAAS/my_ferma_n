@@ -75,30 +75,29 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
         cursor.close();
     }
 
-    // Формируем мапу из БД с ценой TODO чет я запутался
 
     public void addMap() {
         tempList = new HashMap<>();
 
-        for (String product : productList) {
-            Cursor cursor = myDB.readAllDataPrice();
-            if (cursor != null && cursor.getCount() != 0) {
-                while (cursor.moveToNext()) {
-                    if (cursor.getString(1).equals(product)){;
+        Cursor cursor = myDB.readAllDataPrice();
+
+        if (cursor != null && cursor.getCount() != 0) {
+
+            while (cursor.moveToNext()) {
+                String product = cursor.getString(1);
+                if (productList.contains(product)) {
                     Double price = cursor.getDouble(2);
                     tempList.put(product, price);
-                    }
-                    else {
-                        tempList.put(product, 0.0);
-                    }
-                }
-            } else {
-                for (String product : productList) {
-                    tempList.put(product, 0.0);
                 }
             }
-            cursor.close();
+
+        } else {
+            for (String product : productList) {
+                tempList.put(product, 0.0);
+            }
         }
+        cursor.close();
+
 
     }
 
@@ -138,7 +137,7 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
         for (Map.Entry<String, Double> entry :
                 tempList.entrySet()) {
             TextInputLayout p = layout.findViewWithTag(entry.getKey());
-            startIcon(p,entry.getKey());
+            startIcon(p, entry.getKey());
             p.getEditText().setText(String.valueOf(entry.getValue()));
             p.setEndIconOnClickListener(endIconClick(p, entry.getKey()));
             p.getEditText().setOnEditorActionListener(keyboardClick(p, entry.getKey()));
@@ -150,7 +149,7 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
         View.OnClickListener editorListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkInsertPrise(p,product);
+                checkInsertPrise(p, product);
             }
         };
         return editorListener;
@@ -162,16 +161,16 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
-                    checkInsertPrise(p,product);
+                    checkInsertPrise(p, product);
                 }
                 return false;
             }
         };
-        return  editorListenerEgg;
+        return editorListenerEgg;
     }
 
     //Проверка EditText
-    public void checkInsertPrise (TextInputLayout p, String product){
+    public void checkInsertPrise(TextInputLayout p, String product) {
         if (!p.getEditText().getText().toString().equals("")) {
             p.setErrorEnabled(false);
             double price = Double.parseDouble(p.getEditText().getText().toString());
@@ -213,6 +212,7 @@ public class PriceFragment extends Fragment implements View.OnClickListener {
             p.getStartIconDrawable();
         }
     }
+
     @Override
     public void onClick(View v) {
 

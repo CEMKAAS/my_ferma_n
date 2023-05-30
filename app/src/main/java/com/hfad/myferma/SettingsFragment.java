@@ -105,8 +105,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 addProduct.setAdapter(arrayAdapterProduct);
 
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
-                builder.setTitle("Добавить товар?");
-                builder.setMessage(nameProduct);
+                builder.setTitle("Добавить товар "  + nameProduct + " ?");
+                builder.setMessage("Добавленный товар " + nameProduct + " вы сможете добавлять на склад, продавать и списывать!");
                 builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -127,7 +127,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 menuProducts.getError();
             }
         } else {
-            menuProducts.setError("Всего можно установить 7 дополнительных товаров, вы превысили лимит!");
+            menuProducts.setError("Всего можно установить 10 товаров, вы превысили лимит!");
             menuProducts.getError();
         }
     }
@@ -138,8 +138,8 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         menuProducts.setErrorEnabled(false);
             if (arrayListProduct.contains(nameProduct)) {
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
-                builder.setTitle("Удалить товар?");
-                builder.setMessage(addProduct.getText().toString());
+                builder.setTitle("Удалить товар " + addProduct.getText().toString()+ " ?");
+                builder.setMessage("Товар " + addProduct.getText().toString() + " больше не будет отображаться на складе, его нельзя будет добавить, продать или списать. Данные внесенные в журнал будут отображаться.");
                 builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

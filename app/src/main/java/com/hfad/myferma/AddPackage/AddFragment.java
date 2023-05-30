@@ -98,7 +98,7 @@ public class AddFragment extends Fragment implements View.OnClickListener {
         addChart.setOnClickListener(this);
 
         if (savedInstanceState != null) {
-            animals_spiner.setText("Яйца", false);
+            animals_spiner.setText(productList.get(0), false);
         }
         return layout;
     }

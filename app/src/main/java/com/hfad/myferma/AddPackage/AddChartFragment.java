@@ -63,17 +63,22 @@ public class AddChartFragment extends Fragment {
         visitors = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         // настройка спинеров
-        animals_spiner.setText("Яйца", false);
         animals_spiner2.setText("За весь год", false);
         animals_spiner3.setText(String.valueOf(calendar.get(Calendar.YEAR)), false);
 
         //убириаем фаб кнопку
         ExtendedFloatingActionButton fab = (ExtendedFloatingActionButton) getActivity().findViewById(R.id.extended_fab);
         fab.setVisibility(View.GONE);
-
+        // Настройка аппбара настройка стелочки назад
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.setTitle("Мои товар - График");
-        // Todo кнопка назад
+        appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
+        appBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
         //Логика просчета
         storeDataInArrays();

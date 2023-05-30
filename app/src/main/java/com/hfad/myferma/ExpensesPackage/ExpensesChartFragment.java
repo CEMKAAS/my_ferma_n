@@ -87,6 +87,13 @@ public class ExpensesChartFragment extends Fragment {
 
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.setTitle("Мои покупки - График");
+        appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
+        appBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
         //Логика просчета
         storeDataInArrays();
