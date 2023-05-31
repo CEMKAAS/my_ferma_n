@@ -214,7 +214,7 @@ public class WriteOffFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.extended_fab:
-                moveNextFragment(new AddManagerFragment("Мои Списания", myDB.readAllDataWriteOff(), View.VISIBLE,"Статус", "Кол-во", R.layout.my_row_write_off));
+                moveNextFragment(new AddManagerFragment());
                 break;
             case R.id.writeOffChart_button:
                 moveNextFragment(new WriteOffChartFragment());

@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#FFFFFF"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-   >
+    style="@style/Widget.Material3.BottomSheet"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-        android:id="@+id/drag_handle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+       />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,14 +40,15 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/data_sheet"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:hint="Дата"
+            android:hint="Период"
             app:endIconDrawable="@drawable/baseline_calendar_month_24"
             app:endIconMode="custom"
             app:errorEnabled="true"
-            app:helperText="Укажите дату"
+            app:helperText="Укажите период"
+            android:layout_marginRight="10dp"
             app:helperTextEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText

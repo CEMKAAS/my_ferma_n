@@ -128,17 +128,17 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.add_button:
                     replaceFragment(new AddFragment());
-                    fba(new AddManagerFragment("Мои Товар", myDB.readAllData(), View.GONE, "Цена", "Кол-во", R.layout.my_row));
+                    fba(new AddManagerFragment());
                     break;
 
                 case R.id.sale_button:
                     replaceFragment(new SaleFragment());
-                    fba(new AddManagerFragment("Мои Продажи", myDB.readAllDataSale(), View.VISIBLE, "Цена", "Кол-во", R.layout.my_row_sale));
+                    fba(new AddManagerFragment());
                     break;
 
                 case R.id.expenses_button:
                     replaceFragment(new ExpensesFragment());
-                    fba(new AddManagerFragment("Мои Покупки", myDB.readAllDataExpenses(), View.GONE, "Нет", "Цена", R.layout.my_row));
+                    fba(new AddManagerFragment());
                     break;
 
             }
@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                     appBar.setTitle("Информация");
                     fab.hide();
                     fab.setVisibility(View.GONE);
+                    appBar.setNavigationIcon(null);
                     appBar.getMenu().findItem(R.id.delete).setVisible(false);
                     appBar.getMenu().findItem(R.id.filler).setVisible(false);
 

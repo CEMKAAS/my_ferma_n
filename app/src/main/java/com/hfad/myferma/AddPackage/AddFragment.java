@@ -181,7 +181,7 @@ public class AddFragment extends Fragment implements View.OnClickListener {
                 addChart(new AddChartFragment());
                 break;
             case R.id.extended_fab:
-                addChart(new AddManagerFragment("Мои Товар", myDB.readAllData(), View.GONE, "Цена", "Кол-во", R.layout.my_row));
+                addChart(new AddManagerFragment());
                 break;
         }
     }

@@ -112,6 +112,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(getActivity(), "Вы добавили товар " + nameProduct, Toast.LENGTH_SHORT).show();
                         myDB.insertDataProduct(addProduct.getText().toString(), 0);
+                        myDB.insertToDbPrice(addProduct.getText().toString(), 0);
                     }
                 });
                 builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {

@@ -73,15 +73,6 @@ public class AddManagerFragment extends Fragment {
     private Cursor cursorManager;
     private int visibility, myRow;
 
-    public AddManagerFragment(String appBarManager, Cursor cursorManager, int visibility, String statusPrice, String priceDics, int myRow) {
-        this.appBarManager = appBarManager;
-        this.cursorManager = cursorManager;
-        this.visibility = visibility;
-        this.statusPrice = statusPrice;
-        this.priceDics = priceDics;
-        this.myRow = myRow;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -90,16 +81,11 @@ public class AddManagerFragment extends Fragment {
         myDB = new MyFermaDatabaseHelper(getActivity());
         productList = new ArrayList<>();
         productListAll = new ArrayList<>();
-        //Добавление товара в лист
-        add();
-        //Создание модального bottomSheet
-        showBottomSheetDialog();
 
         //Настройка кнопки и верхнего бара
         MaterialToolbar appBar = getActivity().findViewById(R.id.topAppBar);
         appBar.getMenu().findItem(R.id.filler).setVisible(true);
         appBar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
-        appBar.setTitle(appBarManager);
         appBar.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case R.id.filler:
@@ -117,10 +103,43 @@ public class AddManagerFragment extends Fragment {
             return true;
         });
 
+        appBarManager = appBar.getTitle().toString();
+
+        if (appBarManager.equals("Мои Товары")) {
+            cursorManager = myDB.readAllData();
+            visibility = View.GONE;
+            statusPrice = "Цена";
+            priceDics = "Кол-во";
+            myRow =  R.layout.my_row;
+        } else if (appBarManager.equals("Мои Продажи")) {
+            cursorManager = myDB.readAllDataSale();
+            visibility = View.VISIBLE;
+            statusPrice = "Цена";
+            priceDics = "Кол-во";
+            myRow =  R.layout.my_row_sale;
+        } else if (appBarManager.equals("Мои Покупки")) {
+            cursorManager = myDB.readAllDataExpenses();
+            visibility = View.GONE;
+            statusPrice = "Нет";
+            priceDics = "Цена";
+            myRow =  R.layout.my_row;
+        } else if (appBarManager.equals("Мои Списания")) {
+            cursorManager = myDB.readAllDataWriteOff();
+            visibility = View.VISIBLE;
+            statusPrice = "Статус";
+            priceDics = "Кол-во";
+            myRow =  R.layout.my_row_write_off;
+        }
+
+        //Добавление товара в лист
+        add();
+        //Создание модального bottomSheet
+        showBottomSheetDialog();
+
         appBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backToGo();
+                getActivity().getSupportFragmentManager().popBackStack();;
             }
         });
 
@@ -363,30 +382,7 @@ public class AddManagerFragment extends Fragment {
         bundle.putString("id", appBarManager);
         updateProductFragment.setArguments(bundle);
 
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.conteiner, updateProductFragment, "visible_fragment")
-                .addToBackStack(null)
-                .commit();
-
-    }
-    public void backToGo(){
-        if (appBarManager.equals("Мои Товар")) {
-            backToGoFragment(new AddFragment());
-        } else if (appBarManager.equals("Мои Продажи")) {
-            backToGoFragment(new SaleFragment());
-        } else if (appBarManager.equals("Мои Покупки")) {
-            backToGoFragment(new ExpensesFragment());
-        } else if (appBarManager.equals("Мои Списания")) {
-            backToGoFragment(new WriteOffFragment());
-        }
-    }
-
-    public void backToGoFragment (Fragment fragment){
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.conteiner,fragment, "visible_fragment")
-                .addToBackStack(null)
-                .commit();
+      replaceFragment(updateProductFragment);
     }
 
     private void replaceFragment(Fragment fragment) {

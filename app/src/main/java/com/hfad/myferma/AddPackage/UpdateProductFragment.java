@@ -79,7 +79,7 @@ public class UpdateProductFragment extends Fragment {
         appBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backToGo();
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
         appBar.setOnMenuItemClickListener(item -> {
@@ -435,17 +435,15 @@ public class UpdateProductFragment extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (id.equals("Мои Товар")) {
                     myDB.deleteOneRow(String.valueOf(productDB.getId()));
-                    backToGo();
                 } else if (id.equals("Мои Продажи")) {
                    myDB.deleteOneRowSale(String.valueOf(productDB.getId()));
-                    backToGo();
                 } else if (id.equals("Мои Покупки")) {
                    myDB.deleteOneRowExpenses(String.valueOf(productDB.getId()));
-                    backToGo();;
                 } else if (id.equals("Мои Списания")) {
                     myDB.deleteOneRowWriteOff(String.valueOf(productDB.getId()));
-                    backToGo();
                 }
+
+                replaceFragment(new AddManagerFragment());
             }
         });
         builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
@@ -456,41 +454,6 @@ public class UpdateProductFragment extends Fragment {
         });
         builder.create().show();
     }
-
-    //Логика возвращения назад
-    public void backToGo(){
-        AddManagerFragment addManagerFragment = null;
-
-        if (id.equals("Мои Товар")) {
-            addManagerFragment = new AddManagerFragment("Мои Товар", myDB.readAllData(), View.GONE, "Цена", "Кол-во", R.layout.my_row);
-
-        } else if (id.equals("Мои Продажи")) {
-            addManagerFragment = new AddManagerFragment("Мои Продажи", myDB.readAllDataSale(), View.VISIBLE, "Цена", "Кол-во", R.layout.my_row_sale);
-
-        } else if (id.equals("Мои Покупки")) {
-            addManagerFragment = new AddManagerFragment("Мои Покупки", myDB.readAllDataExpenses(), View.GONE, "Нет", "Цена", R.layout.my_row);
-
-        } else if (id.equals("Мои Списания")) {
-
-            addManagerFragment = new AddManagerFragment("Мои Списания", myDB.readAllDataWriteOff(), View.VISIBLE,"Статус", "Кол-во", R.layout.my_row_write_off);
-        }
-
-//        if (id.equals("Мои Товар")) {
-//            replaceFragment(new AddFragment());
-//        } else if (id.equals("Мои Продажи")) {
-//            replaceFragment(new SaleFragment());
-//        } else if (id.equals("Мои Покупки")) {
-//            replaceFragment(new ExpensesFragment());
-//        } else if (id.equals("Мои Списания")) {
-//            replaceFragment(new WriteOffFragment());
-//        }
-
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.conteiner, addManagerFragment, "visible_fragment")
-                .addToBackStack(null)
-                .commit();
-    }
-
 
     //Возвращаемся назад при нажатии на клавишу
     private void replaceFragment(Fragment fragment) {
