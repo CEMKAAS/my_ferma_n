@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import android.view.KeyEvent;
@@ -23,28 +24,32 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.hfad.myferma.MainActivity;
 import com.hfad.myferma.R;
 import com.hfad.myferma.SalePackage.SaleChartFragment;
+import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.db.MydbManager;
 import com.hfad.myferma.db.MydbManagerMetod;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class ExpensesFragment extends Fragment implements View.OnClickListener {
 
-    private MydbManagerMetod mydbManager;
     private TextView totalExpenses_text, unit_text;
     private TextInputLayout expenses_editText, menu;
     private AutoCompleteTextView expensesName_editText;
     private List<String> arrayListAnaimals;
     private ArrayAdapter<String> arrayAdapterAnimals;
     private DecimalFormat f;
+    private MyFermaDatabaseHelper myDB;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mydbManager = new MydbManagerMetod(inflater.getContext());
+        myDB = new MyFermaDatabaseHelper(getActivity());
         View layout = inflater.inflate(R.layout.fragment_expenses, container, false);
 
         expenses_editText = layout.findViewById(R.id.expenses_editText);
@@ -59,12 +64,14 @@ public class ExpensesFragment extends Fragment implements View.OnClickListener {
 
         Button expensesChart = (Button) layout.findViewById(R.id.expensesChart_button);
         expensesChart.setOnClickListener(this);
+        arrayListAnaimals = new ArrayList<>();
 
-//        Button addExpensesHistory = (Button) layout.findViewById(R.id.addExpensesHistory_button);
-//        addExpensesHistory.setOnClickListener(this);
+        allExpenses();
 
-        totalExpenses_text = (TextView) layout.findViewById(R.id.totalExpenses_text);
         f = new DecimalFormat("0.00");
+        totalExpenses_text = (TextView) layout.findViewById(R.id.totalExpenses_text);
+        totalExpenses_text.setText(String.valueOf(f.format(getClearFinance())) + " ₽");
+
         return layout;
     }
 
@@ -73,11 +80,6 @@ public class ExpensesFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         View view = getView();
         if (view != null) {
-            mydbManager.open();
-            arrayListAnaimals = mydbManager.getFromDbNameExpenses();
-
-            totalExpenses_text.setText(String.valueOf(f.format(getClearFinance())) + " ₽");
-
             arrayAdapterAnimals = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, arrayListAnaimals);
             expensesName_editText.setAdapter(arrayAdapterAnimals);
         }
@@ -136,13 +138,14 @@ public class ExpensesFragment extends Fragment implements View.OnClickListener {
 
             if (!arrayListAnaimals.contains(expensesName)) {
                 arrayListAnaimals.add(expensesName);
-                arrayAdapterAnimals = new ArrayAdapter<>(getActivity().getApplicationContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, arrayListAnaimals);
+                arrayAdapterAnimals = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, arrayListAnaimals);
                 expensesName_editText.setAdapter(arrayAdapterAnimals);
             }
 
             double inputExpenses = Double.parseDouble(inputExpensesString.replaceAll(",", ".").replaceAll("[^\\d.]", ""));
 
-            mydbManager.insertToDbExpenses(expensesName, inputExpenses);
+            myDB.insertToDbExpenses(expensesName, inputExpenses);
+
             expenses_editText.setEndIconDrawable(R.drawable.baseline_done_24);
             expenses_editText.getEndIconDrawable();
             totalExpenses_text.setText(String.valueOf(f.format(getClearFinance())) + " ₽");
@@ -161,13 +164,30 @@ public class ExpensesFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    //Считает чистую прибыль(тяжелый способо, но пока так)
-    public double getClearFinance() {
-        double totalAmount = mydbManager.sumFinanceEgg() + mydbManager.sumFinanceMilk() + mydbManager.sumFinanceMeat();
-        double totalExpenses = mydbManager.sumFinanceAll();
-        double clearFinance = totalAmount - totalExpenses;
-        return clearFinance;
+
+    public  void allExpenses() {
+        Set<String> expensesName = new HashSet<>();
+        Cursor cursor = myDB.readAllDataExpenses();
+
+        if (cursor != null && cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                expensesName.add(cursor.getString(1));
+            }
+            cursor.close();
+        }
+
+        for (String name: expensesName
+             ) {
+            arrayListAnaimals.add(name);
+        }
+
     }
+
+
+
+
+
+
     public void expensesChart(View view){
         ExpensesChartFragment expensesChartFragment = new ExpensesChartFragment();
         getActivity().getSupportFragmentManager().beginTransaction()
@@ -176,6 +196,51 @@ public class ExpensesFragment extends Fragment implements View.OnClickListener {
                 .commit();
 
     }
+
+    //расчеты
+    // Общая прибыль
+    public double totalAmount() {
+
+        Cursor cursor = myDB.readAllDataSale();
+        double sum = 0;
+
+        if (cursor != null && cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                double productUnit = cursor.getDouble(6);
+                sum += productUnit;
+            }
+            cursor.close();
+        }
+
+        return sum;
+    }
+
+    // Общие расходы
+    public double totalExpenses() {
+
+        Cursor cursor = myDB.readAllDataExpenses();
+        double sum = 0;
+
+        if (cursor != null && cursor.getCount() != 0) {
+            while (cursor.moveToNext()) {
+                double productUnit = cursor.getDouble(2);
+                sum += productUnit;
+            }
+            cursor.close();
+        }
+
+        return sum;
+    }
+
+    //Считает чистую прибыль(тяжелый способо, но пока так)
+    public double getClearFinance() {
+
+        double totalAmount = totalAmount();
+        double totalExpenses = totalExpenses();
+        double clearFinance = totalAmount - totalExpenses;
+        return clearFinance;
+    }
+
 
 //    public void onClickExpensesHistori(View view) {
 //        Intent intent = new Intent(getActivity(), ExpensesActivity.class);

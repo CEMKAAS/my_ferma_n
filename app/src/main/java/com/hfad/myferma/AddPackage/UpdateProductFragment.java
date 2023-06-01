@@ -117,7 +117,7 @@ public class UpdateProductFragment extends Fragment {
         titlePrice.getEditText().setText(String.valueOf(productDB.getPrice()));
 
         if (R.drawable.baseline_cottage_24 == productDB.getPrice()) {
-            writeOffSpiner.setText("На собсвенные нужды", false);
+            writeOffSpiner.setText("На собственные нужды", false);
         } else {
             writeOffSpiner.setText("На утилизацию", false);
         }
@@ -158,7 +158,7 @@ public class UpdateProductFragment extends Fragment {
         menu.setVisibility(View.GONE);
 
         //Для товаров
-        if (id.equals("Мои Товар")) {
+        if (id.equals("Мои Товары")) {
             titlePrice.setVisibility(View.GONE);
             // для покупок
         } else if (id.equals("Мои Покупки")) {
@@ -169,7 +169,7 @@ public class UpdateProductFragment extends Fragment {
 
             titleCount.setHint("Цена");
             titleCount.setHelperText("Укажите цену за товар");
-            titleCount.getEditText().setText(String.valueOf(productDB.getPrice()));
+            titleCount.getEditText().setText(String.valueOf(productDB.getDisc()));
             // для списаний
         } else if (id.equals("Мои Списания")) {
             titlePrice.setVisibility(View.GONE);
@@ -180,7 +180,7 @@ public class UpdateProductFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (id.equals("Мои Товар")) {
+                if (id.equals("Мои Товары")) {
                     myProduct();
 
                 } else if (id.equals("Мои Продажи")) {
@@ -193,6 +193,7 @@ public class UpdateProductFragment extends Fragment {
                     myWriteOff();
 
                 }
+
             }
         });
 
@@ -248,7 +249,9 @@ public class UpdateProductFragment extends Fragment {
             titleCount.setError("Нелья уйти в минус!");
             titleCount.getError();
         } else {
+            Toast.makeText(getActivity(), "Успешно удаленно.", Toast.LENGTH_SHORT).show();
             myDB.updateData(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2]);
+            replaceFragment(new AddManagerFragment());
         }
     }
 
@@ -286,7 +289,8 @@ public class UpdateProductFragment extends Fragment {
             titleCount.setError("Нелья уйти в минус!");
             titleCount.getError();
         } else {
-            myDB.updateDataSale(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2], Double.valueOf(productDB.getPrice()));
+            myDB.updateDataSale(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2], Double.valueOf(sale));
+            replaceFragment(new AddManagerFragment());
         }
     }
 
@@ -320,6 +324,7 @@ public class UpdateProductFragment extends Fragment {
             titleCount.getError();
         } else {
             myDB.updateDataExpenses(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2]);
+            replaceFragment(new AddManagerFragment());
         }
     }
 
@@ -336,7 +341,7 @@ public class UpdateProductFragment extends Fragment {
 
         // Настройка картинок
         int statusDrawable = R.drawable.baseline_cottage_24;
-        if (!writeOffSpiner.getText().equals("На собсвенные нужды")) {
+        if (writeOffSpiner.getText().toString().equals("На утилизацию")) {
             statusDrawable = R.drawable.baseline_delete_24;
         }
 
@@ -359,6 +364,7 @@ public class UpdateProductFragment extends Fragment {
             titleCount.getError();
         } else {
             myDB.updateDataWriteOff(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2], statusDrawable);
+            replaceFragment(new AddManagerFragment());
         }
 
     }

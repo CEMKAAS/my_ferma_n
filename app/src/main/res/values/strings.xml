@@ -53,7 +53,7 @@
     </string-array>
 
     <string-array name="statusWriteOff" tools:ignore="DuplicateDefinition,ExtraTranslation">
-        <item>На собсвенные нужды</item>
+        <item>На собственные нужды</item>
         <item>На утилизацию</item>
     </string-array>
 

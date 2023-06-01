@@ -3,7 +3,7 @@ package com.hfad.myferma.db;
 public class MyConstanta {
 
     public static final String DB_NAME = "my_db.db"; //База данных
-    public static final int DB_VERSION = 8; //Версия базы данных
+    public static final int DB_VERSION = 7; //Версия базы данных
 
     public static final String TABLE_NAME = "МyFerma"; // Название таблицы
     public static final String _ID = "_id"; // Индефикатор НУМЕРАЦИЯ СТРОК

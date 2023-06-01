@@ -18,6 +18,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -38,8 +40,13 @@ import com.hfad.myferma.WriteOff.WriteOffFragment;
 import com.hfad.myferma.databinding.ActivityMain2Binding;
 import com.hfad.myferma.db.MyFermaDatabaseHelper;
 import com.hfad.myferma.incubator.IncubatorMenuFragment;
+import com.yandex.mobile.ads.banner.AdSize;
 import com.yandex.mobile.ads.banner.BannerAdView;
+import com.yandex.mobile.ads.common.AdRequest;
+import com.yandex.mobile.ads.common.AdRequestError;
+import com.yandex.mobile.ads.common.ImpressionData;
 import com.yandex.mobile.ads.interstitial.InterstitialAd;
+import com.yandex.mobile.ads.interstitial.InterstitialAdEventListener;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -119,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             replaceFragment(new PriceFragment());
-                            appBar.setTitle("Мои Финансы");
+                            appBar.setTitle("Моя Цена");
                             fab.hide();
                             fab.setVisibility(View.GONE);
                         }
@@ -159,15 +166,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        BottomSheetDialogFragment sd = new BottomSheetDialogFragment();
 //        sd.show(getSupportFragmentManager(), bottomFragment.TAG);
-
-
-
-        //Реклама от яндекса
-//        mBannerAdView = (BannerAdView) findViewById(R.id.banner_ad_view);
-//        mBannerAdView.setAdUnitId("R-M-2139251-1"); //Вставляется свой айди от яндекса
-//        mBannerAdView.setAdSize(AdSize.stickySize(320));//Размер банера
-//        final AdRequest adRequest = new AdRequest.Builder().build();
-//        mBannerAdView.loadAd(adRequest);
 
         // AppBar
 
@@ -245,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                     appBar.setNavigationIcon(null);
                 }
                 if (fragment instanceof PriceFragment) {
-                    appBar.setTitle("Мои Финансы");
+                    appBar.setTitle("Моя Цена");
                     position = 1;
                     fab.hide();
                     fab.setVisibility(View.GONE);
@@ -315,53 +313,59 @@ public class MainActivity extends AppCompatActivity {
 
         // Добавляем основые продукты, если приложение открыто впервые
         add();
+        //Реклама от яндекса
 
-        // рекламав
-//        mInterstitialAd = new InterstitialAd(this);
-//        mInterstitialAd.setAdUnitId("R-M-2139251-3");
-//
-//        mInterstitialAd.loadAd(adRequest);
-//        mInterstitialAd.setInterstitialAdEventListener(new InterstitialAdEventListener() {
-//            @Override
-//            public void onAdLoaded() {
-//                mInterstitialAd.show();
-//            }
-//
-//            @Override
-//            public void onAdFailedToLoad(@NonNull AdRequestError adRequestError) {
-//
-//            }
-//
-//            @Override
-//            public void onAdShown() {
-//
-//            }
-//
-//            @Override
-//            public void onAdDismissed() {
-//
-//            }
-//
-//            @Override
-//            public void onAdClicked() {
-//
-//            }
-//
-//            @Override
-//            public void onLeftApplication() {
-//
-//            }
-//
-//            @Override
-//            public void onReturnedToApplication() {
-//
-//            }
-//
-//            @Override
-//            public void onImpression(@Nullable ImpressionData impressionData) {
-//
-//            }
-//        });
+        mBannerAdView = (BannerAdView) findViewById(R.id.banner_ad_view);
+        mBannerAdView.setAdUnitId("R-M-2139251-1"); //Вставляется свой айди от яндекса
+        mBannerAdView.setAdSize(AdSize.stickySize(320));//Размер банера
+        final AdRequest adRequest = new AdRequest.Builder().build();
+        mBannerAdView.loadAd(adRequest);
+        //рекламав
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("R-M-2139251-3");
+
+        mInterstitialAd.loadAd(adRequest);
+        mInterstitialAd.setInterstitialAdEventListener(new InterstitialAdEventListener() {
+            @Override
+            public void onAdLoaded() {
+                mInterstitialAd.show();
+            }
+
+            @Override
+            public void onAdFailedToLoad(@NonNull AdRequestError adRequestError) {
+
+            }
+
+            @Override
+            public void onAdShown() {
+
+            }
+
+            @Override
+            public void onAdDismissed() {
+
+            }
+
+            @Override
+            public void onAdClicked() {
+
+            }
+
+            @Override
+            public void onLeftApplication() {
+
+            }
+
+            @Override
+            public void onReturnedToApplication() {
+
+            }
+
+            @Override
+            public void onImpression(@Nullable ImpressionData impressionData) {
+
+            }
+        });
 
 
     }
@@ -419,6 +423,10 @@ public class MainActivity extends AppCompatActivity {
             myDB.insertToDbSale("Молоко", 0, 0);
             myDB.insertToDbSale("Мясо", 0, 0);
 
+
+            myDB.insertToDbPrice("Яйца", 0);
+            myDB.insertToDbPrice("Молоко", 0);
+            myDB.insertToDbPrice("Мясо", 0);
         }
 
         cursor.close();
