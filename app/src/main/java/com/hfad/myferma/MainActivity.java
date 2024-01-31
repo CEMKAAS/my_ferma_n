@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.delete:
                     beginIncubator();
+                    break;
 //                case R.id.filler:
 ////                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 //                    showBottomSheetDialog();

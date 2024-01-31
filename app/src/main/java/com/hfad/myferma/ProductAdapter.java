@@ -32,6 +32,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         this.suffix = suffix;
         productsList = new ArrayList<>();
         unitList = new ArrayList();
+        f = new DecimalFormat("0.00");
         for (Map.Entry<String, Double> entry :
                 produtsMap.entrySet()) {
             productsList.add(entry.getKey());
@@ -71,7 +72,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.products.setText(name);
         holder.count.setText(nameProuct);
 
-        holder.unit.setText(String.valueOf(unitList.get(position)) + unitString(nameProuct));
+        holder.unit.setText(String.valueOf(f.format(unitList.get(position))) + unitString(nameProuct));
 
     }
 

@@ -52,8 +52,10 @@ public class UpdateProductFragment extends Fragment {
     private String id, oldCount, nowCount;
     private MyFermaDatabaseHelper myDB;
     private MaterialDatePicker datePicker;
+    private double addSum, saleSum, writeOffSum;
     private DecimalFormat f;
     private String unit = null;
+
     public UpdateProductFragment() {
     }
 
@@ -208,7 +210,27 @@ public class UpdateProductFragment extends Fragment {
                 if (id.equals("Мои Товар") || id.equals("Мои Продажи") || id.equals("Мои Списания")) {
                     // Проверяем если мы удалим, уйдем ли мы в минус
                     if (sumDelete(product, count) < 0) {
-                        Toast.makeText(getActivity(), "Нелья уйти в минус!", Toast.LENGTH_SHORT).show();
+
+                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
+                        builder.setTitle("Вы в минусе!");
+                        builder.setMessage("Если вы удалите данную позицию вы уйдете в минус!\n" +
+                                "Вы действительно хотите это сделать ? ");
+
+                        builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                delete();
+                            }
+                        });
+                        builder.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+
+                        builder.show();
+
                     } else {
                         delete();
                     }
@@ -245,8 +267,8 @@ public class UpdateProductFragment extends Fragment {
         } else if (containsEgg(product, count)) {
             titleCount.setError("Яйца не могут быть дробными...");
             titleCount.getError();
-        } else if (sum(product, count) < 0) {
-            titleCount.setError("Нелья уйти в минус!");
+        } else if (sum(product, count)<0) {
+            titleCount.setError("Столько товара нет на складе!\nу Вас списано " + (saleSum + writeOffSum) );
             titleCount.getError();
         } else {
             Toast.makeText(getActivity(), "Успешно удаленно.", Toast.LENGTH_SHORT).show();
@@ -285,8 +307,8 @@ public class UpdateProductFragment extends Fragment {
         } else if (containsEgg(product, count)) {
             titleCount.setError("Яйца не могут быть дробными...");
             titleCount.getError();
-        } else if (sum(product, count) < 0) {
-            titleCount.setError("Нелья уйти в минус!");
+        } else if (sum(product, count)<0) {
+            titleCount.setError("Столько товара нет на складе!\nу Вас добавленно " + addSum + " списано " + writeOffSum);
             titleCount.getError();
         } else {
             myDB.updateDataSale(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2], Double.valueOf(sale));
@@ -360,8 +382,9 @@ public class UpdateProductFragment extends Fragment {
             titleCount.setError("Яйца не могут быть дробными...");
             titleCount.getError();
         } else if (sum(product, count) < 0) {
-            titleCount.setError("Нелья уйти в минус!");
+            titleCount.setError("Столько товара нет на складе!\nу Вас добавленно "+ addSum + " продано " + saleSum);
             titleCount.getError();
+
         } else {
             myDB.updateDataWriteOff(String.valueOf(productDB.getId()), product, count, data[0], data[1], data[2], statusDrawable);
             replaceFragment(new AddManagerFragment());
@@ -380,16 +403,31 @@ public class UpdateProductFragment extends Fragment {
     }
 
     //Считаем сколько у нас товара на текущий момент
-    public Double sum(String product, String count) {
+    public double sum(String product, String count) {
+
+        double diff = Double.valueOf(oldCount) - Double.valueOf(count);
+        double nowUnitProduct = 0;
         double a = add(product);
-        double b = Double.valueOf(oldCount);
-        double c = Double.valueOf(count);
-        double d = a - (b - c);
-        return d;
+
+        if (id.equals("Мои Товары")) {
+            nowUnitProduct = (addSum - diff) - saleSum - writeOffSum;
+            return nowUnitProduct;
+        } else if (id.equals("Мои Покупки")) {
+            nowUnitProduct = addSum - (saleSum - diff) - writeOffSum;
+            return nowUnitProduct;
+        } else if (id.equals("Мои Списания")) {
+            nowUnitProduct = addSum - writeOffSum - (writeOffSum - diff);
+            return nowUnitProduct;
+
+        }else {
+            return nowUnitProduct;
+        }
     }
+
 
     //Считаем сколько у нас товара на текущий момент
     public Double sumDelete(String product, String count) {
+
         double a = add(product);
         double c = Double.valueOf(count);
         double d = a - c;
@@ -400,6 +438,9 @@ public class UpdateProductFragment extends Fragment {
     public double add(String product) {
 
         double tempList = 0;
+        addSum =0;
+        saleSum = 0;
+        writeOffSum = 0;
 
         Cursor cursor = myDB.idProduct1(MyConstanta.TABLE_NAME, MyConstanta.TITLE, product);
 
@@ -408,6 +449,7 @@ public class UpdateProductFragment extends Fragment {
             while (cursor.moveToNext()) {
                 Double productUnit = cursor.getDouble(2);
                 tempList += productUnit;
+                addSum += productUnit;
             }
             cursor.close();
 
@@ -416,6 +458,7 @@ public class UpdateProductFragment extends Fragment {
             while (cursorSale.moveToNext()) {
                 Double productUnit = cursorSale.getDouble(2);
                 tempList -= productUnit;
+                saleSum += productUnit;
             }
             cursorSale.close();
 
@@ -424,6 +467,7 @@ public class UpdateProductFragment extends Fragment {
             while (cursorWriteOff.moveToNext()) {
                 Double productUnit = cursorWriteOff.getDouble(2);
                 tempList -= productUnit;
+                writeOffSum +=productUnit;
             }
             cursorWriteOff.close();
         }
@@ -439,7 +483,7 @@ public class UpdateProductFragment extends Fragment {
         builder.setPositiveButton("Да", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (id.equals("Мои Товар")) {
+                if (id.equals("Мои Товары")) {
                     myDB.deleteOneRow(String.valueOf(productDB.getId()));
                 } else if (id.equals("Мои Продажи")) {
                    myDB.deleteOneRowSale(String.valueOf(productDB.getId()));
