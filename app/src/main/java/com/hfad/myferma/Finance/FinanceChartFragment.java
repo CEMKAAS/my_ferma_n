@@ -169,13 +169,6 @@ public class FinanceChartFragment extends Fragment {
             LineData data = new LineData(dataSets);
             lineChart.invalidate();
             lineChart.setData(data);
-            lineChart.animateY(500);
-
-            if (mount != 13) {
-                xaxis(lineChart, mountMass);
-            } else {
-                xaxis(lineChart, labes);
-            }
 
         } else {
             storeDataInArrays(animalsType, mountString, year2);
@@ -185,13 +178,13 @@ public class FinanceChartFragment extends Fragment {
             LineData data = new LineData(dataset);
             lineChart.invalidate();
             lineChart.setData(data);
-            lineChart.animateY(500);
 
-            if (mount != 13) {
-                xaxis(lineChart, mountMass);
-            } else {
-                xaxis(lineChart, labes);
-            }
+        }
+        lineChart.animateY(500);
+        if (mount != 13) {
+            xaxis(lineChart, mountMass);
+        } else {
+            xaxis(lineChart, labes);
         }
     }
 

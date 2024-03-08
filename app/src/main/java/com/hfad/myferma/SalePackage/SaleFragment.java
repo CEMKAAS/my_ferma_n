@@ -117,17 +117,13 @@ public class SaleFragment extends Fragment implements View.OnClickListener {
             public void onClick(View v) {
                 if (checkPrice.isChecked()) {
                     addPrice.setVisibility(View.VISIBLE);
-                    addSaleEdit.setEndIconDrawable(null);
-                    addSaleEdit.getEndIconDrawable();
-                    addPrice.setEndIconDrawable(null);
-                    addPrice.getEndIconDrawable();
                 } else {
                     addPrice.setVisibility(View.GONE);
-                    addSaleEdit.setEndIconDrawable(null);
-                    addSaleEdit.getEndIconDrawable();
-                    addPrice.setEndIconDrawable(null);
-                    addPrice.getEndIconDrawable();
                 }
+                addSaleEdit.setEndIconDrawable(null);
+                addSaleEdit.getEndIconDrawable();
+                addPrice.setEndIconDrawable(null);
+                addPrice.getEndIconDrawable();
             }
         });
 
