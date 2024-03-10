@@ -8,40 +8,39 @@
     app:behavior_hideable="false"
     app:behavior_peekHeight="100dp">
 
-    <LinearLayout
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/data_sheet"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/data_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Период"
+        app:endIconDrawable="@drawable/baseline_calendar_month_24"
+        app:endIconMode="custom"
+        app:errorEnabled="true"
+        app:helperText="Укажите период"
+
+        app:helperTextEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Период"
-            app:endIconDrawable="@drawable/baseline_calendar_month_24"
-            app:endIconMode="custom"
-            app:errorEnabled="true"
-            app:helperText="Укажите период"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            app:helperTextEnabled="true">
+            android:focusableInTouchMode="false"
+            android:imeOptions="actionGo"
+            android:inputType="date" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionGo"
-                android:inputType="date" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
 
     <Button
         android:id="@+id/button_sheet"
-        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.Material3.Button.Icon"
-        android:layout_marginTop="12dp"
+        style="@style/Widget.Material3.Button"
+        android:layout_marginTop="5dp"
         android:text="Применить" />
 
 </LinearLayout>

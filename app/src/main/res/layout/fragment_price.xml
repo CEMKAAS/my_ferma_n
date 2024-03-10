@@ -8,13 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-<!--        <TextView-->
-<!--            style="@style/TextAppearance.MyApp.DisplaySmall"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginBottom="20dp"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:text="Себестоимость" />-->
+        <!--        <TextView-->
+        <!--            style="@style/TextAppearance.MyApp.DisplaySmall"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginBottom="20dp"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:text="Себестоимость" />-->
 
         <LinearLayout
             android:id="@+id/mlayout"
